@@ -25,6 +25,9 @@ projects:
     status: coming
     status_text: Public release with the paper
     tagline: Magnetic order and spin response from first-principles linear response.
+    description: >-
+      A Quantum ESPRESSO based package that determines magnetic order and spin response of a
+      material directly from its first-principles linear response. Details will follow with the paper.
     links: []
     stack: [Python, Quantum ESPRESSO, MPI]
 

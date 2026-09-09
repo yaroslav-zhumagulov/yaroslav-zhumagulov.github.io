@@ -32,13 +32,9 @@ groups:
       - title: Magnetic order from first-principles linear response
         figure: static/img/research/methods-magnons.png
         summary: >-
-          Instead of comparing the energies of prescribed spin configurations, the incipient magnetic
-          order is found as the leading eigenmode of the self-consistent density-magnetization response
-          of a paramagnetic reference. An eigenvalue above one at wavevector q marks an instability and
-          its eigenvector gives the charge and spin pattern, with spin-orbit coupling kept throughout and
-          no magnetic supercell. Applied to the 3:1 ferrimagnet Cu<sub>2</sub>OSeO<sub>3</sub>, the
-          competing stackings of KV<sub>2</sub>Se<sub>2</sub>O and the incommensurate ring of
-          instabilities in monolayer NiI<sub>2</sub>.
+          A first-principles linear-response approach that identifies the magnetic order of a material
+          without comparing prescribed spin configurations, with spin-orbit coupling included.
+          Paper in preparation; details will follow.
         papers: []
         code: qe_magnon
       - title: Berry-phase transport with WannierBerri
