@@ -24,20 +24,24 @@ projects:
     name: qe_magnon
     status: coming
     status_text: Public release with the paper
-    tagline: Transverse spin response and magnons of an LSDA ground state, without empty states.
+    tagline: Magnetic order and spin response from first-principles linear response, without empty states.
     description: >-
-      The static transverse susceptibility &chi;<sub>+&minus;</sub>(q) is resummed into two cross-spin
-      Sternheimer solves per k-point, so the response is applied to fields rather than assembled,
-      stored or inverted. The Goldstone identity, that the response to a rigid rotation of the
-      exchange field equals the magnetisation, is satisfied to solver tolerance and serves as an
-      exact anchor. Magnon spectra and exchange parameters follow from the same engine.
+      qe_magnon evaluates the density and magnetization response &chi;<sup>0</sup>(q) of a Quantum ESPRESSO
+      ground state with the Sternheimer construction of density-functional perturbation theory, so the
+      response is applied to fields rather than assembled, stored or inverted. On top of this engine it
+      solves the matrix-free eigenproblem &lambda;&phi; = &chi;<sup>0</sup>K&phi; of a symmetry-preserving
+      paramagnetic reference: an eigenvalue above one at wavevector q marks an incipient magnetic
+      instability and its eigenvector gives the charge and spin pattern inside the unit cell. Spin-orbit
+      coupling is kept in the reference and in the response, and q belongs to the perturbation rather
+      than to the cell, so incommensurate order needs no magnetic supercell.
     features:
+      - Spatially resolved Stoner criterion with charge and three magnetization channels in one operator
+      - Collinear, amplitude-modulated and noncollinear orders appear as eigenmodes, not separate ansatzes
       - "No band-convergence parameter: only the k-mesh, q-mesh and solver tolerance"
-      - Exact Goldstone anchor instead of an ad hoc kernel rescaling
-      - Hartree and Fermi-level feedback vanish identically in the transverse channel
-      - Longitudinal (&sigma;<sub>z</sub>) channel and self-consistent magnon eigenproblem on separate branches
+      - Transverse spin-flip channel anchored by the exact Goldstone identity for spin-polarised ground states
+      - Magnon eigenproblem and exchange parameters from the same engine
     links: []
-    stack: [Python, Quantum ESPRESSO, libxc]
+    stack: [Python, Quantum ESPRESSO, libxc, MPI]
 
   - slug: wannier-berri
     name: WannierBerri

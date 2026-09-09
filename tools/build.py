@@ -120,9 +120,14 @@ def load_yaml(name: str):
 
 def load_pubs(groups: dict[str, dict]) -> list[dict]:
     parser = bibtexparser.bparser.BibTexParser(common_strings=True, ignore_nonstandard_types=False)
-    db = bibtexparser.loads((ROOT / "data" / "publications.bib").read_text(), parser=parser)
+    entries = []
+    for name in ("publications.bib", "publications_extra.bib"):
+        f = ROOT / "data" / name
+        if f.exists():
+            parser = bibtexparser.bparser.BibTexParser(common_strings=True, ignore_nonstandard_types=False)
+            entries += bibtexparser.loads(f.read_text(), parser=parser).entries
     pubs = []
-    for e in db.entries:
+    for e in entries:
         journal = e.get("journal", "")
         authors_html, names = format_authors(e.get("author", ""))
         g = groups.get(e.get("group", ""), {})
@@ -149,7 +154,7 @@ def load_pubs(groups: dict[str, dict]) -> list[dict]:
                 "year": year,
                 "doi": e.get("doi", ""),
                 "arxiv": e.get("eprint", ""),
-                "url": f"https://doi.org/{e['doi']}" if e.get("doi") else (f"https://arxiv.org/abs/{e['eprint']}" if e.get("eprint") else ""),
+                "url": f"https://doi.org/{e['doi']}" if e.get("doi") else (f"https://arxiv.org/abs/{e['eprint']}" if e.get("eprint") else e.get("url", "")),
                 "group": e.get("group", ""),
                 "group_title": g.get("title", ""),
                 "group_color": g.get("color", "#888"),
@@ -177,6 +182,7 @@ def main(serve: bool = False) -> None:
     pubs = load_pubs(groups)
     by_id = {}
     for p in pubs:
+        by_id[p["key"].lower()] = p
         if p["arxiv"]:
             by_id[p["arxiv"]] = p
         if p["doi"]:

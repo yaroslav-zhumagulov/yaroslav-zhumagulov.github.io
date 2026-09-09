@@ -8,27 +8,39 @@ positions:
     location: Lausanne, Switzerland
     note: Group of Oleg V. Yazyev
 
-  - period: 2020 – 2024
-    role: PhD in Physics
+  - period: 2020 – 2023
+    role: PhD student
     place: University of Regensburg, Institute for Theoretical Physics
     location: Regensburg, Germany
-    note: Advisor Jaroslav Fabian   # TODO confirm thesis title and defence year
+    note: Advisor Jaroslav Fabian. Correlated phases in proximitized rhombohedral trilayer and Bernal bilayer graphene; excitons and trions in 2D semiconductors as side projects
 
-  - period: 2018 – 2020
+  - period: 2019 – 2020
+    role: Visiting student
+    place: University of Regensburg, Institute for Theoretical Physics
+    location: Regensburg, Germany
+
+  - period: 2018 – 2019
     role: Researcher
     place: ITMO University
     location: St. Petersburg, Russia
-    note: Excitons and trions in 2D semiconductors with D. R. Gulevich and V. Perebeinos   # TODO confirm dates
+    note: Excitons and trions in 2D semiconductors with D. R. Gulevich and V. Perebeinos
 
 education:
+  - period: 2020 – 2023
+    role: Dr. rer. nat. in Physics, magna cum laude
+    place: University of Regensburg
+    location: Regensburg, Germany
+    note: "Thesis: Theoretical investigation of the interplay of proximity-induced spin interactions and correlated phenomena in multilayer graphene systems (summa cum laude). Defended 16 November 2023."
   - period: 2016 – 2018
     role: MSc in Physics
     place: National Research Nuclear University MEPhI
     location: Moscow, Russia
+    note: "Thesis: Magnetic, nematic and superconducting properties of iron-based superconductors from the variational cluster approximation (advisor Andrey Krasavin)"
   - period: 2012 – 2016
     role: BSc in Physics
     place: National Research Nuclear University MEPhI
     location: Moscow, Russia
+    note: "Thesis: Recovery of the density of states of strongly correlated systems using numerical methods (advisor Andrey Krasavin)"
 
 skills:
   - group: Methods
@@ -37,3 +49,13 @@ skills:
     items: [Quantum ESPRESSO, Wannier90, WannierBerri, GPAW, TRIQS, pybinding]
   - group: Programming
     items: [Python, NumPy/SciPy, CuPy, MPI, Fortran, C/C++, CUDA]
+
+awards:
+  - year: 2018
+    text: Best oral presentation, 5th International Youth Scientific Conference "Physics. Technologies. Innovations" (PTI-2018)
+  - year: 2016
+    text: First prize, competition of youth scientific works, P. N. Lebedev Physical Institute RAS and MEPhI
+  - year: 2015 – 2018
+    text: Increased scholarship for activities in science, MEPhI
+
+languages: [Russian (native), English (fluent), German (beginner)]

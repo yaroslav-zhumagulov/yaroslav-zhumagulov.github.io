@@ -136,8 +136,18 @@ def fetch_openalex() -> list[dict]:
     for doi in EXTRA_DOIS:
         try:
             works.append(get_json(f"https://api.openalex.org/works/https://doi.org/{doi}"))
-        except Exception as e:  # noqa: BLE001
-            print(f"warning: could not fetch {doi}: {e}", file=sys.stderr)
+        except Exception:  # noqa: BLE001
+            cr = crossref_meta(doi)  # not in OpenAlex yet: synthesise a minimal record from Crossref
+            if not cr.get("title"):
+                print(f"warning: could not fetch {doi} from OpenAlex or Crossref", file=sys.stderr)
+                continue
+            works.append({
+                "title": cr["title"], "publication_year": cr["year"], "doi": f"https://doi.org/{doi}",
+                "primary_location": {"source": {"display_name": cr["venue"]}},
+                "biblio": {"volume": cr["volume"], "first_page": cr["pages"]},
+                "authorships": [{"author": {"display_name": a}} for a in cr["authors"]],
+                "cited_by_count": 0,
+            })
     return works
 
 
@@ -189,6 +199,7 @@ def crossref_meta(doi: str) -> dict:
         "pages": m.get("article-number") or (m.get("page") or "").split("-")[0],
         "year": issued[0][0],
         "venue": (m.get("container-title") or [""])[0],
+        "title": (m.get("title") or [""])[0],
     }
 
 

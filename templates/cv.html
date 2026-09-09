@@ -29,8 +29,19 @@
     {% for e in cv.education %}
     <li>
       <span class="tl-period">{{ e.period }}</span>
-      <div class="tl-body"><strong>{{ e.role }}</strong><br>{{ e.place }}, {{ e.location }}</div>
+      <div class="tl-body"><strong>{{ e.role }}</strong><br>{{ e.place }}, {{ e.location }}
+        {% if e.note %}<div class="tl-note">{{ e.note }}</div>{% endif %}
+      </div>
     </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="cv-section">
+  <h2>Awards</h2>
+  <ol class="timeline">
+    {% for a in cv.awards %}
+    <li><span class="tl-period">{{ a.year }}</span><div class="tl-body">{{ a.text }}</div></li>
     {% endfor %}
   </ol>
 </section>
@@ -42,6 +53,8 @@
     <dt>{{ s.group }}</dt>
     <dd>{{ s['items']|join(' · ') }}</dd>
     {% endfor %}
+    <dt>Languages</dt>
+    <dd>{{ cv.languages|join(' · ') }}</dd>
   </dl>
 </section>
 

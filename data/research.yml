@@ -51,8 +51,9 @@ groups:
         summary: >-
           Three-particle states of doped MoS<sub>2</sub> from a direct-diagonalisation approach:
           brightening of intervalley excitons, trion-induced photoluminescence and the electrostatic
-          and dielectric control of the trion fine structure.
-        papers: ["2002.08938", "2005.09306", "2104.11800", "10.3390/nano12213728"]
+          and dielectric control of the trion fine structure, summarised in a Perspective in
+          Applied Physics Letters.
+        papers: ["zhumagulov2024perspective", "2002.08938", "2005.09306", "2104.11800"]
       - title: Exciton and trion polaritons and nonlinear spectroscopy
         figure: static/img/research/excitons-polaritons.png
         summary: >-
@@ -79,7 +80,8 @@ groups:
     color: "#10b981"
     lede: >-
       Wannier downfolding and Sternheimer linear response built directly on plane-wave DFT, so that
-      proximity, defect and magnetic responses are obtained without empty states or ad hoc models.
+      proximity couplings, defect scattering and magnetic instabilities are obtained without empty
+      states, magnetic supercells or ad hoc models.
     projects:
       - title: Wannier representation of proximity effects
         figure: static/img/research/methods-proximity.png
@@ -97,12 +99,16 @@ groups:
           in the Wannier basis.
         papers: []
         code: qe-downfolding
-      - title: Spin response and magnons without empty states
+      - title: Magnetic order from first-principles linear response
         figure: static/img/research/methods-magnons.png
         summary: >-
-          The transverse spin susceptibility of a spin-polarised ground state from cross-spin
-          Sternheimer solves, anchored by the exact Goldstone identity, with the magnon spectrum
-          obtained without any band-convergence parameter.
+          Instead of comparing the energies of prescribed spin configurations, the incipient magnetic
+          order is found as the leading eigenmode of the self-consistent density-magnetization response
+          of a paramagnetic reference. An eigenvalue above one at wavevector q marks an instability and
+          its eigenvector gives the charge and spin pattern, with spin-orbit coupling kept throughout and
+          no magnetic supercell. Applied to the 3:1 ferrimagnet Cu<sub>2</sub>OSeO<sub>3</sub>, the
+          competing stackings of KV<sub>2</sub>Se<sub>2</sub>O and the incommensurate ring of
+          instabilities in monolayer NiI<sub>2</sub>.
         papers: []
         code: qe_magnon
       - title: Berry-phase transport with WannierBerri

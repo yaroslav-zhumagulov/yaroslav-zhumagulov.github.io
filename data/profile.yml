@@ -24,20 +24,20 @@ bio:
     ever forming empty states, and building mean-field theories of correlated phases in
     multilayer graphene that experiments can test.
   - >-
-    Before EPFL I did my PhD with Jaroslav Fabian at the University of Regensburg, working on
-    excitons, trions and correlated phases in van der Waals materials, and studied physics at
-    MEPhI in Moscow.
+    Before EPFL I did my PhD with Jaroslav Fabian at the University of Regensburg, where I worked on
+    correlated phases in proximitized rhombohedral trilayer and Bernal bilayer graphene, with excitons
+    and trions in two-dimensional semiconductors as side projects. I studied physics at MEPhI in Moscow.
 
 interests:
   - Correlated phases in rhombohedral and Bernal multilayer graphene
   - Excitons, trions and polaritons in 2D semiconductors and magnets
   - Wannier downfolding of proximity and defect couplings
-  - Sternheimer linear response, magnons and spin-orbit torques
+  - Magnetic order and spin response from Sternheimer linear response
   - Electronic structure of layered materials with experimental collaborators
 
 now:
   - Wannier representation of proximity effects and the qe-downfolding package
-  - Transverse spin response and magnons without empty states (qe_magnon)
+  - Magnetic order from first-principles linear response: a Stoner eigenproblem with spin-orbit coupling (qe_magnon)
   - Correlated phases and magnetoelectric switching in rhombohedral graphene
 
 news:
@@ -70,6 +70,9 @@ links:
   - label: GitHub
     href: https://github.com/yaroslav-zhumagulov
     icon: github
+  - label: LinkedIn
+    href: https://www.linkedin.com/in/yaroslav-zhumagulov-b0b096221/
+    icon: linkedin
   - label: Email
     href: mailto:iaroslav.zhumagulov@epfl.ch
     icon: mail
