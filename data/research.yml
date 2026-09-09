@@ -1,0 +1,200 @@
+# Research subgroups and the projects inside them.
+# `slug` must match the `group` field in data/publications.bib.
+# `papers` reference bib entries by arXiv id or DOI; the build resolves them.
+# `figure` is a path under static/; if the file is missing a placeholder is rendered.
+groups:
+  - slug: graphene
+    number: 1
+    title: Correlated phases in multilayer graphene
+    color: "#3b82f6"
+    lede: >-
+      Rhombohedral and Bernal graphene multilayers host flat bands whose correlated ground states
+      can be steered by proximity spin-orbit and exchange coupling from adjacent layers.
+    projects:
+      - title: Proximity-induced correlated phases in trilayer and bilayer graphene
+        figure: static/img/research/graphene-proximity.png
+        summary: >-
+          Mean-field theory of rhombohedral trilayer and Bernal bilayer graphene with spin-orbit
+          and exchange coupling induced by neighbouring transition-metal dichalcogenide or magnetic
+          layers. Proximity terms swap the order of competing symmetry-broken phases and stabilise
+          new ones, giving a controllable knob for correlated states.
+        papers: ["2305.14277", "2307.16025", "2403.17140"]
+      - title: Rhombohedral N-layer graphene
+        figure: static/img/research/graphene-nlayer.png
+        summary: >-
+          Analytic Lindhard susceptibilities and phase diagrams for rhombohedral stacks of arbitrary
+          thickness, tracing how correlated phases evolve with layer number and displacement field.
+        papers: ["2508.14630"]
+      - title: Magnetoelectric switching of magnetic order
+        figure: static/img/research/graphene-magnetoelectric.png
+        summary: >-
+          Joint theory and experiment on electrically switching the magnetic order of rhombohedral
+          graphene.
+        papers: ["2509.24672"]
+      - title: Edge states in proximitized graphene
+        figure: static/img/research/graphene-edges.png
+        summary: >-
+          Ribbons and flakes of proximitized graphene in a perpendicular magnetic field host lone
+          pseudohelical pairs and pure spin-current edge states.
+        papers: ["2111.06369"]
+
+  - slug: excitons
+    number: 2
+    title: Excitons, trions and polaritons in 2D semiconductors and magnets
+    color: "#f59e0b"
+    lede: >-
+      Few-particle optical excitations in monolayer semiconductors and magnetic insulators,
+      computed from microscopic models and compared directly with spectroscopy.
+    projects:
+      - title: Trions in doped transition-metal dichalcogenide monolayers
+        figure: static/img/research/excitons-trions.png
+        summary: >-
+          Three-particle states of doped MoS<sub>2</sub> from a direct-diagonalisation approach:
+          brightening of intervalley excitons, trion-induced photoluminescence and the electrostatic
+          and dielectric control of the trion fine structure.
+        papers: ["2002.08938", "2005.09306", "2104.11800", "10.3390/nano12213728"]
+      - title: Exciton and trion polaritons and nonlinear spectroscopy
+        figure: static/img/research/excitons-polaritons.png
+        summary: >-
+          Microscopic theory of exciton and trion polaritons in doped monolayers inside optical
+          cavities, and second-harmonic generation as a probe of excitonic states.
+        papers: ["2107.06927", "2109.11633"]
+      - title: Strain and phonons
+        figure: static/img/research/excitons-strain.png
+        summary: >-
+          Optical response of strained bubbles in MoSe<sub>2</sub>, emergent trion-phonon coupling in
+          atomically reconstructed heterobilayers, and strain control of exciton and trion
+          spin-valley dynamics.
+        papers: ["10.1039/d2nr00315e", "2306.01483", "2303.15325"]
+      - title: Excitons in two-dimensional magnets
+        figure: static/img/research/excitons-cri3.png
+        summary: >-
+          Robust polaritons and all-optical magnetisation control in CrI<sub>3</sub> monolayers, and
+          the excitonic anomalous Hall effect produced by scattering on magnetic skyrmions.
+        papers: ["2208.12228", "2304.00331", "2205.15221"]
+
+  - slug: methods
+    number: 3
+    title: First-principles methods
+    color: "#10b981"
+    lede: >-
+      Wannier downfolding and Sternheimer linear response built directly on plane-wave DFT, so that
+      proximity, defect and magnetic responses are obtained without empty states or ad hoc models.
+    projects:
+      - title: Wannier representation of proximity effects
+        figure: static/img/research/methods-proximity.png
+        summary: >-
+          Löwdin downfolding of a heterostructure calculation onto the Wannier subspace of one layer
+          yields the proximity-induced spin-orbit and exchange terms from first principles, including
+          their momentum dependence. Implemented in the qe-downfolding package.
+        papers: ["2607.25690"]
+        code: qe-downfolding
+      - title: Defect scattering and transport
+        figure: static/img/research/methods-defects.png
+        summary: >-
+          Scattering matrix elements of point defects computed from a Quantum ESPRESSO supercell by
+          iterative Löwdin partitioning in the plane-wave basis, feeding transport calculations
+          in the Wannier basis.
+        papers: []
+        code: qe-downfolding
+      - title: Spin response and magnons without empty states
+        figure: static/img/research/methods-magnons.png
+        summary: >-
+          The transverse spin susceptibility of a spin-polarised ground state from cross-spin
+          Sternheimer solves, anchored by the exact Goldstone identity, with the magnon spectrum
+          obtained without any band-convergence parameter.
+        papers: []
+        code: qe_magnon
+      - title: Berry-phase transport with WannierBerri
+        figure: static/img/research/methods-berry.png
+        summary: >-
+          Anomalous Hall conductivity of the weak itinerant ferromagnet ZrZn<sub>2</sub> and
+          spin-orbit torques in monolayer Fe<sub>3</sub>GeTe<sub>2</sub> and Fe<sub>3</sub>GaTe<sub>2</sub>
+          resolved in momentum space and by atom.
+        papers: ["2604.06441", "2608.05788"]
+        code: wannier-berri
+      - title: Time-dependent density functional theory
+        figure: static/img/research/methods-tddft.png
+        summary: >-
+          Nonadiabatic electron dynamics at the cost of the adiabatic local density approximation,
+          and excitonic effects extracted from the zeros of the density response.
+        papers: ["1908.10941", "10.1103/physrevb.100.241109", "2209.10257"]
+
+  - slug: spintronics
+    number: 4
+    title: Spintronics, superconductivity and topology
+    color: "#8b5cf6"
+    lede: >-
+      Phenomenology and tight-binding models of proximitized and geometrically nontrivial systems.
+    projects:
+      - title: Supercurrent diode effect
+        figure: static/img/research/spintronics-diode.png
+        summary: >-
+          A phenomenological theory of the supercurrent diode effect built on the Lifshitz invariant
+          of the Ginzburg-Landau free energy.
+        papers: ["2303.11975"]
+      - title: Spin filtering in Lifshitz-transitioned altermagnets
+        figure: static/img/research/spintronics-filter.png
+        summary: >-
+          Efficient magnetic spin filtering and persistent spin currents as a route to open-orbit
+          spintronics.
+        papers: ["2606.04587"]
+      - title: Graphene nanohelicoids
+        figure: static/img/research/spintronics-helicoids.png
+        summary: >-
+          Electronic properties and topological aspects of helically wound graphene nanoribbons.
+        papers: ["2607.13294"]
+
+  - slug: materials
+    number: 5
+    title: Layered materials with experimental collaborators
+    color: "#ef4444"
+    lede: >-
+      Electronic-structure support for experiments on layered semiconductors and defect-based
+      quantum sensors at EPFL and partner labs.
+    projects:
+      - title: Few-layer PtSe<sub>2</sub> under a displacement field
+        figure: static/img/research/materials-ptse2.png
+        summary: >-
+          Displacement-field-driven reconstruction of the low-energy transport and a doping-modulated
+          semiconductor-to-metal transformation in a low-band-gap two-dimensional material.
+        papers: ["2608.23003", "10.1021/acsnano.5c20066"]
+      - title: Induced magnetism in an air-stable 2D semiconductor
+        figure: static/img/research/materials-magnetism.png
+        summary: >-
+          Electrical control of induced magnetism, combining transport, microscopy and first-principles
+          calculations.
+        papers: ["10.1126/sciadv.aeb0659"]
+      - title: Defects and dopants for quantum sensing
+        figure: static/img/research/materials-defects.png
+        summary: >-
+          Energy-transfer-enhanced emission of V<sub>B</sub><sup>-</sup> defects in hBN-PbI<sub>2</sub>
+          heterostructures, and the coupling between CaWO<sub>4</sub> phonons and Er<sup>3+</sup> dopants.
+        papers: ["2602.02256", "2602.08525"]
+
+  - slug: correlated
+    number: 6
+    title: Correlated superconductors and quantum Monte Carlo
+    color: "#64748b"
+    lede: >-
+      Earlier work on bismuthate and iron-based superconductors, polarons and cluster methods.
+    projects:
+      - title: BaBiO<sub>3</sub> out of equilibrium
+        figure: static/img/research/correlated-babio3.png
+        summary: >-
+          Laser-induced ultrafast insulator-metal transition, the strength of the Hubbard potential
+          under breathing distortion, and direct evidence of real-space pairing from time-resolved
+          x-ray spectroscopy.
+        papers: ["2006.11791", "2110.00084", "10.1103/physrevresearch.6.023307", "10.1134/s0021364019130149"]
+      - title: Iron-based superconductors and cluster methods
+        figure: static/img/research/correlated-qmc.png
+        summary: >-
+          Quantum Monte Carlo and variational cluster approximation for two-orbital models,
+          momentum distributions and non-Fermi-liquid behaviour, and density-of-states reconstruction
+          for metal nanoclusters.
+        papers: ["1610.05582", "10.1103/physrevb.94.235145", "10.1134/s0021364019010144", "10.1134/s0021364016050052", "1612.03288"]
+      - title: Polarons in phosphorene
+        figure: static/img/research/correlated-phosphorene.png
+        summary: >-
+          Polaronic signatures in the electronic structure of pristine phosphorene.
+        papers: ["10.1103/physrevmaterials.5.054008"]

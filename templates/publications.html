@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Publications · {{ profile.name }}{% endblock %}
+{% block canonical %}publications/{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Publications</h1>
+  <p class="lede">{{ stats.total }} papers from {{ stats.years }}, {{ stats.first }} as first author, {{ stats.preprints }} currently preprints.
+    Also on <a href="https://scholar.google.com/citations?user=DmACMHgAAAAJ" target="_blank" rel="noopener">Google Scholar</a>,
+    <a href="https://orcid.org/0000-0002-2541-1100" target="_blank" rel="noopener">ORCID</a> and
+    <a href="https://arxiv.org/a/zhumagulov_y_1" target="_blank" rel="noopener">arXiv</a>.</p>
+</header>
+
+<div class="filters" id="filters">
+  <div class="filter-groups" role="group" aria-label="Filter by subgroup">
+    {% for g in groups %}
+    <button type="button" class="chip chip-filter" data-group="{{ g.slug }}" style="--c: {{ g.color }}" aria-pressed="false"><span class="dot"></span>{{ g.title|safe }}</button>
+    {% endfor %}
+  </div>
+  <div class="filter-row">
+    <label class="check"><input type="checkbox" id="f-first"> first author only</label>
+    <input type="search" id="f-search" placeholder="Search title, author, journal…" aria-label="Search publications">
+    <button type="button" class="lnk" id="f-clear">clear</button>
+    <span class="count" id="f-count"></span>
+  </div>
+</div>
+
+<div class="year-list">
+  {% for y in years %}
+  <section class="year-block" data-year="{{ y }}">
+    <h2 class="year">{{ y }}</h2>
+    <ul class="pub-list">
+      {% for p in pubs if p.year == y and not p.proceedings %}{{ m.pub_item(p) }}{% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+</div>
+
+<details class="proceedings">
+  <summary>Earlier conference proceedings ({{ stats.proceedings }})</summary>
+  <ul class="pub-list compact">
+    {% for p in pubs if p.proceedings %}{{ m.pub_item(p, show_group=False) }}{% endfor %}
+  </ul>
+</details>
+{% endblock %}

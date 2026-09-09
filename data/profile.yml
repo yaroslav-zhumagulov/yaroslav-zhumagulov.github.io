@@ -1,0 +1,75 @@
+# Everything on the home page and in the footer. Edit freely.
+name: Yaroslav Zhumagulov
+alt_names: [Iaroslav Zhumagulov, Yaroslav V. Zhumagulov, Ya. V. Zhumagulov]
+title: Postdoctoral researcher
+group: Chair of Computational Physics of Condensed Matter (C3MP)
+institution: EPFL
+location: Lausanne, Switzerland
+tagline: >-
+  First-principles and model theory of correlated, proximitized and optically active
+  two-dimensional materials.
+email: iaroslav.zhumagulov@epfl.ch
+office: PH H2 445, Station 3, 1015 Lausanne
+url: https://yaroslav-zhumagulov.github.io
+photo: static/img/portrait.jpg   # drop your headshot here (square crop, >= 800 px)
+
+bio:
+  - >-
+    I am a postdoctoral researcher in the group of Oleg Yazyev at EPFL. I work on the
+    electronic structure of two-dimensional materials, with a focus on how proximity effects,
+    defects and electron correlations reshape their low-energy physics.
+  - >-
+    Most of my current work is methodological: representing proximity and defect couplings
+    in a Wannier basis directly from plane-wave DFT, computing linear response without
+    ever forming empty states, and building mean-field theories of correlated phases in
+    multilayer graphene that experiments can test.
+  - >-
+    Before EPFL I did my PhD with Jaroslav Fabian at the University of Regensburg, working on
+    excitons, trions and correlated phases in van der Waals materials, and studied physics at
+    MEPhI in Moscow.
+
+interests:
+  - Correlated phases in rhombohedral and Bernal multilayer graphene
+  - Excitons, trions and polaritons in 2D semiconductors and magnets
+  - Wannier downfolding of proximity and defect couplings
+  - Sternheimer linear response, magnons and spin-orbit torques
+  - Electronic structure of layered materials with experimental collaborators
+
+now:
+  - Wannier representation of proximity effects and the qe-downfolding package
+  - Transverse spin response and magnons without empty states (qe_magnon)
+  - Correlated phases and magnetoelectric switching in rhombohedral graphene
+
+news:
+  - date: 2026-08
+    text: "Preprint: displacement-field-driven reconstruction of transport in few-layer PtSe<sub>2</sub>"
+    href: https://arxiv.org/abs/2608.23003
+  - date: 2026-07
+    text: "Preprint: first-principles Wannier representation of proximity effects"
+    href: https://arxiv.org/abs/2607.25690
+  - date: 2026-01
+    text: "Correlated phases in rhombohedral multilayer graphene published in Physical Review B"
+    href: https://doi.org/10.1103/2q6v-4brs
+  - date: 2025-09
+    text: "Preprint: magnetoelectric switching of magnetic order in rhombohedral graphene"
+    href: https://arxiv.org/abs/2509.24672
+
+links:
+  - label: EPFL
+    href: https://people.epfl.ch/iaroslav.zhumagulov
+    icon: epfl
+  - label: Google Scholar
+    href: https://scholar.google.com/citations?user=DmACMHgAAAAJ
+    icon: scholar
+  - label: ORCID
+    href: https://orcid.org/0000-0002-2541-1100
+    icon: orcid
+  - label: arXiv
+    href: https://arxiv.org/a/zhumagulov_y_1
+    icon: arxiv
+  - label: GitHub
+    href: https://github.com/yaroslav-zhumagulov
+    icon: github
+  - label: Email
+    href: mailto:iaroslav.zhumagulov@epfl.ch
+    icon: mail

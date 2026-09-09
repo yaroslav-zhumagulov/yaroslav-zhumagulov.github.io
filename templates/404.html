@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Not found · {{ profile.name }}{% endblock %}
+{% block canonical %}404.html{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Page not found</h1>
+  <p class="lede">The state you are looking for is not in the spectrum. Try the <a href="/">home page</a> or the <a href="/publications/">publications</a>.</p>
+</header>
+{% endblock %}

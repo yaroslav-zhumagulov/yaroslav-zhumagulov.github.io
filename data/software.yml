@@ -1,0 +1,62 @@
+# Software page. `status` is one of: public, coming, contributor.
+projects:
+  - slug: qe-downfolding
+    name: qe-downfolding
+    status: coming
+    status_text: Public release with the paper
+    tagline: Proximity and defect couplings in the Wannier basis, straight from Quantum ESPRESSO.
+    description: >-
+      Given a pristine crystal and a heterostructure or defect calculation, qe-downfolding solves the
+      Löwdin partitioning equation iteratively in the plane-wave basis and returns the effective
+      coupling V<sub>mn</sub>(k) in the Wannier subspace. The result feeds transport and
+      proximity-effect calculations directly.
+    features:
+      - Loaders for pristine, defect and scattering systems built on pw.x, pp_defect.x and wannier90 output
+      - "One Krylov kernel: an unrestarted multishift GMRES seeded by the static solve, with sparse-ir Matsubara frequencies as shifts"
+      - Runs on CPU or GPU through CuPy, with optional MPI
+      - Companion model package for supercell tight-binding, k-space analysis and WannierBerri export
+    links:
+      - label: Paper (arXiv:2607.25690)
+        href: https://arxiv.org/abs/2607.25690
+    stack: [Python, NumPy, CuPy, MPI, Quantum ESPRESSO, Wannier90]
+
+  - slug: qe_magnon
+    name: qe_magnon
+    status: coming
+    status_text: Public release with the paper
+    tagline: Transverse spin response and magnons of an LSDA ground state, without empty states.
+    description: >-
+      The static transverse susceptibility &chi;<sub>+&minus;</sub>(q) is resummed into two cross-spin
+      Sternheimer solves per k-point, so the response is applied to fields rather than assembled,
+      stored or inverted. The Goldstone identity, that the response to a rigid rotation of the
+      exchange field equals the magnetisation, is satisfied to solver tolerance and serves as an
+      exact anchor. Magnon spectra and exchange parameters follow from the same engine.
+    features:
+      - "No band-convergence parameter: only the k-mesh, q-mesh and solver tolerance"
+      - Exact Goldstone anchor instead of an ad hoc kernel rescaling
+      - Hartree and Fermi-level feedback vanish identically in the transverse channel
+      - Longitudinal (&sigma;<sub>z</sub>) channel and self-consistent magnon eigenproblem on separate branches
+    links: []
+    stack: [Python, Quantum ESPRESSO, libxc]
+
+  - slug: wannier-berri
+    name: WannierBerri
+    status: contributor
+    status_text: Contributor
+    tagline: Berry-phase and Wannier-interpolation toolkit for transport, optics and magnetism.
+    description: >-
+      I contribute to WannierBerri, the open-source code for fast Wannier interpolation of Berry-phase
+      quantities. My contributions add supercell folding for real-space Wannier systems, which is what
+      lets defect and proximity models from qe-downfolding be evaluated with the full WannierBerri
+      machinery.
+    features:
+      - "Supercell folding for real-space systems (pull requests #533 and #534)"
+      - "Fixes to the default magnetisation angles used in spin-resolved calculations (#455)"
+    links:
+      - label: wannier-berri on GitHub
+        href: https://github.com/wannier-berri/wannier-berri
+      - label: Documentation
+        href: https://wannier-berri.org
+      - label: My pull requests
+        href: https://github.com/wannier-berri/wannier-berri/pulls?q=author%3Ayaroslav-zhumagulov
+    stack: [Python, NumPy]

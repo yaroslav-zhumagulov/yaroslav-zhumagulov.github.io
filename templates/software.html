@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Software · {{ profile.name }}{% endblock %}
+{% block canonical %}software/{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Software</h1>
+  <p class="lede">Two packages that turn plane-wave DFT output into Wannier-basis couplings and linear response, and the Berry-phase toolkit they plug into.</p>
+</header>
+
+<figure class="pipeline" aria-label="Code pipeline">
+  <svg viewBox="0 0 960 250" role="img">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <g class="node">
+      <rect x="20" y="80" width="200" height="90" rx="12"/>
+      <text x="120" y="115" text-anchor="middle" class="t1">Quantum ESPRESSO</text>
+      <text x="120" y="140" text-anchor="middle" class="t2">pw.x · pp_defect.x · wannier90</text>
+    </g>
+    <g class="node accent">
+      <rect x="300" y="20" width="200" height="90" rx="12"/>
+      <text x="400" y="55" text-anchor="middle" class="t1 mono">qe-downfolding</text>
+      <text x="400" y="80" text-anchor="middle" class="t2">Löwdin downfolding → V(k)</text>
+    </g>
+    <g class="node accent">
+      <rect x="300" y="140" width="200" height="90" rx="12"/>
+      <text x="400" y="175" text-anchor="middle" class="t1 mono">qe_magnon</text>
+      <text x="400" y="200" text-anchor="middle" class="t2">Sternheimer spin response</text>
+    </g>
+    <g class="node">
+      <rect x="580" y="20" width="200" height="90" rx="12"/>
+      <text x="680" y="55" text-anchor="middle" class="t1">WannierBerri</text>
+      <text x="680" y="80" text-anchor="middle" class="t2">supercell folding · transport</text>
+    </g>
+    <g class="node out">
+      <rect x="580" y="140" width="200" height="90" rx="12"/>
+      <text x="680" y="175" text-anchor="middle" class="t1">Magnons, exchange</text>
+      <text x="680" y="200" text-anchor="middle" class="t2">no empty states</text>
+    </g>
+    <g class="node out">
+      <rect x="820" y="20" width="120" height="90" rx="12"/>
+      <text x="880" y="55" text-anchor="middle" class="t1">Proximity,</text>
+      <text x="880" y="80" text-anchor="middle" class="t1">defects</text>
+    </g>
+    <g class="edges" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr)">
+      <path d="M220 115 C260 115, 260 65, 300 65"/>
+      <path d="M220 135 C260 135, 260 185, 300 185"/>
+      <path d="M500 65 L580 65"/>
+      <path d="M500 185 L580 185"/>
+      <path d="M780 65 L820 65"/>
+    </g>
+  </svg>
+</figure>
+
+<div class="soft-list">
+  {% for s in software.projects %}
+  <article class="soft" id="{{ s.slug }}">
+    <header class="soft-head">
+      <h2><code>{{ s.name }}</code></h2>
+      <span class="status status-{{ s.status }}">{{ s.status_text }}</span>
+    </header>
+    <p class="soft-tagline">{{ s.tagline|safe }}</p>
+    <p>{{ s.description|safe }}</p>
+    <ul class="features">
+      {% for f in s.features %}<li>{{ f|safe }}</li>{% endfor %}
+    </ul>
+    <div class="soft-foot">
+      <div class="stack">{% for t in s.stack %}<span>{{ t }}</span>{% endfor %}</div>
+      <div class="chips">
+        {% for l in s.links %}<a class="chip" href="{{ l.href }}" target="_blank" rel="noopener">{{ l.label }}</a>{% endfor %}
+        {% if s.status == 'coming' %}<span class="chip chip-muted">Repository opens with the paper</span>{% endif %}
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

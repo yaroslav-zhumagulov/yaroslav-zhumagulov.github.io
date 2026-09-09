@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}CV · {{ profile.name }}{% endblock %}
+{% block canonical %}cv/{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Curriculum vitae</h1>
+  <p class="lede">{{ profile.title }} at {{ profile.institution }}, {{ profile.location }}.
+    {% if cv.pdf_exists %}<a class="btn btn-primary btn-sm" href="/{{ cv.pdf }}">Download PDF</a>{% endif %}</p>
+</header>
+
+<section class="cv-section">
+  <h2>Positions</h2>
+  <ol class="timeline">
+    {% for e in cv.positions %}
+    <li>
+      <span class="tl-period">{{ e.period }}</span>
+      <div class="tl-body">
+        <strong>{{ e.role }}</strong><br>{{ e.place }}, {{ e.location }}
+        {% if e.note %}<div class="tl-note">{{ e.note }}</div>{% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="cv-section">
+  <h2>Education</h2>
+  <ol class="timeline">
+    {% for e in cv.education %}
+    <li>
+      <span class="tl-period">{{ e.period }}</span>
+      <div class="tl-body"><strong>{{ e.role }}</strong><br>{{ e.place }}, {{ e.location }}</div>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="cv-section">
+  <h2>Skills</h2>
+  <dl class="skills">
+    {% for s in cv.skills %}
+    <dt>{{ s.group }}</dt>
+    <dd>{{ s['items']|join(' · ') }}</dd>
+    {% endfor %}
+  </dl>
+</section>
+
+<section class="cv-section">
+  <h2>Publications</h2>
+  <p>{{ stats.total }} papers, {{ stats.first }} as first author. See the <a href="/publications/">publication list</a>.</p>
+</section>
+{% endblock %}

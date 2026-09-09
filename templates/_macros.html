@@ -1,0 +1,41 @@
+{% macro placeholder(color, label='Figure to come') -%}
+<div class="fig-placeholder" style="--c: {{ color }}" role="img" aria-label="{{ label }}">
+  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <pattern id="hex-{{ color|replace('#','') }}" width="40" height="69.28" patternUnits="userSpaceOnUse" patternTransform="scale(0.8)">
+        <path d="M20 0 L40 11.55 L40 34.64 L20 46.19 L0 34.64 L0 11.55 Z M20 46.19 L20 69.28 M40 34.64 L60 46.19 M0 34.64 L-20 46.19" fill="none" stroke="var(--c)" stroke-width="1" opacity="0.35"/>
+      </pattern>
+    </defs>
+    <rect width="320" height="200" fill="url(#hex-{{ color|replace('#','') }})"/>
+  </svg>
+  <span>{{ label }}</span>
+</div>
+{%- endmacro %}
+
+{% macro paper_chip(p) -%}
+<a class="chip chip-paper" href="{{ p.url }}" target="_blank" rel="noopener" title="{{ p.title_plain }}">
+  {% if p.first %}<span class="chip-first" title="first author">★</span>{% endif %}{{ p.ref_short }}
+</a>
+{%- endmacro %}
+
+{% macro pub_item(p, show_group=True) -%}
+<li class="pub" data-group="{{ p.group }}" data-first="{{ 'true' if p.first else 'false' }}" data-year="{{ p.year }}"
+    data-search="{{ p.title_plain|lower }} {{ p.authors_html|striptags|lower }} {{ p.journal|lower }}">
+  <div class="pub-main">
+    <a class="pub-title" href="{{ p.url }}" target="_blank" rel="noopener">{{ p.title|safe }}</a>
+    <div class="pub-authors">{{ p.authors_html|safe }}</div>
+    <div class="pub-ref">
+      {% if show_group %}<span class="dot" style="--c: {{ p.group_color }}" title="{{ p.group_title }}"></span>{% endif %}
+      <span class="ref">{{ p.ref }}</span>
+      {% if p.first %}<span class="badge badge-first" title="first author">first author</span>{% endif %}
+      {% if p.selected %}<span class="badge badge-sel">selected</span>{% endif %}
+    </div>
+  </div>
+  <div class="pub-links">
+    {% if p.arxiv %}<a class="lnk" href="https://arxiv.org/abs/{{ p.arxiv }}" target="_blank" rel="noopener">arXiv</a>{% endif %}
+    {% if p.doi %}<a class="lnk" href="https://doi.org/{{ p.doi }}" target="_blank" rel="noopener">DOI</a>{% endif %}
+    <button class="lnk bib-btn" type="button" data-key="{{ p.key }}">BibTeX</button>
+    <pre class="bibtex" id="bib-{{ p.key }}" hidden>{{ p.bibtex }}</pre>
+  </div>
+</li>
+{%- endmacro %}

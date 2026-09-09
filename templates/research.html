@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}Research · {{ profile.name }}{% endblock %}
+{% block canonical %}research/{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Research</h1>
+  <p class="lede">Six threads, from mean-field theories of correlated graphene to the first-principles machinery that feeds them.</p>
+  <nav class="toc" aria-label="Research subgroups">
+    {% for g in groups %}
+    <a href="#{{ g.slug }}" style="--c: {{ g.color }}"><span class="dot"></span>{{ '%02d'|format(g.number) }} {{ g.title|safe }}</a>
+    {% endfor %}
+  </nav>
+</header>
+
+{% for g in groups %}
+<section class="group" id="{{ g.slug }}" style="--c: {{ g.color }}">
+  <div class="group-head">
+    <span class="group-num">{{ '%02d'|format(g.number) }}</span>
+    <div>
+      <h2>{{ g.title|safe }}</h2>
+      <p class="lede">{{ g.lede }}</p>
+    </div>
+  </div>
+  <div class="projects">
+    {% for pr in g.projects %}
+    <article class="project" id="{{ pr.anchor }}">
+      <div class="project-fig">
+        {% if pr.figure_exists %}
+        <img src="/{{ pr.figure }}" alt="{{ pr.title|striptags }}" loading="lazy">
+        {% else %}
+        {{ m.placeholder(g.color) }}
+        {% endif %}
+      </div>
+      <div class="project-body">
+        <h3>{{ pr.title|safe }}</h3>
+        <p>{{ pr.summary|safe }}</p>
+        <div class="chips">
+          {% for p in pr.pubs %}{{ m.paper_chip(p) }}{% endfor %}
+          {% if pr.code %}<a class="chip chip-code" href="/software/#{{ pr.code }}"><code>{{ pr.code }}</code></a>{% endif %}
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <p class="group-foot"><a href="/publications/?group={{ g.slug }}">All {{ g.n_papers }} papers in this subgroup →</a></p>
+</section>
+{% endfor %}
+{% endblock %}

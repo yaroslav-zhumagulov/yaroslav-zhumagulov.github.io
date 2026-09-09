@@ -1,0 +1,39 @@
+# CV page. Put a PDF at static/files/cv.pdf to enable the download button.
+pdf: static/files/cv.pdf
+
+positions:
+  - period: 2024 – present
+    role: Postdoctoral researcher
+    place: EPFL, Institute of Physics, Chair of Computational Physics of Condensed Matter (C3MP)
+    location: Lausanne, Switzerland
+    note: Group of Oleg V. Yazyev
+
+  - period: 2020 – 2024
+    role: PhD in Physics
+    place: University of Regensburg, Institute for Theoretical Physics
+    location: Regensburg, Germany
+    note: Advisor Jaroslav Fabian   # TODO confirm thesis title and defence year
+
+  - period: 2018 – 2020
+    role: Researcher
+    place: ITMO University
+    location: St. Petersburg, Russia
+    note: Excitons and trions in 2D semiconductors with D. R. Gulevich and V. Perebeinos   # TODO confirm dates
+
+education:
+  - period: 2016 – 2018
+    role: MSc in Physics
+    place: National Research Nuclear University MEPhI
+    location: Moscow, Russia
+  - period: 2012 – 2016
+    role: BSc in Physics
+    place: National Research Nuclear University MEPhI
+    location: Moscow, Russia
+
+skills:
+  - group: Methods
+    items: [Density functional theory, Wannier functions and downfolding, Sternheimer linear response, Bethe-Salpeter and few-particle diagonalisation, TDDFT, Hartree-Fock mean field, Quantum Monte Carlo, cluster perturbation theory]
+  - group: Codes
+    items: [Quantum ESPRESSO, Wannier90, WannierBerri, GPAW, TRIQS, pybinding]
+  - group: Programming
+    items: [Python, NumPy/SciPy, CuPy, MPI, Fortran, C/C++, CUDA]

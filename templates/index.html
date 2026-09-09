@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% import "_macros.html" as m %}
+{% block title %}{{ profile.name }} · {{ profile.title }}, {{ profile.institution }}{% endblock %}
+{% block canonical %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <canvas id="lattice" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow">{{ profile.title }} · {{ profile.institution }}, {{ profile.location }}</p>
+      <h1>{{ profile.name }}</h1>
+      <p class="tagline">{{ profile.tagline }}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/research/">Research</a>
+        <a class="btn" href="/publications/">Publications</a>
+        <a class="btn" href="/software/">Software</a>
+      </div>
+      <div class="hero-links">
+        {% for l in profile.links %}
+        <a href="{{ l.href }}" {% if not l.href.startswith('mailto') %}rel="me noopener" target="_blank"{% endif %}>{{ l.label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="hero-photo">
+      {% if profile.photo_exists %}
+      <img src="/{{ profile.photo }}" alt="Portrait of {{ profile.name }}" width="280" height="280">
+      {% else %}
+      <div class="photo-placeholder" aria-hidden="true"><span>YZ</span></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section about">
+  <div class="about-grid">
+    <div class="about-text">
+      <h2>About</h2>
+      {% for para in profile.bio %}<p>{{ para }}</p>{% endfor %}
+    </div>
+    <aside class="about-side">
+      <h3>Now</h3>
+      <ul class="now">
+        {% for n in profile.now %}<li>{{ n }}</li>{% endfor %}
+      </ul>
+      <h3>Contact</h3>
+      <p class="contact"><a href="mailto:{{ profile.email }}">{{ profile.email }}</a><br>{{ profile.office }}</p>
+    </aside>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Research at a glance</h2>
+    <a class="more" href="/research/">All projects →</a>
+  </div>
+  <ol class="group-grid">
+    {% for g in groups %}
+    <li class="group-tile" style="--c: {{ g.color }}">
+      <a href="/research/#{{ g.slug }}">
+        <span class="group-num">{{ '%02d'|format(g.number) }}</span>
+        <span class="group-title">{{ g.title|safe }}</span>
+        <span class="group-meta">{{ g.projects|length }} projects · {{ g.n_papers }} papers</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Selected publications</h2>
+    <a class="more" href="/publications/">All {{ stats.total }} papers →</a>
+  </div>
+  <ul class="pub-list compact">
+    {% for p in selected[:5] %}{{ m.pub_item(p) }}{% endfor %}
+  </ul>
+</section>
+
+<section class="section two-col">
+  <div>
+    <h2>News</h2>
+    <ul class="news">
+      {% for n in profile.news %}
+      <li><time>{{ n.date }}</time> <a href="{{ n.href }}" target="_blank" rel="noopener">{{ n.text|safe }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div>
+    <h2>Software</h2>
+    <ul class="soft-strip">
+      {% for s in software.projects %}
+      <li><a href="/software/#{{ s.slug }}"><code>{{ s.name }}</code><span class="status status-{{ s.status }}">{{ s.status_text }}</span><span class="soft-tag">{{ s.tagline }}</span></a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="/static/js/lattice.js" defer></script>{% endblock %}
