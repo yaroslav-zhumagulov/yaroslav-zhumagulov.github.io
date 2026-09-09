@@ -44,7 +44,7 @@ education:
 
 skills:
   - group: Many-body physics and ab initio methods
-    items: [Density functional theory, Wannier functions and downfolding, Sternheimer linear response, Bethe-Salpeter equation, Matsubara diagrammatics, TDDFT, Quantum Monte Carlo]
+    items: [Density functional theory, Wannier functions and downfolding, Sternheimer linear response, Bethe-Salpeter equation, TDDFT, Quantum Monte Carlo]
   - group: Codes
     items: [Quantum ESPRESSO, Wannier90, WannierBerri, GPAW, TRIQS]
   - group: Programming
