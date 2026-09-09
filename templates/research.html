@@ -5,7 +5,7 @@
 {% block content %}
 <header class="page-head">
   <h1>Research</h1>
-  <p class="lede">Six threads, from mean-field theories of correlated graphene to the first-principles machinery that feeds them.</p>
+  <p class="lede">Six threads, from the ab initio and many-body machinery to the correlated phases and optical excitations it describes.</p>
   <nav class="toc" aria-label="Research subgroups">
     {% for g in groups %}
     <a href="#{{ g.slug }}" style="--c: {{ g.color }}"><span class="dot"></span>{{ '%02d'|format(g.number) }} {{ g.title|safe }}</a>

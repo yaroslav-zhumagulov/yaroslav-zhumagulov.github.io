@@ -43,7 +43,7 @@ education:
     note: "Thesis: Recovery of the density of states of strongly correlated systems using numerical methods (advisor Andrey Krasavin)"
 
 skills:
-  - group: Methods
+  - group: Many-body physics and ab initio methods
     items: [Density functional theory, Wannier functions and downfolding, Sternheimer linear response, Bethe-Salpeter and few-particle diagonalisation, TDDFT, Hartree-Fock mean field, Quantum Monte Carlo, cluster perturbation theory]
   - group: Codes
     items: [Quantum ESPRESSO, Wannier90, WannierBerri, GPAW, TRIQS, pybinding]

@@ -3,85 +3,15 @@
 # `papers` reference bib entries by arXiv id or DOI; the build resolves them.
 # `figure` is a path under static/; if the file is missing a placeholder is rendered.
 groups:
-  - slug: graphene
-    number: 1
-    title: Correlated phases in multilayer graphene
-    color: "#3b82f6"
-    lede: >-
-      Rhombohedral and Bernal graphene multilayers host flat bands whose correlated ground states
-      can be steered by proximity spin-orbit and exchange coupling from adjacent layers.
-    projects:
-      - title: Proximity-induced correlated phases in trilayer and bilayer graphene
-        figure: static/img/research/graphene-proximity.png
-        summary: >-
-          Mean-field theory of rhombohedral trilayer and Bernal bilayer graphene with spin-orbit
-          and exchange coupling induced by neighbouring transition-metal dichalcogenide or magnetic
-          layers. Proximity terms swap the order of competing symmetry-broken phases and stabilise
-          new ones, giving a controllable knob for correlated states.
-        papers: ["2305.14277", "2307.16025", "2403.17140"]
-      - title: Rhombohedral N-layer graphene
-        figure: static/img/research/graphene-nlayer.png
-        summary: >-
-          Analytic Lindhard susceptibilities and phase diagrams for rhombohedral stacks of arbitrary
-          thickness, tracing how correlated phases evolve with layer number and displacement field.
-        papers: ["2508.14630"]
-      - title: Magnetoelectric switching of magnetic order
-        figure: static/img/research/graphene-magnetoelectric.png
-        summary: >-
-          Joint theory and experiment on electrically switching the magnetic order of rhombohedral
-          graphene.
-        papers: ["2509.24672"]
-      - title: Edge states in proximitized graphene
-        figure: static/img/research/graphene-edges.png
-        summary: >-
-          Ribbons and flakes of proximitized graphene in a perpendicular magnetic field host lone
-          pseudohelical pairs and pure spin-current edge states.
-        papers: ["2111.06369"]
-
-  - slug: excitons
-    number: 2
-    title: Excitons, trions and polaritons in 2D semiconductors and magnets
-    color: "#f59e0b"
-    lede: >-
-      Few-particle optical excitations in monolayer semiconductors and magnetic insulators,
-      computed from microscopic models and compared directly with spectroscopy.
-    projects:
-      - title: Trions in doped transition-metal dichalcogenide monolayers
-        figure: static/img/research/excitons-trions.png
-        summary: >-
-          Three-particle states of doped MoS<sub>2</sub> from a direct-diagonalisation approach:
-          brightening of intervalley excitons, trion-induced photoluminescence and the electrostatic
-          and dielectric control of the trion fine structure, summarised in a Perspective in
-          Applied Physics Letters.
-        papers: ["zhumagulov2024perspective", "2002.08938", "2005.09306", "2104.11800"]
-      - title: Exciton and trion polaritons and nonlinear spectroscopy
-        figure: static/img/research/excitons-polaritons.png
-        summary: >-
-          Microscopic theory of exciton and trion polaritons in doped monolayers inside optical
-          cavities, and second-harmonic generation as a probe of excitonic states.
-        papers: ["2107.06927", "2109.11633"]
-      - title: Strain and phonons
-        figure: static/img/research/excitons-strain.png
-        summary: >-
-          Optical response of strained bubbles in MoSe<sub>2</sub>, emergent trion-phonon coupling in
-          atomically reconstructed heterobilayers, and strain control of exciton and trion
-          spin-valley dynamics.
-        papers: ["10.1039/d2nr00315e", "2306.01483", "2303.15325"]
-      - title: Excitons in two-dimensional magnets
-        figure: static/img/research/excitons-cri3.png
-        summary: >-
-          Robust polaritons and all-optical magnetisation control in CrI<sub>3</sub> monolayers, and
-          the excitonic anomalous Hall effect produced by scattering on magnetic skyrmions.
-        papers: ["2208.12228", "2304.00331", "2205.15221"]
-
   - slug: methods
-    number: 3
-    title: First-principles methods
+    number: 1
+    title: Many-body physics and ab initio methods
     color: "#10b981"
     lede: >-
-      Wannier downfolding and Sternheimer linear response built directly on plane-wave DFT, so that
-      proximity couplings, defect scattering and magnetic instabilities are obtained without empty
-      states, magnetic supercells or ad hoc models.
+      Low-energy many-body models built directly from plane-wave DFT: Wannier downfolding of proximity
+      and defect couplings, Sternheimer linear response for magnetic instabilities, Berry-phase transport
+      and time-dependent density functional theory, without empty states, magnetic supercells or ad hoc
+      parameters.
     projects:
       - title: Wannier representation of proximity effects
         figure: static/img/research/methods-proximity.png
@@ -125,6 +55,77 @@ groups:
           Nonadiabatic electron dynamics at the cost of the adiabatic local density approximation,
           and excitonic effects extracted from the zeros of the density response.
         papers: ["1908.10941", "10.1103/physrevb.100.241109", "2209.10257"]
+
+  - slug: graphene
+    number: 2
+    title: Correlated phases in multilayer graphene
+    color: "#3b82f6"
+    lede: >-
+      Rhombohedral and Bernal graphene multilayers host flat bands whose correlated ground states
+      can be steered by proximity spin-orbit and exchange coupling from adjacent layers.
+    projects:
+      - title: Proximity-induced correlated phases in trilayer and bilayer graphene
+        figure: static/img/research/graphene-proximity.png
+        summary: >-
+          Mean-field theory of rhombohedral trilayer and Bernal bilayer graphene with spin-orbit
+          and exchange coupling induced by neighbouring transition-metal dichalcogenide or magnetic
+          layers. Proximity terms swap the order of competing symmetry-broken phases and stabilise
+          new ones, giving a controllable knob for correlated states.
+        papers: ["2305.14277", "2307.16025", "2403.17140"]
+      - title: Rhombohedral N-layer graphene
+        figure: static/img/research/graphene-nlayer.png
+        summary: >-
+          Analytic Lindhard susceptibilities and phase diagrams for rhombohedral stacks of arbitrary
+          thickness, tracing how correlated phases evolve with layer number and displacement field.
+        papers: ["2508.14630"]
+      - title: Magnetoelectric switching of magnetic order
+        figure: static/img/research/graphene-magnetoelectric.png
+        summary: >-
+          Joint theory and experiment on electrically switching the magnetic order of rhombohedral
+          graphene.
+        papers: ["2509.24672"]
+      - title: Edge states in proximitized graphene
+        figure: static/img/research/graphene-edges.png
+        summary: >-
+          Ribbons and flakes of proximitized graphene in a perpendicular magnetic field host lone
+          pseudohelical pairs and pure spin-current edge states.
+        papers: ["2111.06369"]
+
+  - slug: excitons
+    number: 3
+    title: Excitons, trions and polaritons in 2D semiconductors and magnets
+    color: "#f59e0b"
+    lede: >-
+      Few-particle optical excitations in monolayer semiconductors and magnetic insulators,
+      computed from microscopic models and compared directly with spectroscopy.
+    projects:
+      - title: Trions in doped transition-metal dichalcogenide monolayers
+        figure: static/img/research/excitons-trions.png
+        summary: >-
+          Three-particle states of doped MoS<sub>2</sub> from a direct-diagonalisation approach:
+          brightening of intervalley excitons, trion-induced photoluminescence and the electrostatic
+          and dielectric control of the trion fine structure, summarised in a Perspective in
+          Applied Physics Letters.
+        papers: ["zhumagulov2024perspective", "2002.08938", "2005.09306", "2104.11800"]
+      - title: Exciton and trion polaritons and nonlinear spectroscopy
+        figure: static/img/research/excitons-polaritons.png
+        summary: >-
+          Microscopic theory of exciton and trion polaritons in doped monolayers inside optical
+          cavities, and second-harmonic generation as a probe of excitonic states.
+        papers: ["2107.06927", "2109.11633"]
+      - title: Strain and phonons
+        figure: static/img/research/excitons-strain.png
+        summary: >-
+          Optical response of strained bubbles in MoSe<sub>2</sub>, emergent trion-phonon coupling in
+          atomically reconstructed heterobilayers, and strain control of exciton and trion
+          spin-valley dynamics.
+        papers: ["10.1039/d2nr00315e", "2306.01483", "2303.15325"]
+      - title: Excitons in two-dimensional magnets
+        figure: static/img/research/excitons-cri3.png
+        summary: >-
+          Robust polaritons and all-optical magnetisation control in CrI<sub>3</sub> monolayers, and
+          the excitonic anomalous Hall effect produced by scattering on magnetic skyrmions.
+        papers: ["2208.12228", "2304.00331", "2205.15221"]
 
   - slug: spintronics
     number: 4
