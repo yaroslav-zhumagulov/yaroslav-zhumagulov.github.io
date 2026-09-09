@@ -24,24 +24,9 @@ projects:
     name: qe_magnon
     status: coming
     status_text: Public release with the paper
-    tagline: Magnetic order and spin response from first-principles linear response, without empty states.
-    description: >-
-      qe_magnon evaluates the density and magnetization response &chi;<sup>0</sup>(q) of a Quantum ESPRESSO
-      ground state with the Sternheimer construction of density-functional perturbation theory, so the
-      response is applied to fields rather than assembled, stored or inverted. On top of this engine it
-      solves the matrix-free eigenproblem &lambda;&phi; = &chi;<sup>0</sup>K&phi; of a symmetry-preserving
-      paramagnetic reference: an eigenvalue above one at wavevector q marks an incipient magnetic
-      instability and its eigenvector gives the charge and spin pattern inside the unit cell. Spin-orbit
-      coupling is kept in the reference and in the response, and q belongs to the perturbation rather
-      than to the cell, so incommensurate order needs no magnetic supercell.
-    features:
-      - Spatially resolved Stoner criterion with charge and three magnetization channels in one operator
-      - Collinear, amplitude-modulated and noncollinear orders appear as eigenmodes, not separate ansatzes
-      - "No band-convergence parameter: only the k-mesh, q-mesh and solver tolerance"
-      - Transverse spin-flip channel anchored by the exact Goldstone identity for spin-polarised ground states
-      - Magnon eigenproblem and exchange parameters from the same engine
+    tagline: Magnetic order and spin response from first-principles linear response.
     links: []
-    stack: [Python, Quantum ESPRESSO, libxc, MPI]
+    stack: [Python, Quantum ESPRESSO, MPI]
 
   - slug: wannier-berri
     name: WannierBerri

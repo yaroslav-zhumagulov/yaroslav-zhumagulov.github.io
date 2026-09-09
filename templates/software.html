@@ -27,7 +27,7 @@
     <g class="node accent">
       <rect x="300" y="140" width="200" height="90" rx="12"/>
       <text x="400" y="175" text-anchor="middle" class="t1 mono">qe_magnon</text>
-      <text x="400" y="200" text-anchor="middle" class="t2">Sternheimer spin response</text>
+      <text x="400" y="200" text-anchor="middle" class="t2">linear response</text>
     </g>
     <g class="node">
       <rect x="580" y="20" width="200" height="90" rx="12"/>
@@ -36,8 +36,8 @@
     </g>
     <g class="node out">
       <rect x="580" y="140" width="200" height="90" rx="12"/>
-      <text x="680" y="175" text-anchor="middle" class="t1">Magnetic order, magnons</text>
-      <text x="680" y="200" text-anchor="middle" class="t2">no magnetic supercells</text>
+      <text x="680" y="175" text-anchor="middle" class="t1">Magnetic order</text>
+      <text x="680" y="200" text-anchor="middle" class="t2">spin response</text>
     </g>
     <g class="node out">
       <rect x="820" y="20" width="120" height="90" rx="12"/>
@@ -62,10 +62,12 @@
       <span class="status status-{{ s.status }}">{{ s.status_text }}</span>
     </header>
     <p class="soft-tagline">{{ s.tagline|safe }}</p>
-    <p>{{ s.description|safe }}</p>
+    {% if s.description %}<p>{{ s.description|safe }}</p>{% endif %}
+    {% if s.features %}
     <ul class="features">
       {% for f in s.features %}<li>{{ f|safe }}</li>{% endfor %}
     </ul>
+    {% endif %}
     <div class="soft-foot">
       <div class="stack">{% for t in s.stack %}<span>{{ t }}</span>{% endfor %}</div>
       <div class="chips">
