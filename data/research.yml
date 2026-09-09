@@ -192,15 +192,3 @@ groups:
           under breathing distortion, and direct evidence of real-space pairing from time-resolved
           x-ray spectroscopy.
         papers: ["2006.11791", "2110.00084", "10.1103/physrevresearch.6.023307", "10.1134/s0021364019130149"]
-      - title: Iron-based superconductors and cluster methods
-        figure: static/img/research/correlated-qmc.png
-        summary: >-
-          Quantum Monte Carlo and variational cluster approximation for two-orbital models,
-          momentum distributions and non-Fermi-liquid behaviour, and density-of-states reconstruction
-          for metal nanoclusters.
-        papers: ["1610.05582", "10.1103/physrevb.94.235145", "10.1134/s0021364019010144", "10.1134/s0021364016050052", "1612.03288"]
-      - title: Polarons in phosphorene
-        figure: static/img/research/correlated-phosphorene.png
-        summary: >-
-          Polaronic signatures in the electronic structure of pristine phosphorene.
-        papers: ["10.1103/physrevmaterials.5.054008"]
