@@ -43,7 +43,7 @@ VENUE_SHORT = {
 # --- text helpers -------------------------------------------------------------
 def tex_to_html(s: str) -> str:
     """Minimal LaTeX-in-title -> HTML: sub/superscripts, \\text, --, \\&."""
-    s = s.replace(r"\&", "&amp;").replace(r"\%", "%")
+    s = html.escape(s.replace(r"\&", "&").replace(r"\%", "%"), quote=False)  # never trust upstream markup
     s = re.sub(r"\\text\{([^}]*)\}", r"\1", s)
 
     def math(m: re.Match) -> str:
@@ -61,6 +61,11 @@ def tex_to_html(s: str) -> str:
     s = re.sub(r"\b(MoS|PtSe|CrI|WSe|MoSe|PbI|BaBiO|ZrZn|CaWO)\s?(\d)\b", r"\1<sub>\2</sub>", s)
     s = re.sub(r"\bFe3(Ge|Ga)Te2\b", r"Fe<sub>3</sub>\1Te<sub>2</sub>", s)
     return s
+
+
+def safe_url(u: str) -> str:
+    """Only http(s) URLs are allowed to reach an href."""
+    return u if re.match(r"^https?://", u or "") else ""
 
 
 PARTICLES = {"de", "van", "von", "der", "da", "di", "al", "del", "la", "le"}
@@ -154,7 +159,7 @@ def load_pubs(groups: dict[str, dict]) -> list[dict]:
                 "year": year,
                 "doi": e.get("doi", ""),
                 "arxiv": e.get("eprint", ""),
-                "url": f"https://doi.org/{e['doi']}" if e.get("doi") else (f"https://arxiv.org/abs/{e['eprint']}" if e.get("eprint") else e.get("url", "")),
+                "url": f"https://doi.org/{e['doi']}" if e.get("doi") else (f"https://arxiv.org/abs/{e['eprint']}" if e.get("eprint") else safe_url(e.get("url", ""))),
                 "group": e.get("group", ""),
                 "group_title": g.get("title", ""),
                 "group_color": g.get("color", "#888"),
@@ -265,7 +270,7 @@ def main(serve: bool = False) -> None:
 
         handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(OUT))
         print("serving on http://localhost:8000  (Ctrl-C to stop)")
-        http.server.ThreadingHTTPServer(("", 8000), handler).serve_forever()
+        http.server.ThreadingHTTPServer(("127.0.0.1", 8000), handler).serve_forever()
 
 
 if __name__ == "__main__":

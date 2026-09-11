@@ -249,7 +249,21 @@ def clean_title(t: str) -> str:
 
 
 def bib_escape(s: str) -> str:
-    return s.replace("&", r"\&").replace("%", r"\%")
+    """Escape a metadata value so it stays inside its {...} field.
+
+    Braces are kept only when balanced (legitimate LaTeX); otherwise all braces are dropped,
+    so a value can never terminate the field or inject a new record. Newlines and '@' at a line
+    start are neutralised for the same reason.
+    """
+    s = " ".join(s.split())
+    depth = 0
+    for ch in s:
+        depth += (ch == "{") - (ch == "}")
+        if depth < 0:
+            break
+    if depth != 0:
+        s = s.replace("{", "").replace("}", "")
+    return s.replace("&", r"\&").replace("%", r"\%").replace("@", "\\@")
 
 
 def fix_author(a: str) -> str:
@@ -380,6 +394,8 @@ def main() -> None:
         lines.append(f"@article{{{k},")
         for f, v in fields.items():
             if v:
+                if f not in ("title", "abstract"):
+                    v = bib_escape(v)
                 lines.append(f"  {f} = {{{v}}},")
         lines.append("}\n")
     OUT.parent.mkdir(exist_ok=True)
