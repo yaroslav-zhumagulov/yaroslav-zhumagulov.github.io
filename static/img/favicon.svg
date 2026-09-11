@@ -1,15 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-<defs><clipPath id="c0"><circle cx="18.58" cy="26.84" r="4.0"/></clipPath><clipPath id="c1"><circle cx="36.92" cy="37.66" r="4.0"/></clipPath><clipPath id="c2"><circle cx="27.08" cy="37.66" r="4.0"/></clipPath><clipPath id="c3"><circle cx="45.42" cy="26.84" r="4.0"/></clipPath><clipPath id="c4"><circle cx="32.00" cy="28.91" r="4.0"/></clipPath><clipPath id="c5"><circle cx="32.00" cy="50.09" r="4.0"/></clipPath></defs>
 <rect width="64" height="64" rx="14" fill="#ffffff"/>
 <g fill="none" stroke-linejoin="round" stroke-linecap="round">
-<path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#d62828" stroke-width="3.4"/>
-<path d="M23.50 55.00 L10.08 47.25 L10.08 31.75 L23.50 24.00 L36.92 31.75 L36.92 47.25 Z" stroke="#3b3f47" stroke-width="3.4"/>
-<path d="M40.50 55.00 L27.08 47.25 L27.08 31.75 L40.50 24.00 L53.92 31.75 L53.92 47.25 Z" stroke="#2f6fed" stroke-width="3.4"/>
-<g clip-path="url(#c0)"><path d="M23.50 55.00 L10.08 47.25 L10.08 31.75 L23.50 24.00 L36.92 31.75 L36.92 47.25 Z" stroke="#3b3f47" stroke-width="3.4"/></g>
-<g clip-path="url(#c1)"><path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#d62828" stroke-width="3.4"/></g>
-<g clip-path="url(#c2)"><path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#d62828" stroke-width="3.4"/></g>
-<g clip-path="url(#c3)"><path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#d62828" stroke-width="3.4"/></g>
-<g clip-path="url(#c4)"><path d="M23.50 55.00 L10.08 47.25 L10.08 31.75 L23.50 24.00 L36.92 31.75 L36.92 47.25 Z" stroke="#3b3f47" stroke-width="3.4"/></g>
-<g clip-path="url(#c5)"><path d="M40.50 55.00 L27.08 47.25 L27.08 31.75 L40.50 24.00 L53.92 31.75 L53.92 47.25 Z" stroke="#2f6fed" stroke-width="3.4"/></g>
+<path d="M19.44 39.25 L6.89 32.00 L6.89 17.50 L19.44 10.25 L32.00 17.50 L32.00 32.00 Z" stroke="#d62828" stroke-width="3.4"/>
+<path d="M32.00 46.50 L19.44 39.25 L19.44 24.75 L32.00 17.50 L44.56 24.75 L44.56 39.25 Z" stroke="#3b3f47" stroke-width="3.4"/>
+<path d="M44.56 53.75 L32.00 46.50 L32.00 32.00 L44.56 24.75 L57.11 32.00 L57.11 46.50 Z" stroke="#2f6fed" stroke-width="3.4"/>
 </g>
 </svg>
