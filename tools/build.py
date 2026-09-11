@@ -231,6 +231,10 @@ def main(serve: bool = False) -> None:
     OUT.mkdir()
     shutil.copytree(ROOT / "static", OUT / "static")
     (OUT / ".nojekyll").write_text("")
+    if (ROOT / "root").exists():  # files served from the site root, e.g. search-engine verification
+        for f in (ROOT / "root").iterdir():
+            if f.is_file():
+                shutil.copy(f, OUT / f.name)
 
     pages = [
         ("index.html", "index.html", "home"),

@@ -30,5 +30,6 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 - **Software**: `data/software.yml`.
 - **CV**: `data/cv.yml`; put the PDF at `static/files/cv.pdf`.
 - **Portrait**: `static/img/portrait.jpg`.
+- **Root files** (e.g. Google Search Console verification): anything in `root/` is copied to the site root.
 
 Pushing to `main` rebuilds and deploys the site.
