@@ -51,4 +51,7 @@ svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 </svg>
 '''
 OUT.write_text(svg)
-print("wrote", OUT, [(round(x, 1), round(y, 1)) for x, y in centres])
+# same drawing without the background square, for use as an inline logo on the page
+LOGO = OUT.with_name("logo.svg")
+LOGO.write_text(svg.replace(f'<rect width="64" height="64" rx="14" fill="{BG}"/>\n', ""))
+print("wrote", OUT, "and", LOGO, [(round(x, 1), round(y, 1)) for x, y in centres])
