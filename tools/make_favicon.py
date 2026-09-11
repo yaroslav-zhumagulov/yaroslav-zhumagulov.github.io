@@ -20,7 +20,8 @@ OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().paren
 
 # SVG coordinates: y grows downwards, angles measured clockwise from +x
 H = (32 + R * math.cos(math.radians(30)) / 2, 32 - R / 2)   # chosen so the bounding box is centred
-ROT = 60                       # rotate the whole triangle of centres (degrees, clockwise on screen)
+ROT = 60                       # rotate the triangle of centres (degrees, clockwise on screen); hexagons keep orientation
+ROT_ALL = 30                   # rotate the whole picture, hexagons included, about the canvas centre
 shifts = [(0, 0), (R * math.cos(math.radians(150)), R * math.sin(math.radians(150))), (0, R)]
 centres = [(H[0] + dx, H[1] + dy) for dx, dy in shifts]
 # rotate about the triangle centroid, then re-centre the bounding box in the 64x64 canvas
@@ -44,7 +45,7 @@ def path(P):
 layers = "\n".join(f'<path d="{path(hexagon(cx, cy, R))}" stroke="{c}" stroke-width="{W}"/>' for (cx, cy), c in zip(centres, COLORS))
 svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 <rect width="64" height="64" rx="14" fill="{BG}"/>
-<g fill="none" stroke-linejoin="round" stroke-linecap="round">
+<g fill="none" stroke-linejoin="round" stroke-linecap="round" transform="rotate({ROT_ALL} 32 32)">
 {layers}
 </g>
 </svg>
