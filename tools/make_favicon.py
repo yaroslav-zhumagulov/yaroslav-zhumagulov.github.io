@@ -21,7 +21,7 @@ R=hexagon(32,yR,r); G=hexagon(32-dx,yGB,r); B=hexagon(32+dx,yGB,r)
 def path(P): return "M"+" L".join(f"{x:.2f} {y:.2f}" for x,y in P)+" Z"
 cRG=sorted(crossings(R,G)); cRB=sorted(crossings(R,B)); cGB=sorted(crossings(G,B), key=lambda p:p[1])
 FLIP=len(sys.argv)>9 and sys.argv[9]=="flip"
-patches=([("G",cRG[0]),("R",cRG[1]),("R",cRB[0]),("B",cRB[1]),("G",cGB[0]),("B",cGB[1])] if FLIP
+patches=([("G",cRG[0]),("R",cRG[1]),("R",cRB[0]),("R",cRB[1]),("G",cGB[0]),("B",cGB[1])] if FLIP
          else [("R",cRG[0]),("G",cRG[1]),("B",cRB[0]),("R",cRB[1]),("G",cGB[0]),("B",cGB[1])])
 rings={"R":(R,"#d62828"),"G":(G,"#3b3f47"),"B":(B,"#2f6fed")}
 NOHALO=len(sys.argv)>10 and sys.argv[10]=="nohalo"
