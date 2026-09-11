@@ -228,7 +228,7 @@ def main(serve: bool = False) -> None:
     env = Environment(loader=FileSystemLoader(ROOT / "templates"), autoescape=select_autoescape(["html"]), trim_blocks=True, lstrip_blocks=True)
     ctx = dict(
         profile=profile, research=research, software=software, cv=cv, pubs=pubs, selected=selected,
-        stats=stats, years=years, groups=research["groups"], now=dt.date.today(), build_year=dt.date.today().year,
+        stats=stats, years=years, groups=research["groups"], now=dt.date.today(), build_time=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(), build_year=dt.date.today().year,
     )
 
     if OUT.exists():
@@ -255,10 +255,11 @@ def main(serve: bool = False) -> None:
         dest.write_text(env.get_template(tpl).render(page=page, **ctx))
 
     base = profile["url"].rstrip("/")
+    stamp = ctx["build_time"]
     urls = [base + "/"] + [base + "/" + out.rsplit("/", 1)[0] + "/" for _, out, _ in pages[1:-1]]
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        + "".join(f"  <url><loc>{u}</loc><lastmod>{dt.date.today()}</lastmod><changefreq>monthly</changefreq><priority>{'1.0' if u.endswith('.io/') else '0.8'}</priority></url>\n" for u in urls)
+        + "".join(f"  <url><loc>{u}</loc><lastmod>{stamp}</lastmod><changefreq>monthly</changefreq><priority>{'1.0' if u.endswith('.io/') else '0.8'}</priority></url>\n" for u in urls)
         + "</urlset>\n"
     )
     (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
