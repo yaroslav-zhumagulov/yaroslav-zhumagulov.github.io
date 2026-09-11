@@ -37,10 +37,4 @@
   {% endfor %}
 </div>
 
-<details class="proceedings">
-  <summary>Earlier conference proceedings ({{ stats.proceedings }})</summary>
-  <ul class="pub-list compact">
-    {% for p in pubs if p.proceedings %}{{ m.pub_item(p, show_group=False) }}{% endfor %}
-  </ul>
-</details>
 {% endblock %}

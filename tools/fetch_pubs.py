@@ -210,8 +210,8 @@ def oa_record(w: dict) -> dict | None:
     title = TITLE_FIX.get(title, title)
     loc = w.get("primary_location") or {}
     src = (loc.get("source") or {}).get("display_name") or ""
-    if any(v in src for v in DROP_VENUES):
-        return None
+    if any(v in src for v in DROP_VENUES) or any(v in src for v in PROCEEDINGS_VENUES):
+        return None  # conference proceedings are not listed (author's choice, 2026-09-12)
     doi = (w.get("doi") or "").replace("https://doi.org/", "").lower()
     if doi in DROP_DOIS:
         return None
