@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-<defs><clipPath id="c12"><circle cx="24.20" cy="24.10" r="3.6"/></clipPath><clipPath id="c23"><circle cx="39.80" cy="24.10" r="3.6"/></clipPath></defs>
+<defs><clipPath id="c0"><circle cx="18.58" cy="26.84" r="5.2"/></clipPath><clipPath id="c1"><circle cx="36.92" cy="37.66" r="5.2"/></clipPath><clipPath id="c2"><circle cx="27.08" cy="37.66" r="5.2"/></clipPath><clipPath id="c3"><circle cx="45.42" cy="26.84" r="5.2"/></clipPath><clipPath id="c4"><circle cx="32.00" cy="28.91" r="5.2"/></clipPath><clipPath id="c5"><circle cx="32.00" cy="50.09" r="5.2"/></clipPath></defs>
 <rect width="64" height="64" rx="14" fill="#ffffff"/>
 <g fill="none" stroke-linejoin="round" stroke-linecap="round">
-<path d="M16.40 44.40 L5.66 38.20 L5.66 25.80 L16.40 19.60 L27.14 25.80 L27.14 38.20 Z" stroke="#d62828" stroke-width="3.4"/>
-<path d="M32.00 44.40 L21.26 38.20 L21.26 25.80 L32.00 19.60 L42.74 25.80 L42.74 38.20 Z" stroke="#ffffff" stroke-width="5.8"/>
-<path d="M32.00 44.40 L21.26 38.20 L21.26 25.80 L32.00 19.60 L42.74 25.80 L42.74 38.20 Z" stroke="#3b3f47" stroke-width="3.4"/>
-<path d="M47.60 44.40 L36.86 38.20 L36.86 25.80 L47.60 19.60 L58.34 25.80 L58.34 38.20 Z" stroke="#ffffff" stroke-width="5.8"/>
-<path d="M47.60 44.40 L36.86 38.20 L36.86 25.80 L47.60 19.60 L58.34 25.80 L58.34 38.20 Z" stroke="#2f6fed" stroke-width="3.4"/>
-<path d="M16.40 44.40 L5.66 38.20 L5.66 25.80 L16.40 19.60 L27.14 25.80 L27.14 38.20 Z" stroke="#ffffff" stroke-width="5.8" clip-path="url(#c12)"/>
-<path d="M16.40 44.40 L5.66 38.20 L5.66 25.80 L16.40 19.60 L27.14 25.80 L27.14 38.20 Z" stroke="#d62828" stroke-width="3.4" clip-path="url(#c12)"/>
-<path d="M32.00 44.40 L21.26 38.20 L21.26 25.80 L32.00 19.60 L42.74 25.80 L42.74 38.20 Z" stroke="#ffffff" stroke-width="5.8" clip-path="url(#c23)"/>
-<path d="M32.00 44.40 L21.26 38.20 L21.26 25.80 L32.00 19.60 L42.74 25.80 L42.74 38.20 Z" stroke="#3b3f47" stroke-width="3.4" clip-path="url(#c23)"/>
+<path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#d62828" stroke-width="3.4"/>
+<path d="M23.50 55.00 L10.08 47.25 L10.08 31.75 L23.50 24.00 L36.92 31.75 L36.92 47.25 Z" stroke="#3b3f47" stroke-width="3.4"/>
+<path d="M40.50 55.00 L27.08 47.25 L27.08 31.75 L40.50 24.00 L53.92 31.75 L53.92 47.25 Z" stroke="#2f6fed" stroke-width="3.4"/>
+<g clip-path="url(#c0)"><path d="M23.50 55.00 L10.08 47.25 L10.08 31.75 L23.50 24.00 L36.92 31.75 L36.92 47.25 Z" stroke="#ffffff" stroke-width="6.0"/><path d="M23.50 55.00 L10.08 47.25 L10.08 31.75 L23.50 24.00 L36.92 31.75 L36.92 47.25 Z" stroke="#3b3f47" stroke-width="3.4"/></g>
+<g clip-path="url(#c1)"><path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#ffffff" stroke-width="6.0"/><path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#d62828" stroke-width="3.4"/></g>
+<g clip-path="url(#c2)"><path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#ffffff" stroke-width="6.0"/><path d="M32.00 40.50 L18.58 32.75 L18.58 17.25 L32.00 9.50 L45.42 17.25 L45.42 32.75 Z" stroke="#d62828" stroke-width="3.4"/></g>
+<g clip-path="url(#c3)"><path d="M40.50 55.00 L27.08 47.25 L27.08 31.75 L40.50 24.00 L53.92 31.75 L53.92 47.25 Z" stroke="#ffffff" stroke-width="6.0"/><path d="M40.50 55.00 L27.08 47.25 L27.08 31.75 L40.50 24.00 L53.92 31.75 L53.92 47.25 Z" stroke="#2f6fed" stroke-width="3.4"/></g>
+<g clip-path="url(#c4)"><path d="M23.50 55.00 L10.08 47.25 L10.08 31.75 L23.50 24.00 L36.92 31.75 L36.92 47.25 Z" stroke="#ffffff" stroke-width="6.0"/><path d="M23.50 55.00 L10.08 47.25 L10.08 31.75 L23.50 24.00 L36.92 31.75 L36.92 47.25 Z" stroke="#3b3f47" stroke-width="3.4"/></g>
+<g clip-path="url(#c5)"><path d="M40.50 55.00 L27.08 47.25 L27.08 31.75 L40.50 24.00 L53.92 31.75 L53.92 47.25 Z" stroke="#ffffff" stroke-width="6.0"/><path d="M40.50 55.00 L27.08 47.25 L27.08 31.75 L40.50 24.00 L53.92 31.75 L53.92 47.25 Z" stroke="#2f6fed" stroke-width="3.4"/></g>
 </g>
 </svg>
