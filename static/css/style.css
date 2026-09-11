@@ -73,7 +73,7 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 1.25rem 4rem; }
 }
 .brand { display: inline-flex; align-items: center; gap: .6rem; color: var(--fg); font-weight: 600; letter-spacing: -.01em; }
 .brand:hover { text-decoration: none; }
-.brand-mark { width: 14px; height: 14px; border-radius: 4px; background: conic-gradient(from 90deg, #d62828, #2f6fed, #9aa0ab, #d62828); }
+.brand-mark { width: 22px; height: 22px; border-radius: 6px; display: block; }
 .site-nav { display: flex; align-items: center; gap: .25rem; }
 .site-nav a { color: var(--fg-2); padding: .4rem .7rem; border-radius: 8px; font-size: .95rem; }
 .site-nav a:hover { color: var(--fg); background: var(--bg-2); text-decoration: none; }

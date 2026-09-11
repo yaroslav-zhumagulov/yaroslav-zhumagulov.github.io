@@ -1,3 +1,5 @@
+<img src="static/img/favicon.svg" width="48" align="left" alt="">
+
 # yaroslav-zhumagulov.github.io
 
 Personal academic site of Yaroslav Zhumagulov, built by a small Python script and
