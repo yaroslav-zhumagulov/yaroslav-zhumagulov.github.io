@@ -57,7 +57,7 @@
 <body class="page-{{ page }}">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
-  <a class="brand" href="/"><img class="brand-mark" src="/static/img/logo.svg" alt="" width="24" height="24">{{ profile.name }}</a>
+  <a class="brand" href="/"><img class="brand-mark brand-light" src="/static/img/logo.svg" alt="" width="24" height="24"><img class="brand-mark brand-dark" src="/static/img/logo-dark.svg" alt="" width="24" height="24">{{ profile.name }}</a>
   <nav class="site-nav" aria-label="Main">
     <a href="/research/" {% if page == 'research' %}aria-current="page"{% endif %}>Research</a>
     <a href="/publications/" {% if page == 'publications' %}aria-current="page"{% endif %}>Publications</a>

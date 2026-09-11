@@ -53,5 +53,8 @@ svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 OUT.write_text(svg)
 # same drawing without the background square, for use as an inline logo on the page
 LOGO = OUT.with_name("logo.svg")
-LOGO.write_text(svg.replace(f'<rect width="64" height="64" rx="14" fill="{BG}"/>\n', ""))
+logo = svg.replace(f'<rect width="64" height="64" rx="14" fill="{BG}"/>\n', "")
+LOGO.write_text(logo)
+# dark-theme variant: the grey layer becomes light grey so it stays visible on a dark header
+OUT.with_name("logo-dark.svg").write_text(logo.replace(COLORS[1], "#c9ced8"))
 print("wrote", OUT, "and", LOGO, [(round(x, 1), round(y, 1)) for x, y in centres])
