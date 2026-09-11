@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}{{ profile.name }}{% endblock %}</title>
-<meta name="description" content="{% block description %}{{ profile.name }}, {{ profile.title|lower }} at {{ profile.institution }}. {{ profile.tagline }}{% endblock %}">
+<meta name="description" content="{% block description %}{{ profile.name }} (also written Iaroslav Zhumagulov), {{ profile.title|lower }} at {{ profile.institution }}. {{ profile.tagline }}{% endblock %}">
 <link rel="canonical" href="{{ profile.url }}/{% block canonical %}{% endblock %}">
 <meta property="og:title" content="{{ self.title() }}">
 <meta property="og:description" content="{{ self.description() }}">
@@ -76,7 +76,7 @@
     <a href="{{ l.href }}" {% if not l.href.startswith('mailto') %}rel="me noopener" target="_blank"{% endif %}>{{ l.label }}</a>
     {% endfor %}
   </div>
-  <p class="footer-meta">© {{ build_year }} {{ profile.name }} · {{ profile.group }}, {{ profile.institution }} ·
+  <p class="footer-meta">© {{ build_year }} {{ profile.name }}, also written Iaroslav Zhumagulov · {{ profile.group }}, {{ profile.institution }} ·
     <a href="https://github.com/yaroslav-zhumagulov/yaroslav-zhumagulov.github.io">source</a></p>
 </footer>
 <script src="/static/js/site.js" defer></script>
