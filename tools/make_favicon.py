@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Favicon: three overlapping hexagons in a triangle (red top, grey lower-left, blue lower-right).
+"""Favicon: three hexagons in rhombohedral (ABC) stacking, top view, triangular layout.
+
+Layer A is centred on a hollow site H, layer B on an A-sublattice vertex of that
+hexagon (lower-left vertex, 150 deg in SVG coordinates) and layer C on a B-sublattice vertex (straight below, 90 deg).
+The three centres form an equilateral triangle with side = bond length, and each
+centre sits on a vertex of the other two hexagons, exactly as in ABC graphene.
 
     .venv/bin/python tools/make_favicon.py            # writes static/img/favicon.svg
 """
@@ -7,12 +12,16 @@ import math
 import sys
 from pathlib import Path
 
-R = 16.0                       # hexagon circumradius
+R = 15.0                       # hexagon circumradius = bond length
 W = 3.4                        # stroke width
-CENTRES = [(32, 28), (26, 36), (38, 36)]
-COLORS = ["#d62828", "#3b3f47", "#2f6fed"]   # draw order: red, grey, blue (blue on top)
+COLORS = ["#d62828", "#3b3f47", "#2f6fed"]   # A (red), B (grey), C (blue); drawn in this order
 BG = "#ffffff"
 OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent / "static/img/favicon.svg"
+
+# SVG coordinates: y grows downwards, angles measured clockwise from +x
+H = (32 + R * math.cos(math.radians(30)) / 2, 32 - R / 2)   # chosen so the bounding box is centred
+shifts = [(0, 0), (R * math.cos(math.radians(150)), R * math.sin(math.radians(150))), (0, R)]
+centres = [(H[0] + dx, H[1] + dy) for dx, dy in shifts]
 
 
 def hexagon(cx, cy, r):
@@ -23,7 +32,7 @@ def path(P):
     return "M" + " L".join(f"{x:.2f} {y:.2f}" for x, y in P) + " Z"
 
 
-layers = "\n".join(f'<path d="{path(hexagon(cx, cy, R))}" stroke="{c}" stroke-width="{W}"/>' for (cx, cy), c in zip(CENTRES, COLORS))
+layers = "\n".join(f'<path d="{path(hexagon(cx, cy, R))}" stroke="{c}" stroke-width="{W}"/>' for (cx, cy), c in zip(centres, COLORS))
 svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 <rect width="64" height="64" rx="14" fill="{BG}"/>
 <g fill="none" stroke-linejoin="round" stroke-linecap="round">
@@ -32,4 +41,4 @@ svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 </svg>
 '''
 OUT.write_text(svg)
-print("wrote", OUT)
+print("wrote", OUT, [(round(x, 1), round(y, 1)) for x, y in centres])
