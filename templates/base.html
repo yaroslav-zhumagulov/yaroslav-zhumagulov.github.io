@@ -8,8 +8,14 @@
 <link rel="canonical" href="{{ profile.url }}/{% block canonical %}{% endblock %}">
 <meta property="og:title" content="{{ self.title() }}">
 <meta property="og:description" content="{{ self.description() }}">
-<meta property="og:type" content="profile">
+<meta property="og:type" content="{% if page == 'home' %}profile{% else %}website{% endif %}">
 <meta property="og:url" content="{{ profile.url }}/{{ self.canonical() }}">
+<meta property="og:site_name" content="{{ profile.name }}">
+<meta property="og:image" content="{{ profile.url }}/static/img/portrait.jpg">
+<meta property="og:image:alt" content="Portrait of {{ profile.name }}">
+<meta name="twitter:card" content="summary">
+<meta name="author" content="{{ profile.name }}">
+<meta name="keywords" content="{{ profile.name }}, Iaroslav Zhumagulov, EPFL, condensed matter theory, first-principles, DFT, Wannier, multilayer graphene, excitons, trions, 2D materials">
 <meta name="theme-color" content="#0f172a">
 <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,14 +28,25 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
+  {% if page == 'home' %}"@type": "ProfilePage",
+  "dateModified": "{{ now }}",
+  "mainEntity": {
+  {% endif %}
   "@type": "Person",
+  "@id": "{{ profile.url }}/#person",
   "name": "{{ profile.name }}",
   "alternateName": {{ profile.alt_names|tojson }},
   "jobTitle": "{{ profile.title }}",
   "email": "mailto:{{ profile.email }}",
   "url": "{{ profile.url }}",
+  "image": "{{ profile.url }}/static/img/portrait.jpg",
+  "description": "{{ profile.tagline }}",
+  "knowsAbout": {{ profile.interests|tojson }},
+  "worksFor": {"@type": "Organization", "name": "EPFL", "url": "https://www.epfl.ch"},
   "affiliation": {"@type": "Organization", "name": "EPFL", "url": "https://www.epfl.ch"},
+  "alumniOf": [{"@type": "CollegeOrUniversity", "name": "University of Regensburg"}, {"@type": "CollegeOrUniversity", "name": "National Research Nuclear University MEPhI"}],
   "sameAs": {{ profile.same_as|tojson }}
+  {% if page == 'home' %}}{% endif %}
 }
 </script>
 </head>

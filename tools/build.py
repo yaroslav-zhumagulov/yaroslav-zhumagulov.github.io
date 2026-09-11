@@ -253,7 +253,7 @@ def main(serve: bool = False) -> None:
     urls = [base + "/"] + [base + "/" + out.rsplit("/", 1)[0] + "/" for _, out, _ in pages[1:-1]]
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        + "".join(f"  <url><loc>{u}</loc><lastmod>{dt.date.today()}</lastmod></url>\n" for u in urls)
+        + "".join(f"  <url><loc>{u}</loc><lastmod>{dt.date.today()}</lastmod><changefreq>monthly</changefreq><priority>{'1.0' if u.endswith('.io/') else '0.8'}</priority></url>\n" for u in urls)
         + "</urlset>\n"
     )
     (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
