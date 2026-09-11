@@ -78,10 +78,6 @@ GROUPS: dict[str, tuple[str, bool]] = {
     "10.1134/s0021364019130149": ("correlated", False),
     "10.1134/s0021364019010144": ("correlated", False),
     "10.1134/s0021364016050052": ("correlated", False),
-    "1612.03288": ("correlated", False),
-    "10.1016/j.physb.2017.11.015": ("correlated", False),
-    "10.1134/s1063774519020159": ("correlated", False),
-    "10.1134/s1063774519020160": ("correlated", False),
 }
 # Papers OpenAlex does not attribute to the author profile yet.
 EXTRA_DOIS = ["10.1126/sciadv.aeb0659"]
@@ -89,6 +85,8 @@ EXTRA_DOIS = ["10.1126/sciadv.aeb0659"]
 PROCEEDINGS_VENUES = ("Journal of Physics Conference Series", "Journal of Siberian Federal University")
 DROP_TITLE = re.compile(r"^(erratum|corrigendum)", re.I)
 DROP_VENUES = ("Bulletin of the American Physical Society",)
+# papers the author does not want listed (removed 2026-09-12)
+DROP_DOIS = {"10.1016/j.physb.2017.11.015", "10.1063/1.5009280", "10.1134/s1063774519020159", "10.1134/s1063774519020160", "10.48550/arxiv.1612.03288"}
 DROP_TITLES = ("signatures of trions in the optical spectra",)  # v1 title of the JCP trion paper
 TITLE_FIX = {"Direct evidence of real-space pairing in Ba BiO 3": "Direct evidence of real-space pairing in BaBiO$_3$"}
 DOI_JOURNAL = {
@@ -163,6 +161,8 @@ def fetch_arxiv() -> list[dict]:
     for e in ET.fromstring(r.text).findall("a:entry", ns):
         arxiv_id = e.find("a:id", ns).text.split("/abs/")[-1]
         arxiv_id = re.sub(r"v\d+$", "", arxiv_id)
+        if arxiv_id == "1612.03288":  # dropped paper (Rev. Sci. Instrum. 2018)
+            continue
         jr = e.find("ar:journal_ref", ns)
         doi = e.find("ar:doi", ns)
         out.append(
@@ -213,6 +213,8 @@ def oa_record(w: dict) -> dict | None:
     if any(v in src for v in DROP_VENUES):
         return None
     doi = (w.get("doi") or "").replace("https://doi.org/", "").lower()
+    if doi in DROP_DOIS:
+        return None
     is_repo = "arxiv" in src.lower() or "publication server" in src.lower() or doi.startswith("10.48550") or doi.startswith("10.5283")
     biblio = w.get("biblio") or {}
     authors = [a["author"]["display_name"] for a in w.get("authorships", [])]
