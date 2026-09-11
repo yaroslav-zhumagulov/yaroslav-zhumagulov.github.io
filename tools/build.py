@@ -29,6 +29,7 @@ VENUE_SHORT = {
     "npj Computational Materials": "npj Comput. Mater.",
     "The Journal of Chemical Physics": "J. Chem. Phys.",
     "2D Materials": "2D Mater.",
+    "Applied Physics Letters": "Appl. Phys. Lett.",
     "Science Advances": "Sci. Adv.",
     "JETP Letters": "JETP Lett.",
     "Journal of Physics: Conference Series": "J. Phys.: Conf. Ser.",
