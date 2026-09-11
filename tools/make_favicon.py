@@ -24,10 +24,11 @@ FLIP=len(sys.argv)>9 and sys.argv[9]=="flip"
 patches=([("G",cRG[0]),("R",cRG[1]),("R",cRB[0]),("B",cRB[1]),("G",cGB[0]),("B",cGB[1])] if FLIP
          else [("R",cRG[0]),("G",cRG[1]),("B",cRB[0]),("R",cRB[1]),("G",cGB[0]),("B",cGB[1])])
 rings={"R":(R,"#d62828"),"G":(G,"#3b3f47"),"B":(B,"#2f6fed")}
+NOHALO=len(sys.argv)>10 and sys.argv[10]=="nohalo"
 halo=w+2.6; bg="#ffffff"
 defs="".join(f'<clipPath id="c{i}"><circle cx="{p[0]:.2f}" cy="{p[1]:.2f}" r="{rad}"/></clipPath>' for i,(_,p) in enumerate(patches))
 base="\n".join(f'<path d="{path(P)}" stroke="{col}" stroke-width="{w}"/>' for P,col in rings.values())
-over="\n".join(f'<g clip-path="url(#c{i})"><path d="{path(rings[k][0])}" stroke="{bg}" stroke-width="{halo}"/><path d="{path(rings[k][0])}" stroke="{rings[k][1]}" stroke-width="{w}"/></g>' for i,(k,_) in enumerate(patches))
+over="\n".join(f'<g clip-path="url(#c{i})">' + ("" if NOHALO else f'<path d="{path(rings[k][0])}" stroke="{bg}" stroke-width="{halo}"/>') + f'<path d="{path(rings[k][0])}" stroke="{rings[k][1]}" stroke-width="{w}"/></g>' for i,(k,_) in enumerate(patches))
 svg=f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 <defs>{defs}</defs>
 <rect width="64" height="64" rx="14" fill="{bg}"/>
