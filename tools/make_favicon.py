@@ -20,8 +20,17 @@ OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().paren
 
 # SVG coordinates: y grows downwards, angles measured clockwise from +x
 H = (32 + R * math.cos(math.radians(30)) / 2, 32 - R / 2)   # chosen so the bounding box is centred
+ROT = 60                       # rotate the whole triangle of centres (degrees, clockwise on screen)
 shifts = [(0, 0), (R * math.cos(math.radians(150)), R * math.sin(math.radians(150))), (0, R)]
 centres = [(H[0] + dx, H[1] + dy) for dx, dy in shifts]
+# rotate about the triangle centroid, then re-centre the bounding box in the 64x64 canvas
+gx, gy = sum(c[0] for c in centres) / 3, sum(c[1] for c in centres) / 3
+ca, sa = math.cos(math.radians(ROT)), math.sin(math.radians(ROT))
+centres = [(gx + (x - gx) * ca - (y - gy) * sa, gy + (x - gx) * sa + (y - gy) * ca) for x, y in centres]
+hw = R * math.cos(math.radians(30))
+xs = [x for x, _ in centres]; ys = [y for _, y in centres]
+ox, oy = 32 - (min(xs) - hw + max(xs) + hw) / 2, 32 - (min(ys) - R + max(ys) + R) / 2
+centres = [(x + ox, y + oy) for x, y in centres]
 
 
 def hexagon(cx, cy, r):
