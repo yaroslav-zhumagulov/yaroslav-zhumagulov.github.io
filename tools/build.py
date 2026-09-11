@@ -133,7 +133,7 @@ def load_pubs(groups: dict[str, dict]) -> list[dict]:
             entries += bibtexparser.loads(f.read_text(), parser=parser).entries
     pubs = []
     for e in entries:
-        journal = e.get("journal", "")
+        journal = e.get("journal", "").replace(r"\&", "&")
         authors_html, names = format_authors(e.get("author", ""))
         g = groups.get(e.get("group", ""), {})
         year = int(e.get("year", 0))
