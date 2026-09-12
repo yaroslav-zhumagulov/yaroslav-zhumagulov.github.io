@@ -69,7 +69,7 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 1.25rem 4rem; }
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   max-width: var(--max); margin: 0 auto; padding: .9rem 1.25rem;
-  background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(10px);
+  background: var(--bg); border-bottom: 1px solid var(--line);
 }
 .brand { display: inline-flex; align-items: center; gap: .6rem; color: var(--fg); font-weight: 600; letter-spacing: -.01em; }
 .brand:hover { text-decoration: none; }
