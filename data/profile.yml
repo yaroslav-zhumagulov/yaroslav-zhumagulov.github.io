@@ -65,7 +65,7 @@ links:
     href: https://orcid.org/0000-0002-2541-1100
     icon: orcid
   - label: arXiv
-    href: https://arxiv.org/search/?searchtype=authorhttps://arxiv.org/a/zhumagulov_y_1query=Zhumagulov%2C+Y
+    href: https://arxiv.org/search/?searchtype=author&query=Zhumagulov%2C+Y
     icon: arxiv
   - label: GitHub
     href: https://github.com/yaroslav-zhumagulov
