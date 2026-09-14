@@ -8,7 +8,7 @@ location: Lausanne, Switzerland
 tagline: >-
   First-principles and model theory of correlated, proximitized and optically active
   two-dimensional materials.
-email: iaroslav.zhumagulov@epfl.ch
+email: yaroslav.zhumagulov@epfl.ch
 office: PH H2 445, Station 3, 1015 Lausanne
 url: https://yaroslav-zhumagulov.github.io
 photo: static/img/portrait.jpg   # drop your headshot here (square crop, >= 800 px)
@@ -71,5 +71,5 @@ links:
     href: https://www.linkedin.com/in/yaroslav-zhumagulov-b0b096221/
     icon: linkedin
   - label: Email
-    href: mailto:iaroslav.zhumagulov@epfl.ch
+    href: mailto:yaroslav.zhumagulov@epfl.ch
     icon: mail
