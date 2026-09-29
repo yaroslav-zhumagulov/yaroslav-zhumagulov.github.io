@@ -47,8 +47,8 @@ jupyter lab graphene.ipynb
 
 MnTe (minutes 19–37): the same in `02_mnte`, with `mnte.ipynb`; the DFT step takes about 45 s.
 
-Every step of a notebook ends with a checkpoint, the numbers you should get (they are also on the slides). The
-"Try it" cells are small experiments that take seconds, and the bonus steps at the end are for later.
+Every step of a notebook ends with a checkpoint, the numbers you should get. The "Try it" cells are small
+experiments that take seconds, and the bonus steps at the end are for later.
 
 If something goes wrong: unpack `dft-files.tar.gz` (we bring it) in this folder if the DFT step fails, or run
 `bash run_all.sh` to do both parts without Jupyter (six minutes). Executed notebooks from our run are in
@@ -61,29 +61,13 @@ setup/            conda environment, WannierBerri install, setup check, packing 
 01_graphene/      DFT script and notebook for graphene
 02_mnte/          DFT script and notebook for MnTe
 reference/        both notebooks with their output
-slides/           the slides (index.html, PDF) and the scripts that make them
 03_checks/        convergence checks, not needed for the session (they take hours)
 patches/          the two fixes for WannierBerri
 run_all.sh        everything in one go
 ```
 
-The notebooks are stored without output; `*/results/` has the numbers behind the figures on the slides.
+The notebooks are stored without output; `*/results/` has the numbers they save.
 
-## Slides
-
-Open `slides/index.html` in a browser, or the online copy at
-https://yaroslav-zhumagulov.github.io/demos/nm4qm-2026/slides/. Press P to present, N for the speaker notes and R to
-replay an animation. The slides and the notebooks link to each other: the label in a slide's header opens that step
-of the notebook, and each notebook step lists its slides.
-
-To rebuild them after changing the notebooks or the text:
-
-```
-python slides/make_figures.py     # figures and animation frames from */results/
-python slides/render_latex.py     # formulas (needs latex and dvisvgm)
-python slides/link_notebooks.py   # slide numbers in the notebooks, after moving slides
-python slides/make_pdf.py         # the PDF (needs playwright with chromium)
-```
 
 ## Notes
 
@@ -115,5 +99,3 @@ python slides/make_pdf.py         # the PDF (needs playwright with chromium)
   046403 (2019): the gap of graphene
 - L. Šmejkal, J. Sinova and T. Jungwirth, Phys. Rev. X 12, 031042 (2022): altermagnets
 - R. D. Gonzalez Betancourt et al., Phys. Rev. Lett. 130, 036702 (2023): anomalous Hall effect in MnTe
-
-The full list is on the last slide.

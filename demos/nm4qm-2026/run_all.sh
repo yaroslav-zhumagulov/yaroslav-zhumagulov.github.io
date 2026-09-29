@@ -33,4 +33,3 @@ case "${1:-all}" in
     *)        echo "usage: bash run_all.sh [all|graphene|mnte]"; exit 1 ;;
 esac
 echo "Done: executed notebooks in reference/, numbers in */results/."
-echo "Slide figures and animation frames: python slides/make_figures.py"

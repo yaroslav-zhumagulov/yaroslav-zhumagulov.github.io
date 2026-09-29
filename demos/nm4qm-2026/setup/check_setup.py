@@ -5,7 +5,7 @@
     MPIRUN=/path/to/mpirun python setup/check_setup.py   # if several MPI libraries are installed
 
 Everything marked FAIL has to be fixed before the session; WARN means the notebooks run,
-but some numbers may differ slightly from the checkpoints on the slides.
+but some numbers may differ slightly from the checkpoints in the notebooks.
 """
 import hashlib
 import importlib

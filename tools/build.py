@@ -238,10 +238,9 @@ def main(serve: bool = False) -> None:
     OUT.mkdir()
     shutil.copytree(ROOT / "static", OUT / "static")
     (OUT / ".nojekyll").write_text("")
-    if (ROOT / "root").exists():  # files served from the site root, e.g. search-engine verification
-        for f in (ROOT / "root").iterdir():
-            if f.is_file():
-                shutil.copy(f, OUT / f.name)
+    token = profile.get("google_site_verification")
+    if token:  # Google Search Console checks that this file exists at the site root
+        (OUT / f"{token}.html").write_text(f"google-site-verification: {token}.html")
 
     pages = [
         ("index.html", "index.html", "home"),
@@ -257,17 +256,12 @@ def main(serve: bool = False) -> None:
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(env.get_template(tpl).render(page=page, **ctx))
 
-    for t in talks["talks"]:  # only the slides of a demo are published; the rest stays in the repository
-        if t.get("demo"):
-            src, dst = ROOT / "demos" / t["demo"] / "slides", OUT / "demos" / t["demo"] / "slides"
-            if not (src / "index.html").exists():
-                print(f"warning: no slides in {src.relative_to(ROOT)}/", file=sys.stderr)
-                continue
-            dst.mkdir(parents=True)
-            shutil.copy(src / "index.html", dst)
-            shutil.copytree(src / "figures", dst / "figures", ignore=shutil.ignore_patterns("*.json"))
-            for pdf in src.glob("*.pdf"):
-                shutil.copy(pdf, dst)
+    for t in talks["talks"]:  # slides of a talk: talks/<slug>/ -> /talks/<slug>/ (demos/ is not published)
+        src = ROOT / "talks" / t["slug"]
+        if (src / "index.html").exists():
+            shutil.copytree(src, OUT / "talks" / t["slug"])
+        elif t.get("slides"):
+            print(f"warning: no slides in talks/{t['slug']}/", file=sys.stderr)
 
     base = profile["url"].rstrip("/")
     stamp = ctx["build_time"]

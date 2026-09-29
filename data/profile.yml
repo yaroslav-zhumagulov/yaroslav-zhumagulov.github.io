@@ -11,6 +11,7 @@ tagline: >-
 email: yaroslav.zhumagulov@epfl.ch
 office: PH H2 445, Station 3, 1015 Lausanne
 url: https://yaroslav-zhumagulov.github.io
+google_site_verification: google4cc5a9956d5070b8   # Google Search Console
 photo: static/img/portrait.jpg   # drop your headshot here (square crop, >= 800 px)
 
 bio:
@@ -43,7 +44,7 @@ now:
 news:
   - date: 2026-10
     text: "Hands-on session at NM4QM 2026, DIPC: spin and anomalous Hall effects with WannierBerri and GPAW"
-    href: /demos/nm4qm-2026/slides/
+    href: /talks/nm4qm-2026/
   - date: 2026-08
     text: "Preprint: displacement-field-driven reconstruction of transport in few-layer PtSe<sub>2</sub>"
     href: https://arxiv.org/abs/2608.23003
