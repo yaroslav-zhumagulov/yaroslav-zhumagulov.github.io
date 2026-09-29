@@ -1,5 +1,5 @@
-# Talks page. The slides of a talk are in talks/<slug>/ and the demo in demos/<slug>/, both copied
-# from the demo repository with tools/sync_demo.py; `slides` is the page the title links to.
+# Talks page. `demo` names a folder in demos/ (copied there with tools/sync_demo.py);
+# `slides` is the page the title links to.
 talks:
   - slug: nm4qm-2026
     title: Spin and anomalous Hall effects with WannierBerri and GPAW
@@ -11,11 +11,12 @@ talks:
       Symmetry-adapted Wannier functions straight from GPAW, spin–orbit coupling switched on for any
       spin axis without new DFT, the spin Hall conductivity of graphene and the anomalous Hall effect
       of the altermagnet MnTe. Two notebooks that run on a laptop in a few minutes.
-    slides: /talks/nm4qm-2026/
+    demo: nm4qm-2026
+    slides: /demos/nm4qm-2026/slides/
     links:
       - label: Slides
-        href: /talks/nm4qm-2026/
+        href: /demos/nm4qm-2026/slides/
       - label: PDF
-        href: /talks/nm4qm-2026/nm4qm-2026.pdf
+        href: /demos/nm4qm-2026/slides/wannier-berri-demo.pdf
       - label: Notebooks and code
         href: https://github.com/yaroslav-zhumagulov/yaroslav-zhumagulov.github.io/tree/main/demos/nm4qm-2026

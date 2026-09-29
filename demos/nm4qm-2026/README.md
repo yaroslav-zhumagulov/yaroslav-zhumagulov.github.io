@@ -61,6 +61,7 @@ setup/            conda environment, WannierBerri install, setup check, packing 
 01_graphene/      DFT script and notebook for graphene
 02_mnte/          DFT script and notebook for MnTe
 reference/        both notebooks with their output
+slides/           the slides (index.html, PDF) and the scripts that make them
 03_checks/        convergence checks, not needed for the session (they take hours)
 patches/          the two fixes for WannierBerri
 run_all.sh        everything in one go
@@ -68,6 +69,21 @@ run_all.sh        everything in one go
 
 The notebooks are stored without output; `*/results/` has the numbers they save.
 
+## Slides
+
+Open `slides/index.html` in a browser, or the online copy at
+https://yaroslav-zhumagulov.github.io/demos/nm4qm-2026/slides/. Press P to present, N for the speaker notes and R to
+replay an animation. The slides and the notebooks link to each other: the label in a slide's header opens that step
+of the notebook, and each notebook step lists its slides.
+
+To rebuild them after changing the notebooks or the text:
+
+```
+python slides/make_figures.py     # figures and animation frames from */results/
+python slides/render_latex.py     # formulas (needs latex and dvisvgm)
+python slides/link_notebooks.py   # slide numbers in the notebooks, after moving slides
+python slides/make_pdf.py         # the PDF (needs playwright with chromium)
+```
 
 ## Notes
 

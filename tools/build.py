@@ -256,12 +256,17 @@ def main(serve: bool = False) -> None:
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(env.get_template(tpl).render(page=page, **ctx))
 
-    for t in talks["talks"]:  # slides of a talk: talks/<slug>/ -> /talks/<slug>/ (demos/ is not published)
-        src = ROOT / "talks" / t["slug"]
-        if (src / "index.html").exists():
-            shutil.copytree(src, OUT / "talks" / t["slug"])
-        elif t.get("slides"):
-            print(f"warning: no slides in talks/{t['slug']}/", file=sys.stderr)
+    for t in talks["talks"]:  # only the slides of a demo are published; the rest stays in the repository
+        if t.get("demo"):
+            src, dst = ROOT / "demos" / t["demo"] / "slides", OUT / "demos" / t["demo"] / "slides"
+            if not (src / "index.html").exists():
+                print(f"warning: no slides in {src.relative_to(ROOT)}/", file=sys.stderr)
+                continue
+            dst.mkdir(parents=True)
+            shutil.copy(src / "index.html", dst)
+            shutil.copytree(src / "figures", dst / "figures", ignore=shutil.ignore_patterns("*.json"))
+            for pdf in src.glob("*.pdf"):
+                shutil.copy(pdf, dst)
 
     base = profile["url"].rstrip("/")
     stamp = ctx["build_time"]

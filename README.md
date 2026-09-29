@@ -8,8 +8,7 @@ deployed to GitHub Pages by the workflow in `.github/workflows/pages.yml`.
 ```
 data/            all content: profile.yml, research.yml, software.yml, cv.yml, publications.bib
 templates/       Jinja2 templates (base, index, research, publications, software, talks, cv)
-talks/           slides of talks, published under /talks/
-demos/           demo repositories (notebooks, scripts), browsable on GitHub, not published
+demos/           demo repositories (notebooks, scripts, slides); only the slides are published
 static/          css, js, images, files (cv.pdf)
 tools/build.py   renders ./site from data + templates
 tools/fetch_pubs.py  regenerates data/publications.bib from OpenAlex + arXiv
@@ -33,9 +32,10 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
   `selected = {true}`, `firstauthor = {true}`, `url = {...}`.
 - **Software**: `data/software.yml`.
 - **CV**: `data/cv.yml`; put the PDF at `static/files/cv.pdf`.
-- **Talks**: `data/talks.yml`. `tools/sync_demo.py <repository> <slug>` copies the last commit of a demo
-  repository: the slides to `talks/<slug>/` (published at `/talks/<slug>/`, fonts from `static/fonts/plex/`)
-  and the rest, without the slides, to `demos/<slug>/`.
+- **Talks**: `data/talks.yml`. The material of a talk goes in `demos/<name>/`; its slides are published at
+  `/demos/<name>/slides/`, the rest is browsable on GitHub.
+  `tools/sync_demo.py <repository> <name>` copies the last commit of a demo repository there, and makes its
+  `slides/index.html` use the fonts in `static/fonts/plex/` instead of Google Fonts.
 - **Portrait**: `static/img/portrait.jpg`.
 - **Google Search Console**: `google_site_verification` in `data/profile.yml`; the build writes the verification file.
 
