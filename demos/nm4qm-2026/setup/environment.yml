@@ -1,0 +1,30 @@
+# Conda environment for the hands-on session (tested: Python 3.12, GPAW 25.7.0, irrep 3.2.0, Ray 2.44.1).
+#
+#   conda env create -f setup/environment.yml      # Linux, WSL2, Intel Mac
+#   conda activate wbdemo
+#   bash setup/install_wannierberri.sh
+#   python setup/check_setup.py
+#
+# Apple Silicon: conda-forge has no arm64 build of GPAW, so create the environment for Intel and let
+# Rosetta run it (a little slower, fine for this session):
+#   CONDA_SUBDIR=osx-64 conda env create -f setup/environment.yml
+#   conda activate wbdemo && conda config --env --set subdir osx-64
+name: wbdemo
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12
+  - gpaw=25.7.0=*mpi_openmpi*     # GPAW with MPI; brings its PAW datasets (gpaw-data) and a matching mpirun
+  - openmpi
+  - ase>=3.25
+  - numpy
+  - scipy
+  - matplotlib
+  - jupyterlab
+  - nbconvert
+  - git
+  - pip
+  - pip:
+      - irrep==3.2.0
+      - ray[default]==2.44.1

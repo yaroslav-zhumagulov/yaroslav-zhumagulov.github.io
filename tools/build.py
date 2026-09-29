@@ -183,6 +183,7 @@ def main(serve: bool = False) -> None:
     research = load_yaml("research.yml")
     software = load_yaml("software.yml")
     cv = load_yaml("cv.yml")
+    talks = load_yaml("talks.yml")
 
     groups = {g["slug"]: g for g in research["groups"]}
     pubs = load_pubs(groups)
@@ -228,7 +229,7 @@ def main(serve: bool = False) -> None:
 
     env = Environment(loader=FileSystemLoader(ROOT / "templates"), autoescape=select_autoescape(["html"]), trim_blocks=True, lstrip_blocks=True)
     ctx = dict(
-        profile=profile, research=research, software=software, cv=cv, pubs=pubs, selected=selected,
+        profile=profile, research=research, software=software, cv=cv, talks=talks, pubs=pubs, selected=selected,
         stats=stats, years=years, groups=research["groups"], now=dt.date.today(), build_time=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(), build_year=dt.date.today().year,
     )
 
@@ -247,6 +248,7 @@ def main(serve: bool = False) -> None:
         ("research.html", "research/index.html", "research"),
         ("publications.html", "publications/index.html", "publications"),
         ("software.html", "software/index.html", "software"),
+        ("talks.html", "talks/index.html", "talks"),
         ("cv.html", "cv/index.html", "cv"),
         ("404.html", "404.html", "404"),
     ]
@@ -255,9 +257,22 @@ def main(serve: bool = False) -> None:
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(env.get_template(tpl).render(page=page, **ctx))
 
+    for t in talks["talks"]:  # only the slides of a demo are published; the rest stays in the repository
+        if t.get("demo"):
+            src, dst = ROOT / "demos" / t["demo"] / "slides", OUT / "demos" / t["demo"] / "slides"
+            if not (src / "index.html").exists():
+                print(f"warning: no slides in {src.relative_to(ROOT)}/", file=sys.stderr)
+                continue
+            dst.mkdir(parents=True)
+            shutil.copy(src / "index.html", dst)
+            shutil.copytree(src / "figures", dst / "figures", ignore=shutil.ignore_patterns("*.json"))
+            for pdf in src.glob("*.pdf"):
+                shutil.copy(pdf, dst)
+
     base = profile["url"].rstrip("/")
     stamp = ctx["build_time"]
     urls = [base + "/"] + [base + "/" + out.rsplit("/", 1)[0] + "/" for _, out, _ in pages[1:-1]]
+    urls += [base + t["slides"] for t in talks["talks"] if t.get("slides")]
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"  <url><loc>{u}</loc><lastmod>{stamp}</lastmod><changefreq>monthly</changefreq><priority>{'1.0' if u.endswith('.io/') else '0.8'}</priority></url>\n" for u in urls)

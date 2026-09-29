@@ -1,0 +1,12 @@
+no SOC, spin up (Wannierised)       max error:   0.08 meV on the 24 NSCF points,   76.3 meV on the path (mean 3.9)
+no SOC, spin down (from symmetry)   max error:   0.10 meV on the 24 NSCF points,   76.3 meV on the path (mean 3.9)
+SOC, n || y: max error   83.8 meV over all 26 valence bands,   83.8 meV within 1 eV of the top
+SOC, n || y: top level at A -0.341 (Wannier) -0.355 eV (GPAW); SOC shift 75 vs 60 meV
+SOC, n || c: max error   70.5 meV over all 26 valence bands,   54.9 meV within 1 eV of the top
+SOC, n || c: top level at A -0.093 (Wannier) -0.094 eV (GPAW); SOC shift 322 vs 321 meV
+SCF grid 9x9x6 vs 6x6x4, SOC off: max change   3.1 meV (bands relative to the top on the path)
+SCF grid 9x9x6 vs 6x6x4, SOC n || y: max change   3.1 meV (bands relative to the top on the path)
+SCF grid 9x9x6 vs 6x6x4, SOC n || c: max change   3.1 meV (bands relative to the top on the path)
+k_x = 0 plane, 41x41 points: band pairs with a splitting < 1 meV for phi = 0 and > 3 meV for phi = 2.5: 2; their smallest splittings [0.51 0.26] meV (phi = 0) and [6.3 6.4] meV (phi = 2.5)
+Wannier grid 9x9x6: max error on the path  18.2 meV (top band  9.6 meV); SOC shift at A 322 (n || c), 75 meV (n || y)
+Wannier grid 12x12x8: max error on the path   5.8 meV (top band  3.7 meV); SOC shift at A 322 (n || c), 75 meV (n || y)

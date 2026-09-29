@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Talks · {{ profile.name }}{% endblock %}
+{% block description %}Talks and hands-on sessions by Yaroslav Zhumagulov, with slides, notebooks and code.{% endblock %}
+{% block canonical %}talks/{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>Talks</h1>
+  <p class="lede">The slides open in the browser; press P to present them.</p>
+</header>
+
+<div class="soft-list">
+  {% for t in talks.talks %}
+  <article class="soft talk" id="{{ t.slug }}">
+    <p class="talk-meta">{{ t.kind }} · {{ t.date }}</p>
+    <h2>{% if t.slides %}<a href="{{ t.slides }}">{{ t.title }}</a>{% else %}{{ t.title }}{% endif %}</h2>
+    <p class="talk-event">{{ t.event }} · {{ t.place }}</p>
+    <p>{{ t.summary }}</p>
+    <div class="chips">
+      {% for l in t.links %}<a class="chip" href="{{ l.href }}"{% if l.href.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ l.label }}</a>{% endfor %}
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

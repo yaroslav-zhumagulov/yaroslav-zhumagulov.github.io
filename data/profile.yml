@@ -41,6 +41,9 @@ now:
   - Correlated phases and magnetoelectric switching in rhombohedral graphene
 
 news:
+  - date: 2026-10
+    text: "Hands-on session at NM4QM 2026, DIPC: spin and anomalous Hall effects with WannierBerri and GPAW"
+    href: /demos/nm4qm-2026/slides/
   - date: 2026-08
     text: "Preprint: displacement-field-driven reconstruction of transport in few-layer PtSe<sub>2</sub>"
     href: https://arxiv.org/abs/2608.23003

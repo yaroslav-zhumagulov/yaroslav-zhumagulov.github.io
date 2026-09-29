@@ -210,6 +210,11 @@ body { overflow-x: clip; }
 .pipeline .t1.mono { font-family: var(--mono); font-weight: 500; }
 .pipeline .t2 { fill: var(--fg-3); font-family: var(--sans); font-size: 12px; }
 .soft-list { display: grid; gap: 1.5rem; }
+/* talks */
+.talk h2 { font-size: clamp(1.35rem, 2.6vw, 1.7rem); margin: .2rem 0 .35rem; }
+.talk h2 a { color: var(--fg); }
+.talk-meta { font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; color: var(--fg); margin: 0; }
+.talk-event { font-family: var(--serif); font-style: italic; color: var(--fg); margin-bottom: .6rem; }
 .soft { padding: 1.5rem; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); scroll-margin-top: 4.5rem; }
 .soft-head { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; margin-bottom: .25rem; }
 .soft-head h2 { margin: 0; font-family: var(--mono); font-size: 1.4rem; font-weight: 500; }

@@ -1,0 +1,6 @@
+# highest valence band with SOC (n || y), maximum over a 5x5x3 k-grid around each valley (eV, from E_F0)
+                   near Gamma-A   k_z = 0 plane
+GPAW                     -0.325          -0.293
+model 6x6x4              -0.314          -0.323   max |E_W - E_GPAW| of the top band: 30 meV
+model 9x9x6              -0.313          -0.296   max |E_W - E_GPAW| of the top band: 13 meV
+model 12x12x8            -0.313          -0.290   max |E_W - E_GPAW| of the top band: 14 meV

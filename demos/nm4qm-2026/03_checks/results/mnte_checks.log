@@ -1,0 +1,47 @@
+band top, U = 4 eV, phi =  0: E_v - E_F0 = -0.3140 eV at k = [1.    0.02  0.407]
+band top, U = 4 eV, phi = 15: E_v - E_F0 = -0.3140 eV at k = [-0.001  0.021  0.407]
+band top, U = 4 eV, phi = 30: E_v - E_F0 = -0.3141 eV at k = [0.019 0.979 0.408]
+band top, U = 4 eV, phi = 90: E_v - E_F0 = -0.3141 eV at k = [ 0.021 -0.019  0.408]
+n || y, NK = 48: 11 s
+n || y, NK = 96: 44 s
+n || y, NK = 144: 114 s
+n || y, NK = 192: 270 s
+band top, U = 3 eV: E_v - E_F0 = -0.2769 eV at k = [-0.02   0.016  0.42 ]
+U = 3 eV, NK = 144: 171 s
+band top, U = 5 eV: E_v - E_F0 = -0.3171 eV at k = [0.135 0.933 0.   ]
+U = 5 eV, NK = 144: 186 s
+external terms off, NK = 144: 121 s
+scan NK = 96, phi =  0.0: 72 s
+scan NK = 96, phi =  2.5: 119 s
+scan NK = 96, phi =  5.0: 161 s
+scan NK = 96, phi =  7.5: 110 s
+scan NK = 96, phi = 10.0: 153 s
+scan NK = 96, phi = 12.5: 157 s
+scan NK = 96, phi = 15.0: 186 s
+scan NK = 96, phi = 17.5: 103 s
+scan NK = 96, phi = 20.0: 95 s
+scan NK = 96, phi = 22.5: 100 s
+scan NK = 96, phi = 25.0: 101 s
+scan NK = 96, phi = 27.5: 103 s
+scan NK = 96, phi = 30.0: 106 s
+scan NK = 144, phi =  0.0: 221 s
+scan NK = 144, phi =  2.5: 206 s
+scan NK = 144, phi =  5.0: 209 s
+scan NK = 144, phi =  7.5: 219 s
+scan NK = 144, phi = 10.0: 249 s
+scan NK = 144, phi = 12.5: 305 s
+scan NK = 144, phi = 15.0: 278 s
+scan NK = 144, phi = 17.5: 286 s
+scan NK = 144, phi = 20.0: 287 s
+scan NK = 144, phi = 22.5: 278 s
+scan NK = 144, phi = 25.0: 288 s
+scan NK = 144, phi = 27.5: 288 s
+scan NK = 144, phi = 30.0: 174 s
+n || y, NK = 256: 550 s
+degen_thresh = 1e-02, NK = 96: 38 s
+degen_thresh = 1e-03, NK = 96: 38 s
+degen_thresh = 1e-05, NK = 96: 38 s
+band top, NSCF 9: E_v - E_F0 = -0.2956 eV at k = [0.85  0.075 0.   ]
+NSCF 9, NK = 144: 153 s
+band top, NSCF 12: E_v - E_F0 = -0.2901 eV at k = [0.149 0.925 0.   ]
+NSCF 12, NK = 144: 225 s

@@ -1,0 +1,13 @@
+# Kane-Mele gap at K (ueV) for different carbon PAW datasets; Wannier / GPAW (second variation, 60 bands)
+# last column: largest change of the 6 lowest bands (no SOC) on the 6x6 grid against the distributed dataset
+# dataset                                      all channels           p only           d only  bands (meV)
+distributed (gpaw-setups): 2s,s,2p,p,d, 800 eV     41.1 /  43.0       0.0 /   9.1      41.1 /  42.1         0.0
+regenerated: 2s,s,2p,p,d, r_c = 1.2, 800 eV    138.2 / 139.4       0.0 /   7.6     138.2 / 138.4         7.2
+regenerated, r_c = 1.0 Bohr, 1000 eV          189.9 / 190.9       0.0 /   2.6     189.9 / 189.9        25.1
+one p projector (2p), 800 eV                  124.9 / 126.1       0.0 /   7.7     124.9 / 125.1        42.6
+three p projectors, 800 eV                  1036.6 / 1035.8       0.0 /   7.0   1036.6 / 1036.5        20.8
+two d projectors, 800 eV                       40.3 /  41.9       0.0 /   7.1      40.3 /  40.9         7.2
+three d projectors, 800 eV                 20021.9 / 19989.6       0.0 /   7.5  20021.9 / 19990.7         8.8
+one d and one f projector, 800 eV              33.2 /  36.9       0.0 /  13.9      23.4 /  27.2        11.6
+two d and one f projector, 800 eV              30.1 /  33.6       0.0 /  12.9      14.3 /  19.2        12.0
+two d and two f projectors, 800 eV             32.5 /  35.9       0.0 /  13.1      15.7 /  20.4         9.8

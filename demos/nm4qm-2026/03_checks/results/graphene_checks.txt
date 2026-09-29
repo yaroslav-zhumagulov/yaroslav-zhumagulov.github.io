@@ -1,0 +1,22 @@
+# Kane-Mele gap at K (ueV): Wannier model (2 pz functions) vs GPAW (second variation, all bands)
+demo: 400 eV, c = 15 A, 20 bands, 6x6    Wannier   35.8   GPAW   38.7
+600 eV                                   Wannier   41.1   GPAW   43.9
+800 eV                                   Wannier   41.1   GPAW   43.8
+c = 20 A                                 Wannier   35.8   GPAW   38.6
+60 bands                                 Wannier   35.8   GPAW   37.9
+600 eV, 60 bands                         Wannier   41.1   GPAW   43.0
+SCF grid 12x12                           Wannier   35.8   GPAW   38.7
+NSCF 9x9                                 Wannier   35.8   GPAW   38.7
+NSCF 12x12                               Wannier   35.8   GPAW   38.7
+# PAW channel decomposition (600 eV, 60 bands)
+p only (l = 1)                           Wannier    0.0   GPAW    9.1
+d only (l = 2)                           Wannier   41.1   GPAW   42.1
+all                                      Wannier   41.1   GPAW   43.0
+# Dirac point relative to the GPAW Fermi level (demo): +28.6 ueV
+# interpolation error along G-K-M-G, bands inside the frozen window (meV)
+g400                                     max   60.36   mean  14.013
+g400-k9                                  max   45.64   mean   8.411
+g400-k12                                 max    9.26   mean   2.185
+# spin Hall conductivity (e/2pi), alpha = 1000 (gap +-18 meV), 600x600 grid, at E_F - E_F0 = -60, 0, +60 meV
+external terms False                     [0.2758 1.0502 0.2758]
+external terms True                      [0.2771 1.0516 0.2771]
