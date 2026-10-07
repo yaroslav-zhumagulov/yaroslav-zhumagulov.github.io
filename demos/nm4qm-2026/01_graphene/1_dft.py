@@ -5,7 +5,7 @@
   bands for the Wannierisation.
 * Band structure along G-K-M-G, only to benchmark the Wannier bands.
 
-Run:  mpirun -np 4 python 1_dft.py
+Run:  python 1_dft.py
 """
 import os
 
@@ -26,6 +26,7 @@ atoms = Atoms("C2",
 calc = GPAW(mode=PW(400),
             xc="PBE",
             kpts={"size": (6, 6, 1), "gamma": True},
+            legacy_gpaw=True,  # GPAW 26.7: irrep and WannierBerri read the files of the classic code
             txt="gpaw/scf.txt")
 atoms.calc = calc
 atoms.get_potential_energy()

@@ -1,30 +1,29 @@
-# Conda environment for the hands-on session (tested: Python 3.12, GPAW 25.7.0, irrep 3.2.0, Ray 2.44.1).
+# Conda environment for the hands-on session (tested: Python 3.12, GPAW 26.7.0, irrep 3.3.0, Ray 2.44.1).
 #
-#   conda env create -f setup/environment.yml      # Linux, WSL2, Intel Mac
+#   conda env create -f setup/environment.yml      # Linux, macOS, WSL2
 #   conda activate wbdemo
 #   bash setup/install_wannierberri.sh
 #   python setup/check_setup.py
-#
-# Apple Silicon: conda-forge has no arm64 build of GPAW, so create the environment for Intel and let
-# Rosetta run it (a little slower, fine for this session):
-#   CONDA_SUBDIR=osx-64 conda env create -f setup/environment.yml
-#   conda activate wbdemo && conda config --env --set subdir osx-64
 name: wbdemo
 channels:
   - conda-forge
   - nodefaults
 dependencies:
   - python=3.12
-  - gpaw=25.7.0=*mpi_openmpi*     # GPAW with MPI; brings its PAW datasets (gpaw-data) and a matching mpirun
-  - openmpi
-  - ase>=3.25
+  - gpaw=26.7.0=*nompi*           # serial GPAW (one DFT step takes under a minute); brings its PAW datasets
+  - ase>=3.29
   - numpy
   - scipy
+  - numba                         # the tetrahedron method of WannierBerri
+  - pyfftw                        # fast Fourier transforms for WannierBerri
   - matplotlib
   - jupyterlab
+  - ipywidgets                    # else Ray and tqdm print a warning into the notebooks
   - nbconvert
   - git
   - pip
   - pip:
-      - irrep==3.2.0
+      - irrep==3.3.0                # 3.2 finds no altermagnetic symmetry in the GPAW 26.7 moments
       - ray[default]==2.44.1
+variables:
+  OMP_NUM_THREADS: 1              # one thread per process: GPAW runs 2-3 times faster than with all cores

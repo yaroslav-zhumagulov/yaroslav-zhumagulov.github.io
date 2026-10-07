@@ -18,10 +18,12 @@ each part is cached in results/. Run with fewer Ray workers to keep the machine 
 import io
 import os
 import time
+import sys
 import warnings
 from contextlib import redirect_stdout
 
 import numpy as np
+import gpaw.old.atomrotations
 from gpaw import GPAW
 from irrep.spacegroup import SpaceGroup
 
@@ -29,6 +31,8 @@ import wannierberri as wb
 from wannierberri.parallel import ray_init
 from wannierberri.smoother import FermiDiracSmoother
 from wannierberri.symmetry.projections import Projection, ProjectionsSet
+
+sys.modules["gpaw.atomrotations"] = gpaw.old.atomrotations  # irrep 3.3 looks for it where GPAW 25 had it
 
 warnings.simplefilter("ignore")
 np.random.seed(0)  # the Wannierisation draws random numbers: fix them for reproducible output
@@ -43,7 +47,7 @@ DEMO = ("../02_mnte/gpaw/nscf.gpw", "mnte-nscf6")         # the model of the dem
 
 def model(nscf, tag):
     """The Wannier model of the demo (mnte.ipynb, section 2) for a given NSCF run, cached in work/."""
-    calc = GPAW(nscf, txt=None)
+    calc = GPAW(nscf, txt=None, legacy_gpaw=True)
     EF = calc.get_fermi_level()
     # irrep matches the moments with an absolute tolerance of 1e-8 muB; drop the numerical noise on Te
     moments = np.round(calc.get_magnetic_moments(), 6)

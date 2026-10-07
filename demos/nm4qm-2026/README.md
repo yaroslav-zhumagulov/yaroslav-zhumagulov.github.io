@@ -23,17 +23,13 @@ python setup/check_setup.py --dft
 
 The last command should end with `Ready.`
 
-- On an Apple Silicon Mac, conda-forge has no GPAW build, so create the environment for Intel and let Rosetta run it:
-  `CONDA_SUBDIR=osx-64 conda env create -f setup/environment.yml`, then after activating it
-  `conda config --env --set subdir osx-64`. On Windows, use WSL2 with Ubuntu.
-- If you already have GPAW with MPI, you can skip the conda environment: make a virtual environment on top of it
-  (`python -m venv --system-site-packages .venv`), install `irrep==3.2.0`, `ray[default]==2.44.1` and `jupyterlab`
-  if they are missing, and run the install script inside it.
-- `install_wannierberri.sh` installs the master branch of WannierBerri with two small fixes from `patches/`. The PyPI
-  release does not have the altermagnetic Wannierisation yet. In Jupyter or VS Code, make sure the notebook runs with
-  this environment; the first cell stops with a message if it finds another WannierBerri.
-- If the check says that `mpirun` belongs to a different MPI library, run it again with
-  `MPIRUN=/path/to/the/right/mpirun` and use that `mpirun` in the session.
+- On Windows, use WSL2 with Ubuntu.
+- If you already have GPAW 26.7, you can skip the conda environment: make a virtual environment on top of it
+  (`python -m venv --system-site-packages .venv`), install `irrep==3.3.0`, `ray[default]==2.44.1`, `numba` and
+  `jupyterlab` if they are missing, and run the install script inside it.
+- `install_wannierberri.sh` installs the master branch of WannierBerri, because the PyPI release does not have the
+  altermagnetic Wannierisation yet. In Jupyter or VS Code, make sure the notebook runs with this environment; the first
+  cell stops with a message if it finds another WannierBerri.
 
 ## During the session
 
@@ -41,7 +37,7 @@ Graphene (minutes 8–19):
 
 ```
 cd 01_graphene
-mpirun -np 4 python 1_dft.py     # 10 s
+python 1_dft.py     # 10 s
 jupyter lab graphene.ipynb
 ```
 
@@ -63,7 +59,6 @@ setup/            conda environment, WannierBerri install, setup check, packing 
 reference/        both notebooks with their output
 slides/           the slides (index.html, PDF) and the scripts that make them
 03_checks/        convergence checks, not needed for the session (they take hours)
-patches/          the two fixes for WannierBerri
 run_all.sh        everything in one go
 ```
 
@@ -87,11 +82,12 @@ python slides/make_pdf.py         # the PDF (needs playwright with chromium)
 
 ## Notes
 
-- Tested with Python 3.12, GPAW 25.7.0 with MPI, irrep 3.2.0, Ray 2.44.1 and WannierBerri master at commit
-  `0033c84`, on an Apple M2 laptop (4 MPI ranks for GPAW, 8 Ray workers). The checkpoint numbers use the PAW
+- Tested with Python 3.12, serial GPAW 26.7.0, irrep 3.3.0, Ray 2.44.1 and WannierBerri master at commit
+  `450e335`, on an Apple M2 laptop (8 Ray workers). The checkpoint numbers use the PAW
   datasets of gpaw-setups 24.11.0.
-- The two patches: one makes spin–orbit coupling work for non-magnetic systems like graphene, the other stops Ray
-  from counting some k-points twice (without it the graphene plateau came out as 9.56 instead of 1.0).
+- GPAW 26.7 runs its new code by default. The DFT scripts and the notebooks ask for the classic one
+  (`legacy_gpaw=True`), whose files irrep and WannierBerri read, and the first cell of each notebook tells irrep 3.3
+  where GPAW 26.7 keeps `atomrotations`.
 - For the spin Hall plateau of graphene we scale spin–orbit coupling by 1000, because the real gap is too small for
   a uniform k-grid. The last notebook step checks this with the real coupling on a grid refined around K and gets
   0.9997 e/2π.

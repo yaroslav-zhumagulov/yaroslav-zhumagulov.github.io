@@ -5,7 +5,7 @@ k_z = 0 plane. Here GPAW (second-variation SOC, n || y) is evaluated on small k-
 compared with the Wannier models built on 6x6x4 (the demo), 9x9x6 and 12x12x8 NSCF grids.
 
 Needs ../02_mnte/gpaw/scf.gpw and the models cached by mnte_checks.py / mnte_validation.py.
-Optional. Run:  mpirun -np 4 python mnte_band_top.py   (about 5 min)
+Optional. Run:  python mnte_band_top.py   (5 min on 4 cores before; not timed serially)
 """
 import io
 import os
@@ -29,10 +29,10 @@ n_loc = len(local)
 
 path = "work/mnte-bandtop.gpw"
 if not os.path.exists(path):
-    GPAW("../02_mnte/gpaw/scf.gpw", txt=None).fixed_density(kpts=kpts, symmetry="off", nbands=40,
+    GPAW("../02_mnte/gpaw/scf.gpw", txt=None, legacy_gpaw=True).fixed_density(kpts=kpts, symmetry="off", nbands=40,
                                                             txt=None).write(path)
-calc = GPAW(path, txt=None)
-EF = GPAW("../02_mnte/gpaw/nscf.gpw", txt=None).get_fermi_level()
+calc = GPAW(path, txt=None, legacy_gpaw=True)
+EF = GPAW("../02_mnte/gpaw/nscf.gpw", txt=None, legacy_gpaw=True).get_fermi_level()
 E_g = soc_eigenstates(calc, theta=90, phi=90).eigenvalues() - EF      # n || y
 top_g = np.sort(E_g, axis=1)[:, 41]                                   # highest of the 26 valence states + 16 semicore
 

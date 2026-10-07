@@ -9,17 +9,21 @@
 Optional, not needed for the talk. Needs the runs from dft_scan.py.  Run:  python graphene_checks.py   (about 10 min)
 """
 import io
+import sys
 import warnings
 from contextlib import redirect_stdout
 
 import numpy as np
 import gpaw.spinorbit
+import gpaw.old.atomrotations
 from gpaw import GPAW
 from gpaw.spinorbit import soc_eigenstates
 from irrep.spacegroup import SpaceGroup
 
 import wannierberri as wb
 from wannierberri.symmetry.projections import Projection, ProjectionsSet
+
+sys.modules["gpaw.atomrotations"] = gpaw.old.atomrotations  # irrep 3.3 looks for it where GPAW 25 had it
 
 warnings.simplefilter("ignore")
 np.random.seed(0)  # the Wannierisation draws random numbers: fix them for reproducible output
@@ -46,7 +50,9 @@ def wannier_model(calc):
         wandata = wb.WannierDataSOC.from_gpaw(calc, projections=ProjectionsSet([pz]), seedname="work/g")
         wandata.wannierise(froz_min=EF - 2.9, froz_max=EF + 2.8, frozen_states={0: [1]},
                            num_iter=100, sitesym=True)
-        return wb.SystemSOC.from_wannierdata(wandata, berry=True)
+        system = wb.SystemSOC.from_wannierdata(wandata, berry=True)
+    system.rvec = system.system_up.rvec  # non-magnetic: WannierBerri master leaves it unset
+    return system
 
 
 def gap_wannier(system):
@@ -68,26 +74,26 @@ runs = [("g400", "demo: 400 eV, c = 15 A, 20 bands, 6x6"), ("g600", "600 eV"), (
         ("g400-scf12", "SCF grid 12x12"), ("g400-k9", "NSCF 9x9"), ("g400-k12", "NSCF 12x12")]
 systems = {}
 for tag, label in runs:
-    calc = GPAW(f"work/{tag}-nscf.gpw", txt=None)
+    calc = GPAW(f"work/{tag}-nscf.gpw", txt=None, legacy_gpaw=True)
     systems[tag] = wannier_model(calc)
     lines.append(f"{label:40s} Wannier {gap_wannier(systems[tag]) * 1e6:6.1f}   GPAW {gap_gpaw(calc) * 1e6:6.1f}")
 
 lines.append("# PAW channel decomposition (600 eV, 60 bands)")
 for l_keep, label in [([1], "p only (l = 1)"), ([2], "d only (l = 2)"), ([0, 1, 2], "all")]:
     gpaw.spinorbit.soc = only_l(l_keep)
-    calc = GPAW("work/g600-nb60-nscf.gpw", txt=None)
+    calc = GPAW("work/g600-nb60-nscf.gpw", txt=None, legacy_gpaw=True)
     lines.append(f"{label:40s} Wannier {gap_wannier(wannier_model(calc)) * 1e6:6.1f}   GPAW {gap_gpaw(calc) * 1e6:6.1f}")
 gpaw.spinorbit.soc = soc_full
 
 system = systems["g400"]
 system.set_soc_axis(alpha_soc=0)
-EF = GPAW("work/g400-nscf.gpw", txt=None).get_fermi_level()
+EF = GPAW("work/g400-nscf.gpw", txt=None, legacy_gpaw=True).get_fermi_level()
 E_D = wb.evaluate_k(system, k=K, calculators={"E": energy}).data[0][0] - EF
 lines.append(f"# Dirac point relative to the GPAW Fermi level (demo): {E_D * 1e6:+.1f} ueV")
 
 lines.append("# interpolation error along G-K-M-G, bands inside the frozen window (meV)")
-bs = GPAW("work/g400-bands.gpw", txt=None).band_structure()
-EF = GPAW("work/g400-nscf.gpw", txt=None).get_fermi_level()
+bs = GPAW("work/g400-bands.gpw", txt=None, legacy_gpaw=True).band_structure()
+EF = GPAW("work/g400-nscf.gpw", txt=None, legacy_gpaw=True).get_fermi_level()
 E_dft = bs.energies[0] - EF
 for tag in ("g400", "g400-k9", "g400-k12"):
     system = systems[tag]

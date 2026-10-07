@@ -19,12 +19,15 @@ from contextlib import redirect_stdout
 import numpy as np
 import gpaw.spinorbit
 from ase import Atoms
+import gpaw.old.atomrotations
 from gpaw import GPAW, PW, setup_paths
 from gpaw.spinorbit import soc_eigenstates
 from irrep.spacegroup import SpaceGroup
 
 import wannierberri as wb
 from wannierberri.symmetry.projections import Projection, ProjectionsSet
+
+sys.modules["gpaw.atomrotations"] = gpaw.old.atomrotations  # irrep 3.3 looks for it where GPAW 25 had it
 
 warnings.simplefilter("ignore")
 np.random.seed(0)  # the Wannierisation draws random numbers: fix them for reproducible output
@@ -67,12 +70,12 @@ def dft(tag, ecut):
         atoms = Atoms("C2", cell=[[a, 0, 0], [-a / 2, a * np.sqrt(3) / 2, 0], [0, 0, 15]],
                       scaled_positions=[[1 / 3, 2 / 3, 0], [2 / 3, 1 / 3, 0]], pbc=True)
         calc = GPAW(mode=PW(ecut), xc="PBE", setups={"C": tag}, kpts={"size": (6, 6, 1), "gamma": True},
-                    txt=None)
+                    txt=None, legacy_gpaw=True)
         atoms.calc = calc
         atoms.get_potential_energy()
         kpts = SpaceGroup.from_gpaw(calc).get_irreducible_kpoints_grid((6, 6, 1))
         calc.fixed_density(kpts=kpts, nbands=60, txt=None).write(path, mode="all")
-    return GPAW(path, txt=None)
+    return GPAW(path, txt=None, legacy_gpaw=True)
 
 
 def gap_wannier(calc):
@@ -84,6 +87,7 @@ def gap_wannier(calc):
                                               IBend=20)   # the 20 bands of the demo
         wandata.wannierise(froz_min=EF - 2.9, froz_max=EF + 2.8, frozen_states={0: [1]}, num_iter=100, sitesym=True)
         system = wb.SystemSOC.from_wannierdata(wandata, berry=True)
+        system.rvec = system.system_up.rvec  # non-magnetic: WannierBerri master leaves it unset
         system.set_soc_axis(alpha_soc=1)
     E = wb.evaluate_k(system, k=K, calculators={"E": energy}).data[0]
     return E[2] - E[1]

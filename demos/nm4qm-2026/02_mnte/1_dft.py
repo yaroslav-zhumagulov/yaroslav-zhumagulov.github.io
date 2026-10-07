@@ -8,7 +8,7 @@
 * NSCF on the irreducible k-points of the same grid (24 of 144), with empty
   bands for the Wannierisation.
 
-Run:  mpirun -np 4 python 1_dft.py
+Run:  python 1_dft.py
 """
 import os
 
@@ -31,6 +31,7 @@ calc = GPAW(mode=PW(400),
             xc="PBE",
             setups={"Mn": ":d,4.0"},
             kpts={"size": (6, 6, 4), "gamma": True},
+            legacy_gpaw=True,  # GPAW 26.7: irrep and WannierBerri read the files of the classic code
             txt="gpaw/scf.txt")
 atoms.calc = calc
 atoms.get_potential_energy()

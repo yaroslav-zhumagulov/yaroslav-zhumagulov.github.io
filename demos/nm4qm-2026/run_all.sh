@@ -5,19 +5,15 @@
 #
 #   bash run_all.sh              # graphene and MnTe
 #   bash run_all.sh graphene     # one of them
-#   NP=2 bash run_all.sh         # fewer MPI ranks for GPAW (default 4)
-#   MPIRUN=/path/to/mpirun bash run_all.sh   # the mpirun that belongs to GPAW's MPI library
 set -euo pipefail
 cd "$(dirname "$0")"
-NP=${NP:-4}
-MPIRUN=${MPIRUN:-mpirun}
 KERNEL=${KERNEL:-python3}
 
 run_part() {
     local dir=$1 notebook=$2 t0
     t0=$SECONDS
-    echo "== $dir: DFT with $NP MPI ranks"
-    (cd "$dir" && "$MPIRUN" -np "$NP" python 1_dft.py > /dev/null)
+    echo "== $dir: DFT"
+    (cd "$dir" && python 1_dft.py > /dev/null)
     echo "   $((SECONDS - t0)) s"
     t0=$SECONDS
     echo "== $dir/$notebook"

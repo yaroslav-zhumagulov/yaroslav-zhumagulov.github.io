@@ -28,7 +28,7 @@ energy = {"Energy": wb.calculators.tabulate.Energy(degen_thresh=1e-6)}
 NSEMI = 8     # Mn 3s, 3p per spin: below the Wannier window
 NVAL = 13     # valence bands per spin in the model
 
-nscf = GPAW("../02_mnte/gpaw/nscf.gpw", txt=None)
+nscf = GPAW("../02_mnte/gpaw/nscf.gpw", txt=None, legacy_gpaw=True)
 EF = nscf.get_fermi_level()
 system, _ = model("../02_mnte/gpaw/nscf.gpw", "mnte-nscf6")    # the demo: 6x6x4 Wannier grid
 c = system.real_lattice[2, 2]
@@ -51,9 +51,9 @@ for i in np.cumsum([n for _, _, n in nodes])[:-1]:   # no distance across a jump
 
 path_gpw = "work/mnte-path.gpw"
 if not os.path.exists(path_gpw):
-    GPAW("../02_mnte/gpaw/scf.gpw", txt=None).fixed_density(kpts=kpath, symmetry="off", nbands=40,
+    GPAW("../02_mnte/gpaw/scf.gpw", txt=None, legacy_gpaw=True).fixed_density(kpts=kpath, symmetry="off", nbands=40,
                                                             txt=None).write(path_gpw)
-calc = GPAW(path_gpw, txt=None)
+calc = GPAW(path_gpw, txt=None, legacy_gpaw=True)
 
 
 def wannier_bands(syst, k):
@@ -105,7 +105,7 @@ for label, (theta, phi) in {"y": (90, 90), "c": (0, 0)}.items():
 # SCF k-grid: the 6x6x4-NSCF model on a 9x9x6 SCF density against the same model on the demo density
 system6, _ = model("work/mnte-nscf6-nscf.gpw", "mnte-nscf6")
 system9, _ = model("work/mnte-k9-nscf.gpw", "mnte-k9")
-EF9 = GPAW("work/mnte-k9-nscf.gpw", txt=None).get_fermi_level()
+EF9 = GPAW("work/mnte-k9-nscf.gpw", txt=None, legacy_gpaw=True).get_fermi_level()
 for label, (theta, phi, alpha) in {"off": (0, 0, 0), "n || y": (90, 90, 1), "n || c": (0, 0, 1)}.items():
     with redirect_stdout(io.StringIO()):
         for syst in (system6, system9):
@@ -137,7 +137,7 @@ results.update({"gaps_phi0": gaps[0], "gaps_phi2p5": gaps[2.5]})
 # Wannier (NSCF) grid: interpolation error along the path, no SOC, and the SOC shift at A
 for n in (9, 12):
     sys_n, _ = model(f"work/mnte-nscf{n}-nscf.gpw", f"mnte-nscf{n}")
-    EF_n = GPAW(f"work/mnte-nscf{n}-nscf.gpw", txt=None).get_fermi_level()
+    EF_n = GPAW(f"work/mnte-nscf{n}-nscf.gpw", txt=None, legacy_gpaw=True).get_fermi_level()
     with redirect_stdout(io.StringIO()):
         sys_n.set_soc_axis(alpha_soc=0)
         E_n = wb.evaluate_k_path(sys_n.system_up, path=wb.Path(sys_n, k_list=kpath), tabulators=energy,
