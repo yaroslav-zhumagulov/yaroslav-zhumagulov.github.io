@@ -27,8 +27,10 @@ projects:
     tagline: Magnetic order and spin response from first-principles linear response.
     description: >-
       A Quantum ESPRESSO based package that determines magnetic order and spin response of a
-      material directly from its first-principles linear response. Details will follow with the paper.
-    links: []
+      material directly from its first-principles linear response, as described in the paper below.
+    links:
+      - label: Paper (arXiv:2610.10412)
+        href: https://arxiv.org/abs/2610.10412
     stack: [Python, Quantum ESPRESSO, MPI]
 
   - slug: wannier-berri

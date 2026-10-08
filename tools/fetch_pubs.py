@@ -53,6 +53,7 @@ GROUPS: dict[str, tuple[str, bool]] = {
     "2205.15221": ("excitons", False),
     # 3 first-principles methods
     "2607.25690": ("methods", True),
+    "2610.10412": ("methods", True),
     "2604.06441": ("methods", False),
     "2608.05788": ("methods", False),
     "1908.10941": ("methods", False),

@@ -32,10 +32,14 @@ groups:
       - title: Magnetic order from first-principles linear response
         figure: static/img/research/methods-magnons.png
         summary: >-
-          A first-principles linear-response approach that identifies the magnetic order of a material
-          without comparing prescribed spin configurations, with spin-orbit coupling included.
-          Paper in preparation; details will follow.
-        papers: []
+          The magnetic order is read off the paramagnetic state instead of a set of trial spin
+          configurations: the leading eigenmodes of the self-consistent magnetization response,
+          computed with spin-orbit coupling at any wavevector within the primitive cell, give both the
+          ordering wavevector and the pattern of moments. With no assumption about the order, the
+          method finds the G-type stacking of the altermagnet candidate KV<sub>2</sub>Se<sub>2</sub>O,
+          the 3:1 ferrimagnetic tetrahedra of Cu<sub>2</sub>OSeO<sub>3</sub> and the incommensurate
+          spiral of monolayer NiI<sub>2</sub>.
+        papers: ["2610.10412"]
         code: qe_magnon
       - title: Berry-phase transport with WannierBerri
         figure: static/img/research/methods-berry.png

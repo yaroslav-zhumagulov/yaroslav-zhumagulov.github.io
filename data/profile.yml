@@ -43,6 +43,9 @@ now:
 
 news:
   - date: 2026-10
+    text: "Preprint: magnetic order from first-principles linear response"
+    href: https://arxiv.org/abs/2610.10412
+  - date: 2026-10
     text: "Hands-on session at NM4QM 2026, DIPC: spin and anomalous Hall effects with WannierBerri and GPAW"
     href: /demos/nm4qm-2026/slides/
   - date: 2026-08
