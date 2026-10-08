@@ -195,8 +195,10 @@ def crossref_meta(doi: str) -> dict:
         elif "name" in a:
             authors.append(a["name"])
     issued = (m.get("issued") or {}).get("date-parts") or [[None]]
+    y, mo, d = (list(issued[0]) + [1, 1])[:3]
     return {
         "authors": authors,
+        "date": f"{y:04d}-{mo:02d}-{d:02d}" if y else "",
         "volume": m.get("volume", ""),
         "pages": m.get("article-number") or (m.get("page") or "").split("-")[0],
         "year": issued[0][0],
@@ -345,7 +347,10 @@ def main() -> None:
         rec["pages"] = rec["pages"] or cr["pages"]
         rec["venue"] = rec["venue"] or cr["venue"]
         if cr["year"]:
-            rec["year"] = cr["year"]  # journal year, not preprint year
+            # the journal year and the sort date must agree: both come from Crossref,
+            # otherwise a paper keeps its preprint date and sorts into the wrong year
+            rec["year"] = cr["year"]
+            rec["date"] = cr["date"] or rec.get("date", "")
 
     entries = []
     unmapped = []
