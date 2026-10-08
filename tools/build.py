@@ -158,6 +158,7 @@ def load_pubs(groups: dict[str, dict]) -> list[dict]:
                 "ref": ref,
                 "ref_short": ref_short,
                 "year": year,
+                "date": e.get("date", "") or f"{year}-12-31",  # year-only entries sort last within their year
                 "doi": e.get("doi", ""),
                 "arxiv": e.get("eprint", ""),
                 "url": f"https://doi.org/{e['doi']}" if e.get("doi") else (f"https://arxiv.org/abs/{e['eprint']}" if e.get("eprint") else safe_url(e.get("url", ""))),
@@ -174,7 +175,7 @@ def load_pubs(groups: dict[str, dict]) -> list[dict]:
                 "preprint": journal == "arXiv preprint",
             }
         )
-    pubs.sort(key=lambda p: (-p["year"], p["preprint"], p["proceedings"], p["key"]))
+    pubs.sort(key=lambda p: (p["date"], p["key"]), reverse=True)
     return pubs
 
 

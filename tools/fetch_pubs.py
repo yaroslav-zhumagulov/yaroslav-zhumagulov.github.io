@@ -172,6 +172,7 @@ def fetch_arxiv() -> list[dict]:
                 "title": " ".join(e.find("a:title", ns).text.split()),
                 "authors": [x.find("a:name", ns).text for x in e.findall("a:author", ns)],
                 "year": int(e.find("a:published", ns).text[:4]),
+                "date": e.find("a:published", ns).text[:10],
                 "journal_ref": jr.text if jr is not None else "",
                 "doi": doi.text if doi is not None else "",
                 "abstract": " ".join(e.find("a:summary", ns).text.split()),
@@ -222,6 +223,7 @@ def oa_record(w: dict) -> dict | None:
     return {
         "title": title,
         "year": w.get("publication_year"),
+        "date": w.get("publication_date") or "",
         "doi": "" if is_repo else doi,
         "venue": "" if is_repo else src,
         "volume": biblio.get("volume") or "",
@@ -298,6 +300,10 @@ def main() -> None:
                 "authors": a["authors"], "citations": 0, "is_repo": True,
             }
         rec["arxiv"] = a["arxiv"]
+        rec.setdefault("date", "")
+        if not rec["date"]:
+            rec["date"] = a["date"]
+        rec["arxiv_date"] = a["date"]
         rec["authors"] = a["authors"]  # as printed on the paper
         rec["abstract"] = a["abstract"]
         rec["title"] = a["title"]
@@ -372,6 +378,7 @@ def main() -> None:
             "title": bib_escape(clean_title(rec["title"])),
             "author": " and ".join(authors),
             "year": str(year),
+            "date": rec.get("date") or rec.get("arxiv_date") or "",
             "journal": venue if venue else ("arXiv preprint" if rec.get("arxiv") else ""),
             "volume": rec["volume"],
             "pages": rec["pages"],
