@@ -7,7 +7,7 @@
 <link rel="canonical" href="https://yaroslav-zhumagulov.github.io/demos/nm4qm-2026/slides/">
 <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../../static/fonts/plex/fonts.css">
-<!-- nm4qm-2026 6e5b4a5, copied by tools/sync_demo.py -->
+<!-- nm4qm-2026 30930b1, copied by tools/sync_demo.py -->
 <title>Spin and anomalous Hall effects with WannierBerri and GPAW</title>
 <style>
   :root {
@@ -484,7 +484,7 @@ python 1_dft.py                    # 10 s
 jupyter lab graphene.ipynb</pre>
         <div class="cols" style="height:auto">
           <ul class="big">
-            <li>No environment yet: README, "Before the session"</li>
+            <li>No environment yet: <code class="inline">bash setup/setup.sh</code> (15 min)</li>
             <li>DFT fails: unpack our <code class="inline">dft-files.tar.gz</code> and carry on</li>
           </ul>
           <ul class="big">
@@ -1239,11 +1239,9 @@ wb.run(system, grid=..., calculators=...)</pre>
         <div class="stack">
           <p class="label">Run it</p>
           <p class="big"><a href="https://github.com/yaroslav-zhumagulov/wannier-berri-demo">github.com/yaroslav-zhumagulov/<br>wannier-berri-demo</a></p>
-          <pre class="code" data-lang="sh" style="font-size:.74em">conda env create -f setup/environment.yml
+          <pre class="code" data-lang="sh" style="font-size:.74em">bash setup/setup.sh    # once, 15 min
 conda activate wbdemo
-bash setup/install_wannierberri.sh
-python setup/check_setup.py
-bash run_all.sh     # 6 min, or the notebooks</pre>
+bash run_all.sh        # 6 min, or the notebooks</pre>
           <p class="small">Linux, macOS or WSL2, with GPAW 26.7 from conda-forge</p>
         </div>
       </div>

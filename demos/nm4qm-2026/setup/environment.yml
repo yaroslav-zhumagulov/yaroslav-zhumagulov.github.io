@@ -1,9 +1,6 @@
 # Conda environment for the hands-on session (tested: Python 3.12, GPAW 26.7.0, irrep 3.3.0, Ray 2.44.1).
 #
-#   conda env create -f setup/environment.yml      # Linux, macOS, WSL2
-#   conda activate wbdemo
-#   bash setup/install_wannierberri.sh
-#   python setup/check_setup.py
+#   bash setup/setup.sh      # Linux, macOS, WSL2: creates it, installs WannierBerri, checks everything
 name: wbdemo
 channels:
   - conda-forge

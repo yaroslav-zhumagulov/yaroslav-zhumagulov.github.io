@@ -10,32 +10,44 @@ functions built on seven k-points. In the second we look at MnTe, an altermagnet
 anomalous Hall effect that depends on the direction of the Néel vector. Along the way you build symmetry-adapted
 Wannier functions straight from GPAW and switch spin–orbit coupling on for any spin axis without redoing the DFT.
 
-## Setup (do this before the session, about 20 minutes)
+## Setup (once, before the session, about 15 minutes)
+
+You need conda. If `conda --version` says "command not found", install Miniforge, then open a new terminal:
+
+```
+curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh
+```
+
+Then:
 
 ```
 git clone https://github.com/yaroslav-zhumagulov/wannier-berri-demo
 cd wannier-berri-demo
-conda env create -f setup/environment.yml
-conda activate wbdemo
-bash setup/install_wannierberri.sh
-python setup/check_setup.py --dft
+bash setup/setup.sh
 ```
 
-The last command should end with `Ready.`
+The script creates the conda environment `wbdemo` with GPAW and WannierBerri, registers it as the Jupyter kernel
+"Python (wannier-berri-demo)", runs the graphene DFT step as a test and ends with `Ready.` Running it again updates
+the environment.
 
+- No git: on GitHub, use Code → Download ZIP, unpack it and run the script in that folder.
 - On Windows, use WSL2 with Ubuntu.
+- If macOS asks whether python may accept incoming network connections, click Allow: Ray, which runs the k-points
+  in parallel, talks to its workers over local connections.
 - If you already have GPAW 26.7, you can skip the conda environment: make a virtual environment on top of it
   (`python -m venv --system-site-packages .venv`), install `irrep==3.3.0`, `ray[default]==2.44.1`, `numba` and
   `jupyterlab` if they are missing, and run the install script inside it.
-- `install_wannierberri.sh` installs the master branch of WannierBerri, because the PyPI release does not have the
-  altermagnetic Wannierisation yet. In Jupyter or VS Code, make sure the notebook runs with this environment; the first
-  cell stops with a message if it finds another WannierBerri.
+- `setup.sh` installs the master branch of WannierBerri (with `install_wannierberri.sh`), because the PyPI release
+  does not have the altermagnetic Wannierisation yet.
 
 ## During the session
 
 Graphene (minutes 8–19):
 
 ```
+cd wannier-berri-demo
+conda activate wbdemo
 cd 01_graphene
 python 1_dft.py     # 10 s
 jupyter lab graphene.ipynb
@@ -43,8 +55,9 @@ jupyter lab graphene.ipynb
 
 MnTe (minutes 19–37): the same in `02_mnte`, with `mnte.ipynb`; the DFT step takes about 45 s.
 
-Every step of a notebook ends with a checkpoint, the numbers you should get. The "Try it" cells are small
-experiments that take seconds, and the bonus steps at the end are for later.
+In VS Code or another Jupyter, choose the kernel "Python (wannier-berri-demo)"; the first cell stops with a message
+if the notebook runs in another environment. Every step of a notebook ends with a checkpoint, the numbers you should
+get. The "Try it" cells are small experiments that take seconds, and the bonus steps at the end are for later.
 
 If something goes wrong: unpack `dft-files.tar.gz` (we bring it) in this folder if the DFT step fails, or run
 `bash run_all.sh` to do both parts without Jupyter (six minutes). Executed notebooks from our run are in
@@ -53,7 +66,7 @@ If something goes wrong: unpack `dft-files.tar.gz` (we bring it) in this folder 
 ## What is where
 
 ```
-setup/            conda environment, WannierBerri install, setup check, packing the DFT files
+setup/            setup.sh (does all of the setup), conda environment, WannierBerri install, setup check
 01_graphene/      DFT script and notebook for graphene
 02_mnte/          DFT script and notebook for MnTe
 reference/        both notebooks with their output
