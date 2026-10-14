@@ -1316,67 +1316,12 @@ L 387.824453 31.343184
 " clip-path="url(#pbb5b44e17a)" style="fill: none; stroke: #d95926; stroke-width: 1.8; stroke-linecap: square"/>
    </g>
    <g id="text_13">
-    <!-- 0.9997 -->
-    <g style="fill: #eef1f6" transform="translate(338.743984 23.483478) scale(0.15 -0.15)">
-     <defs>
-      <path id="IBMPlexSans-39" d="M 3411 2829 
-Q 3411 2330 3264 1891 
-Q 3117 1453 2883 1091 
-Q 2650 730 2368 451 
-Q 2086 173 1818 0 
-L 1126 0 
-Q 1485 262 1766 512 
-Q 2048 762 2259 1034 
-Q 2470 1306 2617 1616 
-Q 2765 1926 2854 2317 
-L 2822 2330 
-Q 2662 2054 2409 1872 
-Q 2157 1690 1747 1690 
-Q 1459 1690 1216 1786 
-Q 973 1882 800 2061 
-Q 627 2240 528 2493 
-Q 429 2746 429 3066 
-Q 429 3392 534 3664 
-Q 640 3936 835 4131 
-Q 1030 4326 1302 4435 
-Q 1574 4544 1914 4544 
-Q 2259 4544 2537 4425 
-Q 2816 4307 3011 4086 
-Q 3206 3866 3308 3546 
-Q 3411 3226 3411 2829 
-z
-M 1920 2144 
-Q 2362 2144 2608 2387 
-Q 2854 2630 2854 3085 
-L 2854 3136 
-Q 2854 3590 2608 3833 
-Q 2362 4077 1920 4077 
-Q 1478 4077 1232 3833 
-Q 986 3590 986 3136 
-L 986 3085 
-Q 986 2630 1232 2387 
-Q 1478 2144 1920 2144 
-z
-" transform="scale(0.015625)"/>
-      <path id="IBMPlexSans-37" d="M 1120 0 
-L 2829 4006 
-L 922 4006 
-L 922 3174 
-L 442 3174 
-L 442 4467 
-L 3373 4467 
-L 3373 3994 
-L 1696 0 
-L 1120 0 
-z
-" transform="scale(0.015625)"/>
-     </defs>
-     <use xlink:href="#IBMPlexSans-30"/>
-     <use xlink:href="#IBMPlexSans-2e" transform="translate(59.999985 0)"/>
-     <use xlink:href="#IBMPlexSans-39" transform="translate(87.199982 0)"/>
-     <use xlink:href="#IBMPlexSans-39" transform="translate(147.199966 0)"/>
-     <use xlink:href="#IBMPlexSans-39" transform="translate(207.199951 0)"/>
-     <use xlink:href="#IBMPlexSans-37" transform="translate(267.199936 0)"/>
+    <!-- e/2π -->
+    <g style="fill: #eef1f6" transform="translate(356.590547 23.583478) scale(0.145 -0.145)">
+     <use xlink:href="#IBMPlexSans-65"/>
+     <use xlink:href="#IBMPlexSans-2f" transform="translate(54.899994 0)"/>
+     <use xlink:href="#IBMPlexSans-32" transform="translate(93.199982 0)"/>
+     <use xlink:href="#IBMPlexSans-3c0" transform="translate(153.199966 0)"/>
     </g>
    </g>
    <g id="legend_1">

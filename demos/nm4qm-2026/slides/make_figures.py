@@ -178,7 +178,7 @@ def graphene_gap(t, theme):
     lo, hi = d["E1"][i0, 1] * 1e6, d["E1"][i0, 2] * 1e6
     moving.append(ax.annotate("", xy=(0.55, lo), xytext=(0.55, hi),
                               arrowprops=dict(arrowstyle="<->", color=t["ink2"], lw=1.2, shrinkA=0, shrinkB=0)))
-    moving.append(ax.text(0.7, (lo + hi) / 2, f"{hi - lo:.1f} μeV", va="center", color=t["ink"], fontsize=16))
+    moving.append(ax.text(0.7, (lo + hi) / 2, f"{hi - lo:.0f} μeV", va="center", color=t["ink"], fontsize=16))
     label = [-1.6, round(float((lo + hi) / 2), 2)]   # SOC strength of the blue curve; the slide animates it
     moving.append(ax.text(*label, "α = 1", ha="center", va="center", color=t["blue"], fontsize=17,
                           fontweight="semibold"))
@@ -191,7 +191,7 @@ def graphene_gap(t, theme):
     legend(ax, t, [Line2D([], [], color=t["muted"], lw=1.6, label="α = 0 (no SOC)"),
                    Line2D([], [], color=t["blue"], lw=2.2, label="with SOC, WannierBerri"),
                    Line2D([], [], ls="", marker="D", ms=7, color=t["orange"],
-                          label=f"GPAW, full SOC ({gpaw_gap:.1f} μeV)")],
+                          label=f"GPAW, full SOC ({gpaw_gap:.0f} μeV)")],
            loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=2, borderaxespad=0.3)
     geom = save_animated(fig, ax, "graphene-gap", theme, moving)
     return dict(geom=geom, k=np.round(k, 4).tolist(), iK=i0, alpha=np.round(d["alpha"], 3).tolist(),
@@ -212,10 +212,9 @@ def graphene_shc(t, theme):
     ax.text(E[-1], 1.02, "e/2π", ha="right", va="bottom", color=t["ink2"], fontsize=14.5)
     ax.plot(E, d["sigma0"], color=t["muted"], lw=1.6, zorder=2)
     ax.plot(E, d["sigma1000"], color=t["blue"], lw=2.2, zorder=3)
-    ax.text(edge + 4, 0.93, f"{d['sigma1000'][i0]:.4f} e/2π", va="top", color=t["ink"], fontsize=15)
     ax.set_xlim(E[0], E[-1])
     ax.set_ylim(-0.05, 1.15)
-    ax.set_xlabel("E$_F$ − E$_F^0$ (meV)")
+    ax.set_xlabel("E$_F$ (meV)")
     ax.set_ylabel("σ$^{s_z}_{xy}$ (e/2π)")
     style_axes(ax, t)
     legend(ax, t, [Line2D([], [], color=t["blue"], lw=2.2, label="α = 1000"),
@@ -235,7 +234,7 @@ def graphene_shc_polar(t, theme):
         ax.plot(r, d[key], color=color, lw=lw, zorder=3)
         handles.append(Line2D([], [], color=color, lw=lw, label=f"α = {alpha}"))
     legend(ax, t, handles, loc="upper left", bbox_to_anchor=(0.0, 0.93))
-    ax.text(r[-1], 1.02, f"{d['alpha1'][-1]:.4f}", ha="right", va="bottom", color=t["ink"], fontsize=15)
+    ax.text(r[-1], 1.02, "e/2π", ha="right", va="bottom", color=t["ink2"], fontsize=14.5)
     ax.set_xscale("log")
     ax.set_xlim(1e-8, r[-1])
     ax.set_ylim(-0.03, 1.12)
@@ -243,32 +242,6 @@ def graphene_shc_polar(t, theme):
     ax.set_ylabel("σ$^{s_z}_{xy}$ inside the discs (e/2π)")
     style_axes(ax, t, grid_y=True)
     save(fig, "graphene-shc-polar", theme)
-
-
-def graphene_shc_grids(t, theme):
-    """sigma^sz_xy(E_F) for alpha = 1000 on uniform grids against the grid spacing (backup slide)."""
-    d = np.load(ROOT / "01_graphene/results/graphene_shc_convergence.npz")
-    sp, sig, nk = d["spacing"], d["sigma"], d["nk"]
-    width = 0.036 / 5.8   # peak width Delta / (hbar v_F) in 1/A for the 36 meV gap
-    fig, ax = plt.subplots(figsize=(6.0, 4.6))
-    ax.axhline(1, color=t["axis"], lw=1.0, zorder=1)
-    ax.text(sp.max() * 1.25, 1.12, "e/2π", ha="left", va="bottom", color=t["ink2"], fontsize=14.5)
-    ax.axvline(width, color=t["muted"], lw=1.2, dashes=(4, 3), zorder=1)
-    ax.text(width / 1.08, 4.9, "peak width\nΔ/ħv$_F$", ha="left", va="top", color=t["ink2"], fontsize=14.5)
-    ax.plot(sp, sig, "-", color=t["blue"], lw=2.2, zorder=2)
-    ax.plot(sp, sig, "o", ms=8, color=t["blue"], mec=t["surface"], mew=1.2, zorder=3)
-    for x, y, n in zip(sp, sig, nk):
-        ax.annotate(f"{n}²", (x, y), xytext=(0, 11), textcoords="offset points", ha="center",
-                    color=t["ink"], fontsize=14.5)
-    ax.set_xscale("log")
-    ax.set_xlim(0.03, 0.0018)          # finer grids to the right
-    ax.set_xticks([0.02, 0.01, 0.005, 0.0025], ["0.02", "0.01", "0.005", "0.0025"])
-    ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
-    ax.set_ylim(0, 5.6)
-    ax.set_xlabel("grid spacing (Å$^{-1}$)")
-    ax.set_ylabel("σ$^{s_z}_{xy}$(E$_F$) (e/2π)")
-    style_axes(ax, t, grid_y=True)
-    save(fig, "graphene-shc-grids", theme)
 
 
 # --------------------------------------------------------------------------- MnTe
@@ -384,7 +357,6 @@ def mnte_ahc(t, theme):
     """sigma_xy at 150 K against E_F - E_v for the three Neel vectors; hole density on the top axis."""
     d = np.load(ROOT / "02_mnte/results/mnte_ahc.npz")
     x, p = d["E"] - float(d["Ev"]), d["holes_y"]
-    grid = {k: "×".join(str(n) for n in d[f"NK_{k}"]) for k in "xyz"}
     fig, ax = plt.subplots(figsize=(6.1, 4.45))
     ax.axhline(0, color=t["axis"], lw=0.9, zorder=1)
     ax.plot([0, 0], [-205, 80], color=t["muted"], lw=0.9, dashes=(3, 2), zorder=1)   # band top
@@ -401,9 +373,9 @@ def mnte_ahc(t, theme):
     top.set_xlabel("hole density (cm$^{-3}$)", color=t["ink"])
     top.spines["top"].set_color(t["axis"])
     top.tick_params(colors=t["ink2"], labelcolor=t["ink2"], length=4, width=0.8)
-    legend(ax, t, [Line2D([], [], color=t["aqua"], lw=2.4, label=f"n $\\parallel$ y   ({grid['y']})"),
-                   Line2D([], [], color=t["orange"], lw=1.8, dashes=(5, 3), label=f"n $\\parallel$ x   ({grid['x']})"),
-                   Line2D([], [], color=t["blue"], lw=1.8, dashes=(1.5, 2.5), label=f"n $\\parallel$ c   ({grid['z']})")],
+    legend(ax, t, [Line2D([], [], color=t["aqua"], lw=2.4, label="n $\\parallel$ y"),
+                   Line2D([], [], color=t["orange"], lw=1.8, dashes=(5, 3), label="n $\\parallel$ x"),
+                   Line2D([], [], color=t["blue"], lw=1.8, dashes=(1.5, 2.5), label="n $\\parallel$ c")],
            loc="lower right", bbox_to_anchor=(0.86, 0.0), fontsize=13.5)
     save(fig, "mnte-ahc", theme)
 
@@ -449,7 +421,7 @@ def mnte_neel(t, theme):
 if __name__ == "__main__":
     anim = {}
     for theme, t in THEMES.items():
-        for make in (graphene_bands, graphene_shc, graphene_shc_polar, graphene_shc_grids,
+        for make in (graphene_bands, graphene_shc, graphene_shc_polar,
                      mnte_bands, mnte_splitting, mnte_ahc):
             make(t, theme)
         # animated figures: the frames and the geometry are the same for both themes

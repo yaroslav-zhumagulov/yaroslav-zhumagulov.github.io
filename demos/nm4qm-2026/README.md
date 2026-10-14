@@ -102,14 +102,14 @@ python slides/make_pdf.py         # the PDF (needs playwright with chromium)
   (`legacy_gpaw=True`), whose files irrep and WannierBerri read, and the first cell of each notebook tells irrep 3.3
   where GPAW 26.7 keeps `atomrotations`.
 - For the spin Hall plateau of graphene we scale spin–orbit coupling by 1000, because the real gap is too small for
-  a uniform k-grid. The last notebook step checks this with the real coupling on a grid refined around K and gets
-  0.9997 e/2π.
-- MnTe uses PBE+U with U = 4 eV. The band gap comes out too small (0.77 eV against 1.27–1.41 eV measured), and a
+  a uniform k-grid. The last notebook step checks this with the real coupling on a grid refined around K: the
+  plateau is e/2π there too.
+- MnTe uses PBE+U with U = 4 eV. The band gap comes out too small (≈ 0.8 eV against 1.3–1.4 eV measured), and a
   larger U does not fix it. The Hall conductivity is computed at 150 K, the temperature of the measurement.
 - The Wannierisation uses random numbers, so the notebooks fix the seed to get the same numbers every time.
 - `03_checks/` tests the demo settings: cutoff, vacuum, k-grids, U, the PAW dataset and more. Its results are stored
-  in `03_checks/results/`; for example, the graphene gap goes from 35.8 μeV at 400 eV to 41.1 μeV at 600 eV
-  (measured: 42.2 μeV).
+  in `03_checks/results/`; for example, the graphene gap goes from ≈ 36 μeV at 400 eV to ≈ 41 μeV at 600 eV
+  (measured: 42 μeV).
 
 ## References
 
