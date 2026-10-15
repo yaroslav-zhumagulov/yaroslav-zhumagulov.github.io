@@ -28,14 +28,14 @@ LINKS = {
         "## Bonus 7": ["s10"],
     },
     "mnte.ipynb": {
-        "# Act 2": ["a2", "s11", "s12", "s13", "s14", "s15", "s16", "s17"],
+        "# Act 2": ["a2", "s11", "s11k", "s12", "s13", "s14", "s15", "s16"],
         "## Step 1": ["s11", "s12"],
         "## Step 2": ["s12"],
         "## Step 3": ["s13"],
         "## Step 4": ["s14"],
         "## Step 5": ["s15"],
-        "## Step 6": ["s16", "s17"],
-        "## Bonus 7": ["s11", "b2"],
+        "## Step 6": ["s16"],
+        "## Bonus 7": ["s11k", "b2"],
     },
 }
 NOTEBOOKS = ["01_graphene/graphene.ipynb", "02_mnte/mnte.ipynb", "reference/graphene.ipynb", "reference/mnte.ipynb"]

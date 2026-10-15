@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib import font_manager  # noqa: E402
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
+from scipy.spatial import ConvexHull  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "slides" / "figures"
@@ -148,6 +149,34 @@ def path_axes(ax, t, ticks, labels):
 
 
 # --------------------------------------------------------------------------- graphene
+def graphene_sheet():
+    """The graphene sheet on the slides, from the DFT file: the in-plane cell vectors and the two
+    carbon sites (Å)."""
+    atoms = read(ROOT / "01_graphene/gpaw/scf.gpw")
+    return dict(geom=dict(w=420, h=340), cell=np.round(atoms.cell[:2], 3).tolist(),
+                sites=np.round(atoms.positions, 3).tolist())
+
+
+def graphene_cone(cut=1.0, rings=16):
+    """The Dirac cone for the 3D view on the slides: the two π bands of the Wannier model around K
+    (step 3), each cut where it reaches E − E_F = ±cut (eV), so that both end in a smooth rim.
+
+    mesh[b, i, j] = (k_x, k_y, E) on ring i of `rings` and angle j, k − K in Å⁻¹ and E in eV, stored
+    in units of 1e-4; band 0 is the valence band. R is the largest radius of a rim (Å⁻¹).
+    """
+    d = np.load(ROOT / "01_graphene/results/graphene_cone.npz")
+    r, phi, E = d["r"], d["phi"], d["E"]
+    mesh = np.empty((2, rings, len(phi), 3))
+    for b, sign in ((0, -1), (1, 1)):
+        for j, angle in enumerate(phi):
+            e = sign * E[:, j, b]                              # rises from 0 at K along every direction
+            radii = np.linspace(0, np.interp(cut, e, r), rings)
+            mesh[b, :, j] = np.stack([radii * np.cos(angle), radii * np.sin(angle),
+                                      sign * np.interp(radii, r, e)], axis=1)
+    return dict(geom=dict(w=520, h=440), R=float(np.hypot(mesh[..., 0], mesh[..., 1]).max()), cut=cut,
+                rings=rings, angles=len(phi), mesh=b64(np.round(mesh * 1e4), "<i2"))
+
+
 def graphene_bands(t, theme):
     d = np.load(ROOT / "01_graphene/results/graphene_bands.npz")
     labels = ["Γ" if str(s) == "G" else str(s) for s in d["labels"]]
@@ -346,11 +375,12 @@ def mnte_splitting(t, theme):
 
 
 def mnte_zone3d():
-    """Frames of the 3D view on slide 16, from k_z = 0 to π/c (bonus 7 of mnte.ipynb).
+    """Frames of the 3D view of the altermagnetic splitting, from k_z = 0 to π/c (bonus 7 of mnte.ipynb).
 
     maps: E↑ − E↓ of the top valence band on the 61 × 61 grid of each k_z plane, in steps of SPLIT/127;
     up, dn: that band for each spin on every second grid point, E − E_F in meV; -128 and -32768 lie
-    outside the hexagonal zone. K is the Γ–K distance (Å⁻¹), rest the k_z of the map on slide 27.
+    outside the hexagonal zone. line: all bands of each spin along M̄–Γ̄–M̄ in each plane (k in Å⁻¹,
+    E − E_F in meV). K is the Γ–K distance (Å⁻¹), rest the k_z of the flat map (mnte_splitting).
     """
     z = np.load(ROOT / "02_mnte/results/mnte_splitting_kz.npz")
     up, dn = z["top_up"], z["top_dn"]
@@ -360,24 +390,37 @@ def mnte_zone3d():
     def meV(E):
         return b64(np.where(np.isnan(E[half]), -32768, np.round(E[half] * 1000)), "<i2")
 
-    return dict(geom=dict(w=760, h=480), K=float(z["K"]), kz=np.round(z["kz"], 4).tolist(),
+    line = dict(k=np.round(z["k_line"], 4).tolist(), nb=int(z["line_up"].shape[2]),
+                up=b64(np.round(z["line_up"] * 1000), "<i2"), dn=b64(np.round(z["line_dn"] * 1000), "<i2"))
+    return dict(geom=dict(w=1500, h=530), K=float(z["K"]), kz=np.round(z["kz"], 4).tolist(), line=line,
                 rest=float(np.load(ROOT / "02_mnte/results/mnte_splitting_map.npz")["kz"]), split=SPLIT,
                 n=int(up.shape[1]), maps=b64(maps, "i1"), m=int(up[half].shape[1]), up=meV(up), dn=meV(dn),
                 E=[float(np.nanmin([up, dn])), float(np.nanmax([up, dn]))])
 
 
 def mnte_crystal():
-    """The MnTe cell of slide 19, from the DFT file: every atom with its periodic images on the cell
-    boundary (Å, origin at the cell centre) and the sign of its moment, +1 Mn1, -1 Mn2, 0 Te."""
+    """The MnTe cell on the slides, from the DFT file: every atom with its periodic images on the cell
+    boundary (Å, origin at the cell centre) and the sign of its moment, +1 Mn1, -1 Mn2, 0 Te; and the
+    Te octahedra of the two Mn of the cell (vertices in Å, faces as vertex triples), turned by 60°
+    with respect to each other: what makes MnTe an altermagnet rather than an antiferromagnet."""
     atoms = read(ROOT / "02_mnte/gpaw/scf.gpw")
     cell = np.array(atoms.cell)
+    centre = cell.sum(axis=0) / 2
+    shifts = np.array([[i, j, k] for i in (-1, 0, 1) for j in (-1, 0, 1) for k in (-1, 0, 1)]) @ cell
+    te = (atoms.positions[atoms.numbers == 52][:, None] + shifts).reshape(-1, 3)
+    octahedra = []
+    is_mn = atoms.numbers == 25
+    for mn, magmom in zip(atoms.positions[is_mn], atoms.get_initial_magnetic_moments()[is_mn]):
+        te6 = te[np.argsort(np.linalg.norm(te - mn, axis=1))[:6]]
+        octahedra.append(dict(spin=int(np.sign(magmom)), te=np.round(te6 - centre, 3).tolist(),
+                              faces=ConvexHull(te6).simplices.tolist()))
     shifts = np.array([[i, j, k] for i in (0, 1) for j in (0, 1) for k in (0, 1)])
     sites = []
     for spos, magmom in zip(atoms.get_scaled_positions(), atoms.get_initial_magnetic_moments()):
         for s in spos + shifts:
             if s.max() <= 1 + 1e-6:
                 sites.append([*np.round((s - 0.5) @ cell, 3), int(np.sign(magmom))])
-    return dict(geom=dict(w=330, h=300), cell=np.round(cell, 3).tolist(), sites=sites)
+    return dict(geom=dict(w=330, h=300), cell=np.round(cell, 3).tolist(), sites=sites, octahedra=octahedra)
 
 
 
@@ -463,6 +506,7 @@ if __name__ == "__main__":
         anim["mirror"] = mnte_bands(t, theme)
         anim["soc"] = mnte_bands_soc(t, theme)
         anim["neel"] = mnte_neel(t, theme)
+    anim["sheet"], anim["cone"] = graphene_sheet(), graphene_cone()
     anim["zone3d"], anim["crystal"] = mnte_zone3d(), mnte_crystal()
     anim["palette"] = {theme: dict(diverging=t["diverging"], muted=t["muted"]) for theme, t in THEMES.items()}
     write_anim_data(anim)

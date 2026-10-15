@@ -17,7 +17,7 @@ from irrep.spacegroup import SpaceGroup
 os.makedirs("gpaw", exist_ok=True)
 
 a = 2.46   # in-plane lattice constant (Angstrom)
-c = 15.0   # out-of-plane period (Angstrom)
+c = 10.0   # out-of-plane period: 10 Angstrom of vacuum between the layers
 atoms = Atoms("C2",
               cell=[[a, 0, 0], [-a / 2, a * np.sqrt(3) / 2, 0], [0, 0, c]],
               scaled_positions=[[1 / 3, 2 / 3, 0], [2 / 3, 1 / 3, 0]],
