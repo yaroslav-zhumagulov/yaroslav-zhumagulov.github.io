@@ -7,10 +7,10 @@ The figures use IBM Plex Sans when matplotlib can find it (set FIGURE_FONTS
 to a folder with its .ttf files); otherwise the default sans-serif font.
 Text is stored as paths, so the SVGs look the same in any browser.
 
-For each figure the slides animate, this script also writes a background image
-without the moving parts, and it stores the frames (from the live runs, or the
-model of berry_peak) with the position of the axes in figures/anim-data.json,
-which is copied into index.html (<script id="anim-data">).
+For each figure the slides animate over a matplotlib image, this script also
+writes a background image without the moving parts. The data of every animation
+(from the live runs, and the MnTe cell from its DFT file) goes to
+figures/anim-data.json, which is copied into index.html (<script id="anim-data">).
 """
 import base64
 import json
@@ -20,6 +20,7 @@ from pathlib import Path
 
 import matplotlib
 import numpy as np
+from ase.io import read
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
@@ -29,6 +30,7 @@ from matplotlib.lines import Line2D  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "slides" / "figures"
+SPLIT = 0.5   # eV: colour scale of the altermagnetic splitting E↑ − E↓
 
 if os.environ.get("FIGURE_FONTS"):
     for ttf in Path(os.environ["FIGURE_FONTS"]).glob("*.ttf"):
@@ -143,53 +145,6 @@ def path_axes(ax, t, ticks, labels):
     for x in ticks[1:-1]:
         ax.axvline(x, color=t["grid"], lw=0.9, zorder=0)
     ax.tick_params(axis="x", length=0, pad=6, labelcolor=t["ink"])
-
-
-# --------------------------------------------------------------------------- introduction
-def dirac_velocity():
-    """ħv (eV Å) of the graphene Wannier bands at K, from the path points on either side of it."""
-    d = np.load(ROOT / "01_graphene/results/graphene_bands.npz")
-    x, E = d["x"], d["E_wann"][:, 1]
-    iK = int(np.argmin(np.abs(x - d["X"][1])))
-    side = [iK - 1, iK + 1]
-    return float(np.mean(np.abs(E[side] - E[iK]) / np.abs(x[side] - x[iK])))
-
-
-def berry_peak(t, theme):
-    """Berry curvature of a gapped Dirac cone as its gap closes, sampled by a k-grid 0.1 Å⁻¹ apart.
-
-    H = ħv (k_x σ_x + k_y σ_y) + Δ σ_z has the gap 2Δ and, in its lower band,
-        Ω(k) = (ħv)² Δ / [2 ((ħv k)² + Δ²)^{3/2}],   so   Ω(k)/Ω(0) = (1 + s²)^{-3/2},   s = ħv k / Δ:
-    one shape, of half width 0.77 Δ/ħv (Å⁻¹). ħv is that of graphene (dirac_velocity); the slide
-    closes the gap from 1 eV to the 42 μeV measured in graphene (Sichau et al. 2019).
-    """
-    hbar_v, gaps = dirac_velocity(), [1.0, 42e-6]                     # eV Å; 2Δ in eV
-    widths = [g / 2 / hbar_v for g in gaps]                          # Δ/ħv, Å⁻¹
-    s = np.concatenate([-np.logspace(7, -3, 200), [0], np.logspace(-3, 7, 200)])
-    shape = (1 + s**2) ** -1.5
-    grid = np.arange(-0.45, 0.46, 0.1)                               # Å⁻¹, the peak between two points
-    fig, ax = plt.subplots(figsize=(5.6, 4.4))
-    ax.axhline(0, color=t["axis"], lw=0.9, zorder=1)
-    ax.plot(s * widths[0], shape, color=t["muted"], lw=1.6, zorder=2)
-    moving = ax.plot(s * widths[1], shape, color=t["blue"], lw=2.2, zorder=3)
-    moving += ax.plot(grid, np.interp(grid / widths[1], s, shape), "o", ms=7, color=t["orange"],
-                      mec=t["surface"], mew=1.2, zorder=4)
-    label = [0.48, 1.04]                                    # the gap of the blue curve; the slide animates it
-    moving.append(ax.text(*label, "2Δ = 42 μeV", ha="right", va="center", color=t["blue"], fontsize=16,
-                          fontweight="semibold"))
-    ax.set_xlim(-0.5, 0.5)
-    ax.set_ylim(-0.06, 1.12)
-    ax.set_xlabel("k (Å$^{-1}$)")
-    ax.set_ylabel("Ω(k) / Ω(0)")
-    style_axes(ax, t)
-    legend(ax, t, [Line2D([], [], color=t["muted"], lw=1.6, label="2Δ = 1 eV"),
-                   Line2D([], [], color=t["blue"], lw=2.2, label="gap closing"),
-                   Line2D([], [], ls="", marker="o", ms=7, color=t["orange"], label="k-grid")],
-           loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=3, borderaxespad=0.3, columnspacing=1.2,
-           handlelength=1.6)
-    geom = save_animated(fig, ax, "berry-peak", theme, moving)
-    return dict(geom=geom, s=np.round(s, 6).tolist(), shape=np.round(shape, 5).tolist(),
-                grid=np.round(grid, 3).tolist(), gaps=gaps, widths=widths, label=label)
 
 
 # --------------------------------------------------------------------------- graphene
@@ -363,12 +318,12 @@ def mnte_bands_soc(t, theme):
                 S=b64(np.round(r["S_n"][:, :, keep] * 100), "i1"))
 
 
-def mnte_splitting(t, theme, size=(6.4, 5.0), name="mnte-splitting", animate=False):
+def mnte_splitting(t, theme):
     d = np.load(ROOT / "02_mnte/results/mnte_splitting_map.npz")
     K = float(d["K"])
     cmap = LinearSegmentedColormap.from_list("spin", t["diverging"])
-    fig, ax = plt.subplots(figsize=size)
-    im = ax.pcolormesh(d["kx"], d["ky"], d["top"], cmap=cmap, vmin=-0.5, vmax=0.5, shading="auto",
+    fig, ax = plt.subplots(figsize=(6.4, 5.0))
+    im = ax.pcolormesh(d["kx"], d["ky"], d["top"], cmap=cmap, vmin=-SPLIT, vmax=SPLIT, shading="auto",
                        rasterized=True)
     corners = [(K * np.cos(a), K * np.sin(a)) for a in np.deg2rad(np.arange(0, 361, 60))]
     ax.plot(*zip(*corners), color=t["ink2"], lw=1.2)
@@ -383,19 +338,46 @@ def mnte_splitting(t, theme, size=(6.4, 5.0), name="mnte-splitting", animate=Fal
     ax.set_xlabel("k$_x$ (Å$^{-1}$)")
     ax.set_ylabel("k$_y$ (Å$^{-1}$)")
     style_axes(ax, t)
-    cb = fig.colorbar(im, ax=ax, pad=0.03, fraction=0.045, ticks=[-0.5, 0, 0.5])
+    cb = fig.colorbar(im, ax=ax, pad=0.03, fraction=0.045, ticks=[-SPLIT, 0, SPLIT])
     cb.outline.set_visible(False)
     cb.ax.tick_params(colors=t["ink2"], labelcolor=t["ink2"], length=0)
     cb.set_label("E$_\\uparrow$ − E$_\\downarrow$ (eV)", color=t["ink"])
-    if not animate:
-        save(fig, name, theme)
-        return None
-    geom = save_animated(fig, ax, name, theme, [im])
-    z = np.load(ROOT / "02_mnte/results/mnte_splitting_kz.npz")   # the same map from k_z = 0 to pi/c
-    q = np.where(np.isnan(z["maps"]), -128, np.clip(np.round(z["maps"] / 0.5 * 127), -127, 127))
-    return dict(geom=geom, kz=np.round(z["kz"], 4).tolist(), rest=float(d["kz"]), n=int(z["maps"].shape[1]),
-                extent=[float(z["kx"].min()), float(z["kx"].max()), float(z["ky"].min()), float(z["ky"].max())],
-                maps=b64(q, "i1"))
+    save(fig, "mnte-splitting", theme)
+
+
+def mnte_zone3d():
+    """Frames of the 3D view on slide 16, from k_z = 0 to π/c (bonus 7 of mnte.ipynb).
+
+    maps: E↑ − E↓ of the top valence band on the 61 × 61 grid of each k_z plane, in steps of SPLIT/127;
+    up, dn: that band for each spin on every second grid point, E − E_F in meV; -128 and -32768 lie
+    outside the hexagonal zone. K is the Γ–K distance (Å⁻¹), rest the k_z of the map on slide 27.
+    """
+    z = np.load(ROOT / "02_mnte/results/mnte_splitting_kz.npz")
+    up, dn = z["top_up"], z["top_dn"]
+    maps = np.where(np.isnan(up), -128, np.clip(np.round((up - dn) / SPLIT * 127), -127, 127))
+    half = (slice(None), slice(None, None, 2), slice(None, None, 2))
+
+    def meV(E):
+        return b64(np.where(np.isnan(E[half]), -32768, np.round(E[half] * 1000)), "<i2")
+
+    return dict(geom=dict(w=760, h=480), K=float(z["K"]), kz=np.round(z["kz"], 4).tolist(),
+                rest=float(np.load(ROOT / "02_mnte/results/mnte_splitting_map.npz")["kz"]), split=SPLIT,
+                n=int(up.shape[1]), maps=b64(maps, "i1"), m=int(up[half].shape[1]), up=meV(up), dn=meV(dn),
+                E=[float(np.nanmin([up, dn])), float(np.nanmax([up, dn]))])
+
+
+def mnte_crystal():
+    """The MnTe cell of slide 19, from the DFT file: every atom with its periodic images on the cell
+    boundary (Å, origin at the cell centre) and the sign of its moment, +1 Mn1, -1 Mn2, 0 Te."""
+    atoms = read(ROOT / "02_mnte/gpaw/scf.gpw")
+    cell = np.array(atoms.cell)
+    shifts = np.array([[i, j, k] for i in (0, 1) for j in (0, 1) for k in (0, 1)])
+    sites = []
+    for spos, magmom in zip(atoms.get_scaled_positions(), atoms.get_initial_magnetic_moments()):
+        for s in spos + shifts:
+            if s.max() <= 1 + 1e-6:
+                sites.append([*np.round((s - 0.5) @ cell, 3), int(np.sign(magmom))])
+    return dict(geom=dict(w=330, h=300), cell=np.round(cell, 3).tolist(), sites=sites)
 
 
 
@@ -407,16 +389,15 @@ def e_of_p(E, p, target):
 
 
 def mnte_ahc(t, theme):
-    """sigma_xy at 150 K against E_F - E_v for the three Neel vectors; hole density on the top axis.
-    The slide draws the curves as E_F moves down from the band top."""
+    """sigma_xy at 150 K against E_F - E_v for the three Neel vectors; hole density on the top axis."""
     d = np.load(ROOT / "02_mnte/results/mnte_ahc.npz")
     x, p = d["E"] - float(d["Ev"]), d["holes_y"]
     fig, ax = plt.subplots(figsize=(6.1, 4.45))
     ax.axhline(0, color=t["axis"], lw=0.9, zorder=1)
     ax.plot([0, 0], [-205, 80], color=t["muted"], lw=0.9, dashes=(3, 2), zorder=1)   # band top
-    moving = ax.plot(x, d["sigma_x"][:, 2], color=t["orange"], lw=1.8, dashes=(5, 3), zorder=3)
-    moving += ax.plot(x, d["sigma_z"][:, 2], color=t["blue"], lw=1.8, dashes=(1.5, 2.5), zorder=3)
-    moving += ax.plot(x, d["sigma_y"][:, 2], color=t["aqua"], lw=2.4, zorder=4)
+    ax.plot(x, d["sigma_x"][:, 2], color=t["orange"], lw=1.8, dashes=(5, 3), zorder=3)
+    ax.plot(x, d["sigma_z"][:, 2], color=t["blue"], lw=1.8, dashes=(1.5, 2.5), zorder=3)
+    ax.plot(x, d["sigma_y"][:, 2], color=t["aqua"], lw=2.4, zorder=4)
     ax.set_xlim(x[0], 0.06)
     ax.set_ylim(-205, 130)
     ax.set_xlabel("E$_F$ − E$_v$ (eV)")
@@ -431,10 +412,7 @@ def mnte_ahc(t, theme):
                    Line2D([], [], color=t["orange"], lw=1.8, dashes=(5, 3), label="n $\\parallel$ x"),
                    Line2D([], [], color=t["blue"], lw=1.8, dashes=(1.5, 2.5), label="n $\\parallel$ c")],
            loc="lower right", bbox_to_anchor=(0.86, 0.0), fontsize=13.5)
-    geom = save_animated(fig, ax, "mnte-ahc", theme, moving)
-    shown = x <= ax.get_xlim()[1]
-    return dict(geom=geom, E=np.round(x[shown], 4).tolist(),                       # E_F - E_v, eV
-                sigma={n: np.round(d[f"sigma_{n}"][shown, 2], 1).tolist() for n in "xyz"})   # S/cm
+    save(fig, "mnte-ahc", theme)
 
 
 def mnte_neel(t, theme):
@@ -478,16 +456,14 @@ def mnte_neel(t, theme):
 if __name__ == "__main__":
     anim = {}
     for theme, t in THEMES.items():
-        for make in (graphene_bands, graphene_shc, graphene_shc_polar, mnte_splitting):
+        for make in (graphene_bands, graphene_shc, graphene_shc_polar, mnte_splitting, mnte_ahc):
             make(t, theme)
         # animated figures: the frames and the geometry are the same for both themes
-        anim["berry"] = berry_peak(t, theme)
         anim["gap"] = graphene_gap(t, theme)
         anim["mirror"] = mnte_bands(t, theme)
-        anim["ahc"] = mnte_ahc(t, theme)
         anim["soc"] = mnte_bands_soc(t, theme)
-        anim["kz"] = mnte_splitting(t, theme, size=(5.3, 4.5), name="mnte-splitting-small", animate=True)
         anim["neel"] = mnte_neel(t, theme)
+    anim["zone3d"], anim["crystal"] = mnte_zone3d(), mnte_crystal()
     anim["palette"] = {theme: dict(diverging=t["diverging"], muted=t["muted"]) for theme, t in THEMES.items()}
     write_anim_data(anim)
     print(f"wrote {len(list(OUT.glob('*.svg')))} figures and the animation data to {OUT}")
