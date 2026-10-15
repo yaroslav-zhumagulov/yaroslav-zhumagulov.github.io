@@ -10,7 +10,7 @@ functions built on seven k-points. In the second we look at MnTe, an altermagnet
 anomalous Hall effect that depends on the direction of the Néel vector. Along the way you build symmetry-adapted
 Wannier functions straight from GPAW and switch spin–orbit coupling on for any spin axis without redoing the DFT.
 
-## Setup (once, before the session, about 15 minutes)
+## Setup (once, before the session, about 5 minutes)
 
 You need conda. If `conda --version` says "command not found", install Miniforge, then open a new terminal:
 
@@ -36,14 +36,12 @@ the environment.
 - If macOS asks whether python may accept incoming network connections, click Allow: Ray, which runs the k-points
   in parallel, talks to its workers over local connections.
 - If you already have GPAW 26.7, you can skip the conda environment: make a virtual environment on top of it
-  (`python -m venv --system-site-packages .venv`), install `irrep==3.3.0`, `ray[default]==2.44.1`, `numba` and
-  `jupyterlab` if they are missing, and run the install script inside it.
-- `setup.sh` installs the master branch of WannierBerri (with `install_wannierberri.sh`), because the PyPI release
-  does not have the altermagnetic Wannierisation yet.
+  (`python -m venv --system-site-packages .venv`), install `wannierberri==26.10`, `irrep==3.3.0`, `ray==2.44.1`,
+  `numba` and `jupyterlab` if they are missing.
 
 ## During the session
 
-Graphene (minutes 8–19):
+Graphene (minutes 8–20):
 
 ```
 cd wannier-berri-demo
@@ -53,7 +51,15 @@ python 1_dft.py     # 10 s
 jupyter lab graphene.ipynb
 ```
 
-MnTe (minutes 19–37): the same in `02_mnte`, with `mnte.ipynb`; the DFT step takes about 45 s.
+MnTe (minutes 20–37):
+
+```
+cd wannier-berri-demo
+conda activate wbdemo
+cd 02_mnte
+python 1_dft.py     # 45 s
+jupyter lab mnte.ipynb
+```
 
 In VS Code or another Jupyter, choose the kernel "Python (wannier-berri-demo)"; the first cell stops with a message
 if the notebook runs in another environment. Every step of a notebook ends with a checkpoint, the numbers you should
@@ -66,7 +72,7 @@ If something goes wrong: unpack `dft-files.tar.gz` (we bring it) in this folder 
 ## What is where
 
 ```
-setup/            setup.sh (does all of the setup), conda environment, WannierBerri install, setup check
+setup/            setup.sh (does all of the setup), conda environment, setup check, packing the DFT files
 01_graphene/      DFT script and notebook for graphene
 02_mnte/          DFT script and notebook for MnTe
 reference/        both notebooks with their output
@@ -95,9 +101,8 @@ python slides/make_pdf.py         # the PDF (needs playwright with chromium)
 
 ## Notes
 
-- Tested with Python 3.12, serial GPAW 26.7.0, irrep 3.3.0, Ray 2.44.1 and WannierBerri master at commit
-  `450e335`, on an Apple M2 laptop (8 Ray workers). The checkpoint numbers use the PAW
-  datasets of gpaw-setups 24.11.0.
+- Tested with Python 3.12, serial GPAW 26.7.0, WannierBerri 26.10, irrep 3.3.0 and Ray 2.44.1, on an Apple M2
+  laptop (8 Ray workers). The checkpoint numbers use the PAW datasets of gpaw-setups 24.11.0.
 - GPAW 26.7 runs its new code by default. The DFT scripts and the notebooks ask for the classic one
   (`legacy_gpaw=True`), whose files irrep and WannierBerri read, and the first cell of each notebook tells irrep 3.3
   where GPAW 26.7 keeps `atomrotations`.

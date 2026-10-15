@@ -7,9 +7,9 @@ The figures use IBM Plex Sans when matplotlib can find it (set FIGURE_FONTS
 to a folder with its .ttf files); otherwise the default sans-serif font.
 Text is stored as paths, so the SVGs look the same in any browser.
 
-Four figures are animated on the slides. For each of them this script also
-writes a background image without the moving parts, and it stores the frames
-(from the live runs) with the position of the axes in figures/anim-data.json,
+For each figure the slides animate, this script also writes a background image
+without the moving parts, and it stores the frames (from the live runs, or the
+model of berry_peak) with the position of the axes in figures/anim-data.json,
 which is copied into index.html (<script id="anim-data">).
 """
 import base64
@@ -145,6 +145,53 @@ def path_axes(ax, t, ticks, labels):
     ax.tick_params(axis="x", length=0, pad=6, labelcolor=t["ink"])
 
 
+# --------------------------------------------------------------------------- introduction
+def dirac_velocity():
+    """ħv (eV Å) of the graphene Wannier bands at K, from the path points on either side of it."""
+    d = np.load(ROOT / "01_graphene/results/graphene_bands.npz")
+    x, E = d["x"], d["E_wann"][:, 1]
+    iK = int(np.argmin(np.abs(x - d["X"][1])))
+    side = [iK - 1, iK + 1]
+    return float(np.mean(np.abs(E[side] - E[iK]) / np.abs(x[side] - x[iK])))
+
+
+def berry_peak(t, theme):
+    """Berry curvature of a gapped Dirac cone as its gap closes, sampled by a k-grid 0.1 Å⁻¹ apart.
+
+    H = ħv (k_x σ_x + k_y σ_y) + Δ σ_z has the gap 2Δ and, in its lower band,
+        Ω(k) = (ħv)² Δ / [2 ((ħv k)² + Δ²)^{3/2}],   so   Ω(k)/Ω(0) = (1 + s²)^{-3/2},   s = ħv k / Δ:
+    one shape, of half width 0.77 Δ/ħv (Å⁻¹). ħv is that of graphene (dirac_velocity); the slide
+    closes the gap from 1 eV to the 42 μeV measured in graphene (Sichau et al. 2019).
+    """
+    hbar_v, gaps = dirac_velocity(), [1.0, 42e-6]                     # eV Å; 2Δ in eV
+    widths = [g / 2 / hbar_v for g in gaps]                          # Δ/ħv, Å⁻¹
+    s = np.concatenate([-np.logspace(7, -3, 200), [0], np.logspace(-3, 7, 200)])
+    shape = (1 + s**2) ** -1.5
+    grid = np.arange(-0.45, 0.46, 0.1)                               # Å⁻¹, the peak between two points
+    fig, ax = plt.subplots(figsize=(5.6, 4.4))
+    ax.axhline(0, color=t["axis"], lw=0.9, zorder=1)
+    ax.plot(s * widths[0], shape, color=t["muted"], lw=1.6, zorder=2)
+    moving = ax.plot(s * widths[1], shape, color=t["blue"], lw=2.2, zorder=3)
+    moving += ax.plot(grid, np.interp(grid / widths[1], s, shape), "o", ms=7, color=t["orange"],
+                      mec=t["surface"], mew=1.2, zorder=4)
+    label = [0.48, 1.04]                                    # the gap of the blue curve; the slide animates it
+    moving.append(ax.text(*label, "2Δ = 42 μeV", ha="right", va="center", color=t["blue"], fontsize=16,
+                          fontweight="semibold"))
+    ax.set_xlim(-0.5, 0.5)
+    ax.set_ylim(-0.06, 1.12)
+    ax.set_xlabel("k (Å$^{-1}$)")
+    ax.set_ylabel("Ω(k) / Ω(0)")
+    style_axes(ax, t)
+    legend(ax, t, [Line2D([], [], color=t["muted"], lw=1.6, label="2Δ = 1 eV"),
+                   Line2D([], [], color=t["blue"], lw=2.2, label="gap closing"),
+                   Line2D([], [], ls="", marker="o", ms=7, color=t["orange"], label="k-grid")],
+           loc="lower left", bbox_to_anchor=(0.0, 1.0), ncol=3, borderaxespad=0.3, columnspacing=1.2,
+           handlelength=1.6)
+    geom = save_animated(fig, ax, "berry-peak", theme, moving)
+    return dict(geom=geom, s=np.round(s, 6).tolist(), shape=np.round(shape, 5).tolist(),
+                grid=np.round(grid, 3).tolist(), gaps=gaps, widths=widths, label=label)
+
+
 # --------------------------------------------------------------------------- graphene
 def graphene_bands(t, theme):
     d = np.load(ROOT / "01_graphene/results/graphene_bands.npz")
@@ -260,12 +307,14 @@ def mnte_path_labels(d):
 
 
 def mnte_bands(t, theme):
+    """Bands without SOC. The slide turns spin ↑ over about Γ and Γ̄ onto spin ↓: on this path
+    E↓(k_x, k_y, k_z) = E↑(−k_x, −k_y, k_z), from the operation that swaps Mn1 and Mn2."""
     d = np.load(ROOT / "02_mnte/results/mnte_bands.npz")
     x, ticks, labels = d["x"], d["ticks"], mnte_path_labels(d)
     xb, E_dn, E_up = split_breaks(x, d["E_dn"], d["E_up"])
     fig, ax = plt.subplots(figsize=(8.0, 4.9))
     path_axes(ax, t, ticks, labels)
-    ax.plot(xb, E_dn, color=t["blue"], lw=2.6, solid_capstyle="round")
+    moving = ax.plot(xb, E_dn, color=t["blue"], lw=2.6, solid_capstyle="round")
     ax.plot(xb, E_up, color=t["red"], lw=1.2, solid_capstyle="round")
     ax.set_ylim(-6, 0.3)
     ax.set_ylabel("E − E$_F$ (eV)")
@@ -277,7 +326,11 @@ def mnte_bands(t, theme):
     legend(ax, t, [Line2D([], [], color=t["red"], lw=2, label="spin ↑"),
                    Line2D([], [], color=t["blue"], lw=2.6, label="spin ↓")],
            loc="upper center", ncol=2, bbox_to_anchor=(0.5, -0.07))
-    save(fig, "mnte-bands", theme)
+    geom = save_animated(fig, ax, "mnte-bands", theme, moving)
+    jump = int(np.where(np.diff(x) == 0)[0][0]) + 1                  # K|M̄: the two halves of the path
+    return dict(geom=geom, x=np.round(x, 4).tolist(), nb=int(d["E_up"].shape[1]),
+                halves=[[0, jump, float(ticks[1])], [jump, len(x), float(ticks[3])]],
+                E=b64(np.round(d["E_up"] * 1000), "<i2"))            # meV
 
 
 def mnte_bands_soc(t, theme):
@@ -354,15 +407,16 @@ def e_of_p(E, p, target):
 
 
 def mnte_ahc(t, theme):
-    """sigma_xy at 150 K against E_F - E_v for the three Neel vectors; hole density on the top axis."""
+    """sigma_xy at 150 K against E_F - E_v for the three Neel vectors; hole density on the top axis.
+    The slide draws the curves as E_F moves down from the band top."""
     d = np.load(ROOT / "02_mnte/results/mnte_ahc.npz")
     x, p = d["E"] - float(d["Ev"]), d["holes_y"]
     fig, ax = plt.subplots(figsize=(6.1, 4.45))
     ax.axhline(0, color=t["axis"], lw=0.9, zorder=1)
     ax.plot([0, 0], [-205, 80], color=t["muted"], lw=0.9, dashes=(3, 2), zorder=1)   # band top
-    ax.plot(x, d["sigma_x"][:, 2], color=t["orange"], lw=1.8, dashes=(5, 3), zorder=3)
-    ax.plot(x, d["sigma_z"][:, 2], color=t["blue"], lw=1.8, dashes=(1.5, 2.5), zorder=3)
-    ax.plot(x, d["sigma_y"][:, 2], color=t["aqua"], lw=2.4, zorder=4)
+    moving = ax.plot(x, d["sigma_x"][:, 2], color=t["orange"], lw=1.8, dashes=(5, 3), zorder=3)
+    moving += ax.plot(x, d["sigma_z"][:, 2], color=t["blue"], lw=1.8, dashes=(1.5, 2.5), zorder=3)
+    moving += ax.plot(x, d["sigma_y"][:, 2], color=t["aqua"], lw=2.4, zorder=4)
     ax.set_xlim(x[0], 0.06)
     ax.set_ylim(-205, 130)
     ax.set_xlabel("E$_F$ − E$_v$ (eV)")
@@ -377,7 +431,10 @@ def mnte_ahc(t, theme):
                    Line2D([], [], color=t["orange"], lw=1.8, dashes=(5, 3), label="n $\\parallel$ x"),
                    Line2D([], [], color=t["blue"], lw=1.8, dashes=(1.5, 2.5), label="n $\\parallel$ c")],
            loc="lower right", bbox_to_anchor=(0.86, 0.0), fontsize=13.5)
-    save(fig, "mnte-ahc", theme)
+    geom = save_animated(fig, ax, "mnte-ahc", theme, moving)
+    shown = x <= ax.get_xlim()[1]
+    return dict(geom=geom, E=np.round(x[shown], 4).tolist(),                       # E_F - E_v, eV
+                sigma={n: np.round(d[f"sigma_{n}"][shown, 2], 1).tolist() for n in "xyz"})   # S/cm
 
 
 def mnte_neel(t, theme):
@@ -421,11 +478,13 @@ def mnte_neel(t, theme):
 if __name__ == "__main__":
     anim = {}
     for theme, t in THEMES.items():
-        for make in (graphene_bands, graphene_shc, graphene_shc_polar,
-                     mnte_bands, mnte_splitting, mnte_ahc):
+        for make in (graphene_bands, graphene_shc, graphene_shc_polar, mnte_splitting):
             make(t, theme)
         # animated figures: the frames and the geometry are the same for both themes
+        anim["berry"] = berry_peak(t, theme)
         anim["gap"] = graphene_gap(t, theme)
+        anim["mirror"] = mnte_bands(t, theme)
+        anim["ahc"] = mnte_ahc(t, theme)
         anim["soc"] = mnte_bands_soc(t, theme)
         anim["kz"] = mnte_splitting(t, theme, size=(5.3, 4.5), name="mnte-splitting-small", animate=True)
         anim["neel"] = mnte_neel(t, theme)

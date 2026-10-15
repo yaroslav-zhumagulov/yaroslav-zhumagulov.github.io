@@ -8,9 +8,7 @@ but some numbers may differ slightly from the checkpoints in the notebooks.
 """
 import hashlib
 import importlib
-import inspect
 import os
-import re
 import shutil
 import subprocess
 import sys
@@ -18,8 +16,6 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-# the WannierBerri commit used for the checkpoint numbers, set in install_wannierberri.sh
-WB_COMMIT = re.search(r"^COMMIT=(\w+)$", (ROOT / "setup/install_wannierberri.sh").read_text(), re.M)[1]
 # ids (md5 of the dataset files) of the PAW datasets used for the checkpoint numbers: gpaw-setups-24.11.0
 PAW_IDS = {"C": "4aa54d4b901d75f77cc0ea3eec22967b", "Mn": "00ec47dccfe5670b984398596635e8a7",
            "Te": "e44b9ef4772d7e5a1c6a47e6d6496588"}
@@ -65,9 +61,8 @@ if irrep:
     report(version >= (3, 3), "irrep 3.3 or newer", irrep.__version__)
 wb = module("wannierberri")
 if wb:
-    report(WB_COMMIT in wb.__version__, f"WannierBerri master at {WB_COMMIT}", wb.__version__, warn=True)
-    report("altermagnetic" in inspect.signature(wb.WannierDataSOC.from_gpaw).parameters,
-           "altermagnetic Wannierisation (WannierBerri master)")
+    version = tuple(int(v) for v in wb.__version__.split(".")[:2])
+    report(version >= (26, 10), "WannierBerri 26.10 or newer", wb.__version__)
 numba = module("numba")   # the tetrahedron method of WannierBerri
 if numba:
     report(True, "numba", numba.__version__)

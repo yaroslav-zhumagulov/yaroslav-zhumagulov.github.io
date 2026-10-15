@@ -87,7 +87,7 @@ def gap_wannier(calc):
                                               IBend=20)   # the 20 bands of the demo
         wandata.wannierise(froz_min=EF - 2.9, froz_max=EF + 2.8, frozen_states={0: [1]}, num_iter=100, sitesym=True)
         system = wb.SystemSOC.from_wannierdata(wandata, berry=True)
-        system.rvec = system.system_up.rvec  # non-magnetic: WannierBerri master leaves it unset
+        system.rvec = system.system_up.rvec  # non-magnetic: WannierBerri 26.10 leaves it unset
         system.set_soc_axis(alpha_soc=1)
     E = wb.evaluate_k(system, k=K, calculators={"E": energy}).data[0]
     return E[2] - E[1]

@@ -51,7 +51,7 @@ def wannier_model(calc):
         wandata.wannierise(froz_min=EF - 2.9, froz_max=EF + 2.8, frozen_states={0: [1]},
                            num_iter=100, sitesym=True)
         system = wb.SystemSOC.from_wannierdata(wandata, berry=True)
-    system.rvec = system.system_up.rvec  # non-magnetic: WannierBerri master leaves it unset
+    system.rvec = system.system_up.rvec  # non-magnetic: WannierBerri 26.10 leaves it unset
     return system
 
 

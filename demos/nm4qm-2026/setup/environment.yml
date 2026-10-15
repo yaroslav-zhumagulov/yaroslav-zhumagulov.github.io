@@ -1,6 +1,7 @@
-# Conda environment for the hands-on session (tested: Python 3.12, GPAW 26.7.0, irrep 3.3.0, Ray 2.44.1).
+# Conda environment for the hands-on session (tested: Python 3.12, GPAW 26.7.0, WannierBerri 26.10, irrep 3.3.0,
+# Ray 2.44.1).
 #
-#   bash setup/setup.sh      # Linux, macOS, WSL2: creates it, installs WannierBerri, checks everything
+#   bash setup/setup.sh      # Linux, macOS, WSL2: creates it and checks everything
 name: wbdemo
 channels:
   - conda-forge
@@ -16,11 +17,10 @@ dependencies:
   - matplotlib
   - jupyterlab
   - ipywidgets                    # else Ray and tqdm print a warning into the notebooks
-  - nbconvert
-  - git
   - pip
   - pip:
+      - wannierberri==26.10         # the first release with the altermagnetic Wannierisation
       - irrep==3.3.0                # 3.2 finds no altermagnetic symmetry in the GPAW 26.7 moments
-      - ray[default]==2.44.1
+      - ray==2.44.1
 variables:
   OMP_NUM_THREADS: 1              # one thread per process: GPAW runs 2-3 times faster than with all cores

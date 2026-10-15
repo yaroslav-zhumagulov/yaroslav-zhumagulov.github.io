@@ -7,7 +7,7 @@ __pycache__/
 .DS_Store
 03_checks/work/
 
-# hands-on session: WannierBerri source from setup/install_wannierberri.sh, packed DFT files
+# hands-on session: packed DFT files; .wannier-berri/ is the WannierBerri source of older setups
 .wannier-berri/
 dft-files.tar.gz
 .venv/
