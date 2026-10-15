@@ -290,6 +290,13 @@ def mnte_path_labels(d):
     return ["|".join(bar.get(p, p) for p in str(s).split("|")) for s in d["labels"]]
 
 
+def kz_labels(ax, t, ticks):
+    """The k_z of the two halves of the MnTe band path, above the axes (E up to 0.3 eV)."""
+    for x0, x1, text in [(ticks[0], ticks[2], "k$_z$ = 0"), (ticks[2], ticks[-1], "k$_z$ = 0.35 Å$^{-1}$")]:
+        ax.text((x0 + x1) / 2, 0.45, text, ha="center", va="bottom", color=t["ink2"], fontsize=14.5,
+                transform=ax.transData)
+
+
 def mnte_bands(t, theme):
     """Bands without SOC. The slide turns spin ↑ over about Γ and Γ̄ onto spin ↓: on this path
     E↓(k_x, k_y, k_z) = E↑(−k_x, −k_y, k_z), from the operation that swaps Mn1 and Mn2."""
@@ -302,9 +309,7 @@ def mnte_bands(t, theme):
     ax.plot(xb, E_up, color=t["red"], lw=1.2, solid_capstyle="round")
     ax.set_ylim(-6, 0.3)
     ax.set_ylabel("E − E$_F$ (eV)")
-    for x0, x1, text in [(ticks[0], ticks[2], "k$_z$ = 0"), (ticks[2], ticks[-1], "k$_z$ = 0.35 Å$^{-1}$")]:
-        ax.text((x0 + x1) / 2, 0.45, text, ha="center", va="bottom", color=t["ink2"], fontsize=14.5,
-                transform=ax.transData)
+    kz_labels(ax, t, ticks)
     style_axes(ax, t)
     ax.tick_params(axis="x", length=0)
     legend(ax, t, [Line2D([], [], color=t["red"], lw=2, label="spin ↑"),
@@ -332,6 +337,7 @@ def mnte_bands_soc(t, theme):
                     lw=0, cmap=cmap, vmin=-1, vmax=1, zorder=2, rasterized=True)
     ax.set_ylim(-6, 0.3)
     ax.set_ylabel("E − E$_F$ (eV)")
+    kz_labels(ax, t, ticks)
     style_axes(ax, t)
     ax.tick_params(axis="x", length=0)
     cb = fig.colorbar(sc, ax=ax, pad=0.02, fraction=0.04, ticks=[-1, 0, 1])
