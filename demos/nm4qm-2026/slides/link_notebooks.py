@@ -18,13 +18,13 @@ SLIDES_URL = "https://yaroslav-zhumagulov.github.io/demos/nm4qm-2026/slides/"   
 # heading of a notebook section -> ids of the slides that go with it
 LINKS = {
     "graphene.ipynb": {
-        "# Act 1": ["a1", "s6", "s7", "s8", "s9", "s10"],
+        "# Act 1": ["a1", "s5q", "s6", "s7", "s8", "s9", "s10"],
         "## Step 1": ["s6"],
         "## Step 2": ["s5", "w1", "s6"],
         "## Step 3": ["s7"],
         "## Step 4": ["s8", "s9"],
         "## Step 5": ["s10"],
-        "## Bonus 6": ["b1"],
+        "## Bonus 6": ["s5q", "b1"],
         "## Bonus 7": ["s10"],
     },
     "mnte.ipynb": {
