@@ -67,6 +67,7 @@ GROUPS: dict[str, tuple[str, bool]] = {
     "2608.23003": ("materials", False),
     "10.1021/acsnano.5c20066": ("materials", False),
     "2602.02256": ("materials", False),
+    "10.1038/s41467-026-78802-4": ("materials", False),
     "2602.08525": ("materials", False),
     "10.1126/sciadv.aeb0659": ("materials", False),  # induced magnetism, Science Advances
     # 6 correlated superconductors and QMC
@@ -85,10 +86,17 @@ EXTRA_DOIS = ["10.1126/sciadv.aeb0659"]
 
 PROCEEDINGS_VENUES = ("Journal of Physics Conference Series", "Journal of Siberian Federal University")
 DROP_TITLE = re.compile(r"^(erratum|corrigendum)", re.I)
-DROP_VENUES = ("Bulletin of the American Physical Society",)
+DROP_VENUES = ("Bulletin of the American Physical Society", "Electronic Archive of Ural Federal University")
 # papers the author does not want listed (removed 2026-09-12)
 DROP_DOIS = {"10.1016/j.physb.2017.11.015", "10.1063/1.5009280", "10.1134/s1063774519020159", "10.1134/s1063774519020160", "10.48550/arxiv.1612.03288"}
-DROP_TITLES = ("signatures of trions in the optical spectra",)  # v1 title of the JCP trion paper
+DROP_TITLES = (
+    "signatures of trions in the optical spectra",  # v1 title of the JCP trion paper
+    "data for ",       # Zenodo deposits that accompany a paper, not papers themselves
+    "data archive of ",
+)
+# Published under a new title with arXiv never updated, so neither title nor DOI can match them:
+# the arXiv id is given the journal DOI, and the journal record then absorbs the preprint.
+SUPERSEDED = {"2602.02256": "10.1038/s41467-026-78802-4"}
 TITLE_FIX = {"Direct evidence of real-space pairing in Ba BiO 3": "Direct evidence of real-space pairing in BaBiO$_3$"}
 DOI_JOURNAL = {
     "physrevlett": "Physical Review Letters", "physrevb": "Physical Review B",
@@ -302,6 +310,8 @@ def main() -> None:
                 "authors": a["authors"], "citations": 0, "is_repo": True,
             }
         rec["arxiv"] = a["arxiv"]
+        if a["arxiv"] in SUPERSEDED:
+            rec["doi"] = SUPERSEDED[a["arxiv"]]
         rec.setdefault("date", "")
         if not rec["date"]:
             rec["date"] = a["date"]

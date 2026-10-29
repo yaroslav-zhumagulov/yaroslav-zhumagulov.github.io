@@ -43,6 +43,9 @@ now:
 
 news:
   - date: 2026-10
+    text: "A van der Waals photon-ratchet for spin-defect emission and quantum sensing, published in Nature Communications"
+    href: https://doi.org/10.1038/s41467-026-78802-4
+  - date: 2026-10
     text: "Preprint: magnetic order from first-principles linear response"
     href: https://arxiv.org/abs/2610.10412
   - date: 2026-10

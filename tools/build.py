@@ -31,6 +31,7 @@ VENUE_SHORT = {
     "2D Materials": "2D Mater.",
     "Applied Physics Letters": "Appl. Phys. Lett.",
     "Science Advances": "Sci. Adv.",
+    "Nature Communications": "Nat. Commun.",
     "JETP Letters": "JETP Lett.",
     "Journal of Physics: Conference Series": "J. Phys.: Conf. Ser.",
     "Journal of Siberian Federal University. Mathematics & Physics": "J. Sib. Fed. Univ. Math. Phys.",
