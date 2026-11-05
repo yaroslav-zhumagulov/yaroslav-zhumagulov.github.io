@@ -188,17 +188,24 @@ body { overflow-x: clip; }
 .group-head { display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start; padding-top: 1.25rem; border-top: 3px solid var(--c); }
 .group-head .group-num { font-size: 1.1rem; padding-top: .35rem; }
 .group-head h2 { margin-bottom: .25rem; }
-.projects { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
-.project { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; padding: 1.25rem; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); scroll-margin-top: 4.5rem; }
-.project-fig { aspect-ratio: 16/10; border-radius: 10px; overflow: hidden; background: var(--bg-2); }
+.projects { display: grid; gap: 1rem; margin-top: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+.project { aspect-ratio: 1; display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius); background: var(--card); border: 1px solid var(--line); scroll-margin-top: 4.5rem; transition: border-color .15s, box-shadow .15s; }
+.project:hover { border-color: color-mix(in srgb, var(--c) 45%, var(--line)); box-shadow: var(--shadow); }
+.project-fig { flex: none; height: 44%; overflow: hidden; background: var(--bg-2); border-bottom: 1px solid var(--line); }
 .project-fig img { width: 100%; height: 100%; object-fit: contain; padding: .5rem; background: var(--card); }
-.project h3 { margin-bottom: .4rem; }
-.project p { color: var(--fg-2); margin-bottom: .25rem; }
+.project-body { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: .85rem 1rem 1rem; }
+.project h3 { font-size: 1.02rem; margin-bottom: .35rem; }
+/* the summary takes the space the title and the chips leave, and is clipped rather than
+   allowed to push the chips out of a panel whose height is fixed by its square shape */
+.project p { color: var(--fg-2); font-size: .88rem; margin: 0; flex: 1; min-height: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 10; }
+.project .chips { flex: none; margin-top: .7rem; }
 .fig-placeholder { position: relative; width: 100%; height: 100%; display: grid; place-items: center; background: color-mix(in srgb, var(--c) 6%, var(--bg-2)); }
 .fig-placeholder svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .fig-placeholder span { position: relative; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-3); }
 .group-foot { margin-top: 1rem; font-size: .92rem; }
-@media (max-width: 760px) { .project { grid-template-columns: 1fr; } }
+/* one column on a phone, where a square panel would leave the figure too small and
+   clip the summary: the panel grows to its content instead */
+@media (max-width: 560px) { .project { aspect-ratio: auto; } .project-fig { height: 160px; } .project p { -webkit-line-clamp: none; display: block; } }
 
 /* ---------- software ---------- */
 .pipeline { margin: 0 0 2.5rem; padding: 1rem; border-radius: var(--radius); background: var(--bg-2); color: var(--fg-3); overflow-x: auto; }
