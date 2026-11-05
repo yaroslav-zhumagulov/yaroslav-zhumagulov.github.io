@@ -97,7 +97,14 @@ DROP_TITLES = (
 # Published under a new title with arXiv never updated, so neither title nor DOI can match them:
 # the arXiv id is given the journal DOI, and the journal record then absorbs the preprint.
 SUPERSEDED = {"2602.02256": "10.1038/s41467-026-78802-4"}
-TITLE_FIX = {"Direct evidence of real-space pairing in Ba BiO 3": "Direct evidence of real-space pairing in BaBiO$_3$"}
+TITLE_FIX = {  # OpenAlex splits chemical formulas into bare digits; these are the titles it mangles
+    "Direct evidence of real-space pairing in Ba BiO 3":
+        "Direct evidence of real-space pairing in BaBiO$_3$",
+    "Anatomy of spin-orbit torques in monolayer Fe 3 GeTe 2 and Fe 3 GaTe 2 : Insights from "
+    "atomistic and momentum-space decompositions":
+        "Anatomy of spin-orbit torques in monolayer Fe$_3$GeTe$_2$ and Fe$_3$GaTe$_2$: Insights "
+        "from atomistic and momentum-space decompositions",
+}
 DOI_JOURNAL = {
     "physrevlett": "Physical Review Letters", "physrevb": "Physical Review B",
     "physrevresearch": "Physical Review Research", "physrevmaterials": "Physical Review Materials",

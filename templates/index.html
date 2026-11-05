@@ -60,7 +60,7 @@
       <a href="/research/#{{ g.slug }}">
         <span class="group-num">{{ '%02d'|format(g.number) }}</span>
         <span class="group-title">{{ g.title|safe }}</span>
-        <span class="group-meta">{{ g.projects|length }} projects · {{ g.n_papers }} papers</span>
+        <span class="group-meta">{{ g.projects|length }} project{{ "" if g.projects|length == 1 else "s" }} · {{ g.n_papers }} paper{{ "" if g.n_papers == 1 else "s" }}</span>
       </a>
     </li>
     {% endfor %}

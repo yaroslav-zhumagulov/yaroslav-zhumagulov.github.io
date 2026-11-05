@@ -23,30 +23,52 @@
 <script>
 (function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}})();
 </script>
+{% if page != '404' %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  {% if page == 'home' %}"@type": "ProfilePage",
-  "dateModified": "{{ build_time }}",
-  "mainEntity": {
-  {% endif %}
-  "@type": "Person",
-  "@id": "{{ profile.url }}/#person",
-  "name": "{{ profile.name }}",
-  "alternateName": {{ profile.alt_names|tojson }},
-  "jobTitle": "{{ profile.title }}",
-  "email": "mailto:{{ profile.email }}",
-  "url": "{{ profile.url }}",
-  "image": "{{ profile.url }}/static/img/portrait.jpg",
-  "description": "{{ profile.tagline }}",
-  "knowsAbout": {{ profile.interests|tojson }},
-  "worksFor": {"@type": "Organization", "name": "EPFL", "url": "https://www.epfl.ch"},
-  "affiliation": {"@type": "Organization", "name": "EPFL", "url": "https://www.epfl.ch"},
-  "alumniOf": [{"@type": "CollegeOrUniversity", "name": "University of Regensburg"}, {"@type": "CollegeOrUniversity", "name": "National Research Nuclear University MEPhI"}],
-  "sameAs": {{ profile.same_as|tojson }}
-  {% if page == 'home' %}}{% endif %}
+  "@graph": [
+    {
+      "@type": {% if page == 'home' %}"ProfilePage"{% elif page in ('publications', 'research', 'software', 'talks') %}"CollectionPage"{% else %}"WebPage"{% endif %},
+      "@id": {{ (profile.url + '/' + self.canonical() + '#webpage')|tojson }},
+      "url": {{ (profile.url + '/' + self.canonical())|tojson }},
+      "name": {{ self.title()|striptags|tojson }},
+      "description": {{ self.description()|striptags|tojson }},
+      "inLanguage": "en",
+      "dateModified": "{{ build_time }}",
+      "isPartOf": {"@id": "{{ profile.url }}/#website"},
+      "about": {"@id": "{{ profile.url }}/#person"}
+    },
+    {
+      "@type": "WebSite",
+      "@id": "{{ profile.url }}/#website",
+      "url": "{{ profile.url }}/",
+      "name": {{ profile.name|tojson }},
+      "inLanguage": "en",
+      "publisher": {"@id": "{{ profile.url }}/#person"}
+    },
+    {
+      "@type": "Person",
+      "@id": "{{ profile.url }}/#person",
+      "name": "{{ profile.name }}",
+      "alternateName": {{ profile.alt_names|tojson }},
+      "jobTitle": "{{ profile.title }}",
+      "email": "mailto:{{ profile.email }}",
+      "url": "{{ profile.url }}",
+      "image": "{{ profile.url }}/static/img/portrait.jpg",
+      "description": "{{ profile.tagline }}",
+      "knowsAbout": {{ profile.interests|tojson }},
+      "identifier": {"@type": "PropertyValue", "propertyID": "ORCID", "value": {{ profile.orcid|tojson }}},
+      "worksFor": {"@type": "Organization", "name": "EPFL", "url": "https://www.epfl.ch", "department": {{ profile.group|tojson }}},
+      "affiliation": {"@type": "Organization", "name": "EPFL", "url": "https://www.epfl.ch"},
+      "alumniOf": [{"@type": "CollegeOrUniversity", "name": "University of Regensburg"}, {"@type": "CollegeOrUniversity", "name": "National Research Nuclear University MEPhI"}],
+      "mainEntityOfPage": {"@id": "{{ profile.url }}/#webpage"},
+      "sameAs": {{ profile.same_as|tojson }}
+    }{{ jsonld_extra|safe }}
+  ]
 }
 </script>
+{% endif %}
 </head>
 <body class="page-{{ page }}">
 <a class="skip" href="#main">Skip to content</a>
@@ -76,7 +98,10 @@
     {% endfor %}
   </div>
   <p class="footer-meta">© {{ build_year }} {{ profile.name }}, also written Iaroslav Zhumagulov · {{ profile.group }}, {{ profile.institution }} ·
-    <a href="https://github.com/yaroslav-zhumagulov/yaroslav-zhumagulov.github.io">source</a></p>
+    <a href="https://github.com/yaroslav-zhumagulov/yaroslav-zhumagulov.github.io">source</a> ·
+    updated {{ build_time[:10] }}</p>
+  <p class="footer-meta">Machine-readable: <a href="/llms.txt">llms.txt</a> · <a href="/publications.bib">BibTeX</a> ·
+    <a href="/publications.json">CSL-JSON</a></p>
 </footer>
 <script src="/static/js/site.js" defer></script>
 {% block scripts %}{% endblock %}

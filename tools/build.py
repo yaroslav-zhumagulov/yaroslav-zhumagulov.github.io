@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import datetime as dt
 import html
+import json
 import re
 import shutil
 import sys
@@ -20,6 +21,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "site"
 SELF = re.compile(r"zhumagulov", re.I)
+SELF_NAME = "Yaroslav Zhumagulov"  # sources spell him Y., Yaroslav V., Iaroslav; the site, once
 
 VENUE_SHORT = {
     "Physical Review Letters": "Phys. Rev. Lett.",
@@ -73,30 +75,37 @@ def safe_url(u: str) -> str:
 PARTICLES = {"de", "van", "von", "der", "da", "di", "al", "del", "la", "le"}
 
 
-def short_name(full: str) -> str:
-    """'Yaroslav V. Zhumagulov' -> 'Y. V. Zhumagulov'."""
+def split_name(full: str) -> tuple[str, str]:
+    """'Yaroslav V. Zhumagulov' -> ('Yaroslav V.', 'Zhumagulov'); 'Surname, Given' is read too."""
     full = full.strip()
-    if "," in full:  # 'Surname, Given'
+    if "," in full:
         sur, given = [x.strip() for x in full.split(",", 1)]
         toks = given.split() + [sur]
     else:
         toks = full.split()
     if not toks:
-        return full
+        return "", full
     n_sur = 1
     if toks[-1].rstrip(".").lower() in {"junior", "jr"} and len(toks) > 2:
         n_sur = 2
     if len(toks) - n_sur - 1 >= 1 and toks[-n_sur - 1].lower() in PARTICLES:
         n_sur += 1
-    given, sur = toks[:-n_sur], " ".join(toks[-n_sur:])
+    return " ".join(toks[:-n_sur]), " ".join(toks[-n_sur:])
+
+
+def short_name(full: str) -> str:
+    """'Yaroslav V. Zhumagulov' -> 'Y. V. Zhumagulov'."""
+    given, sur = split_name(full)
     initials = " ".join(
-        "-".join(p[0] + "." for p in g.split("-") if p) for g in given if g and g[0].isalpha()
+        "-".join(p[0] + "." for p in g.split("-") if p)
+        for g in given.split() if g and g[0].isalpha()
     )
     return f"{initials} {sur}".strip()
 
 
 def format_authors(raw: str) -> tuple[str, list[str]]:
-    names = [short_name(a) for a in raw.split(" and ")]
+    """Co-authors as initials, the site's owner in full: one spelling for readers and for search."""
+    names = [SELF_NAME if SELF.search(a) else short_name(a) for a in raw.split(" and ")]
     parts = []
     for n in names:
         e = html.escape(n)
@@ -118,6 +127,159 @@ def bibtex_of(e: dict) -> str:
         fields += [("eprint", e["eprint"]), ("archivePrefix", "arXiv")]
     body = "".join(f"  {k} = {{{v}}},\n" for k, v in fields if v)
     return f"@article{{{e['ID']},\n{body}}}"
+
+
+def plain(s: str) -> str:
+    """Rendered HTML back to the plain text an agent or a Markdown file wants."""
+    return html.unescape(re.sub(r"<[^>]+>", "", s or "")).strip()
+
+
+# --- machine-readable exports -------------------------------------------------
+def csl_json(pubs: list[dict]) -> str:
+    """The publication list as CSL-JSON, for reference managers and machine readers."""
+    items = []
+    for p in pubs:
+        item = {
+            "id": p["key"],
+            "type": "article" if p["preprint"] else "article-journal",
+            "title": p["title_plain"],
+            "author": [{"given": g, "family": f} for g, f in map(split_name, p["authors_full"])],
+            "issued": {"date-parts": [[int(x) for x in p["date"].split("-") if x.isdigit()]]},
+            "URL": p["url"],
+        }
+        for key, value in (
+            ("container-title", "" if p["preprint"] else p["journal"]),
+            ("volume", p["volume"]),
+            ("page", p["pages"]),
+            ("DOI", p["doi"]),
+            ("number", f"arXiv:{p['arxiv']}" if p["arxiv"] else ""),
+        ):
+            if value:
+                item[key] = value
+        items.append(item)
+    return json.dumps(items, indent=1, ensure_ascii=False) + "\n"
+
+
+def jsonld_nodes(page: str, profile: dict, pubs: list[dict], software: dict) -> str:
+    """The page's own schema.org nodes, serialised for the @graph that base.html opens.
+
+    Both lists carry the author's @id, so a paper and a package resolve to the same Person
+    node as the profile does.
+    """
+    base, person = profile["url"].rstrip("/"), {"@id": profile["url"].rstrip("/") + "/#person"}
+    nodes: list[dict] = []
+    if page == "publications":
+        for p in pubs:
+            node = {
+                "@type": "ScholarlyArticle",
+                "@id": f"{base}/publications/#{p['key']}",
+                "name": p["title_plain"],
+                "author": [
+                    dict({"@type": "Person", "name": a}, **(person if SELF.search(a) else {}))
+                    for a in p["authors_full"]
+                ],
+                "datePublished": p["date"],
+                "url": p["url"],
+            }
+            ids = [{"@type": "PropertyValue", "propertyID": k, "value": v}
+                   for k, v in (("DOI", p["doi"]), ("arXiv", p["arxiv"])) if v]
+            if ids:
+                node["identifier"] = ids
+            if not p["preprint"]:
+                node["isPartOf"] = {"@type": "Periodical", "name": p["journal"]}
+                if p["volume"]:
+                    node["volumeNumber"] = p["volume"]
+                if p["pages"]:
+                    node["pagination"] = p["pages"]
+            nodes.append(node)
+        nodes.append({
+            "@type": "ItemList",
+            "@id": f"{base}/publications/#list",
+            "name": f"Publications of {profile['name']}",
+            "numberOfItems": len(pubs),
+            "itemListElement": [{"@type": "ListItem", "position": i, "url": n["@id"]}
+                                for i, n in enumerate(nodes, 1)],
+        })
+    elif page == "software":
+        for s in software["projects"]:
+            role = "contributor" if s["status"] == "contributor" else "author"
+            node = {
+                "@type": "SoftwareSourceCode",
+                "@id": f"{base}/software/#{s['slug']}",
+                "name": s["name"],
+                "description": plain(s["tagline"] + " " + s["description"]),
+                role: person,
+                "programmingLanguage": s["stack"],
+            }
+            hrefs = [link["href"] for link in s.get("links", [])]
+            repo = next((h for h in hrefs if "github.com" in h), "")
+            cite = next((h for h in hrefs if "arxiv.org" in h), "")
+            if repo:
+                node["codeRepository"] = repo
+            if cite:
+                node["citation"] = cite
+            nodes.append(node)
+    return "".join(",\n    " + json.dumps(n, ensure_ascii=False) for n in nodes)
+
+
+def llms_txt(profile: dict, research: dict, software: dict, pubs: list[dict], stamp: str) -> str:
+    """The whole site as one Markdown file at /llms.txt, for agents that read rather than browse."""
+    base = profile["url"].rstrip("/")
+    out = [
+        f"# {profile['name']}",
+        "",
+        f"> {profile['title']} at {profile['institution']}, {profile['group']}, "
+        f"{profile['location']}. {' '.join(profile['tagline'].split())} "
+        f"The same person is published as {', '.join(profile['alt_names'])}.",
+        "",
+    ]
+    out += [f"- {link['label']}: {link['href'].replace('mailto:', '')}" for link in profile["links"]]
+    out += [f"- Updated: {stamp[:10]}", "", "## Pages", ""]
+    out += [
+        f"- [Research]({base}/research/): {len(research['groups'])} subgroups, "
+        f"{sum(len(g['projects']) for g in research['groups'])} projects, each with its papers",
+        f"- [Publications]({base}/publications/): all {len(pubs)} papers with DOI and arXiv links",
+        f"- [Software]({base}/software/): {', '.join(s['name'] for s in software['projects'])}",
+        f"- [Talks]({base}/talks/): slides and hands-on material",
+        f"- [CV]({base}/cv/): positions, education, awards",
+        "",
+        "## About",
+        "",
+    ]
+    out += [" ".join(p.split()) + "\n" for p in profile["bio"]]
+    out += ["## Research", ""]
+    for g in research["groups"]:
+        out += [f"### {g['number']:02d} {plain(g['title'])}", "", " ".join(g["lede"].split()), ""]
+        for pr in g["projects"]:
+            papers = ", ".join(
+                f"arXiv:{p['arxiv']}" if p["preprint"]
+                else f"{p['venue_short']} {p['year']}, doi:{p['doi']}"
+                for p in pr["pubs"]
+            )
+            cite = f" ({papers})" if papers else ""
+            out.append(f"- **{plain(pr['title'])}** — {plain(pr['summary'])}{cite}")
+        out.append("")
+    out += ["## Software", ""]
+    for s in software["projects"]:
+        links = ", ".join(f"{link['label']}: {link['href']}" for link in s.get("links", []))
+        out.append(f"- **{s['name']}** ({s['status_text']}) — {plain(s['tagline'])} {links}")
+    span = f"{min(p['year'] for p in pubs)}–{max(p['year'] for p in pubs)}"
+    out += ["", f"## Publications ({len(pubs)}, {span})", ""]
+    for p in pubs:
+        ident = (f"arXiv:{p['arxiv']}" if p["preprint"]
+                 else f"doi:{p['doi']}" if p["doi"] else p["ref"])
+        out.append(f'- {p["date"]}. {p["authors_plain"]}. "{p["title_plain"]}". '
+                   f'{p["ref"]}. {ident}. {p["url"]}')
+    out += [
+        "",
+        "## Machine-readable",
+        "",
+        f"- BibTeX of every paper: {base}/publications.bib",
+        f"- The same list as CSL-JSON: {base}/publications.json",
+        f"- Sitemap: {base}/sitemap.xml",
+        "",
+    ]
+    return "\n".join(out)
 
 
 # --- data loading -------------------------------------------------------------
@@ -153,9 +315,13 @@ def load_pubs(groups: dict[str, dict]) -> list[dict]:
                 "title": tex_to_html(e.get("title", "")),
                 "title_plain": html.unescape(re.sub(r"<[^>]+>", "", tex_to_html(e.get("title", "")))),
                 "authors_html": authors_html,
+                "authors_plain": ", ".join(names),
+                "authors_full": [a.strip() for a in e.get("author", "").split(" and ") if a],
                 "n_authors": len(names),
                 "journal": journal,
                 "venue_short": venue_short,
+                "volume": volume,
+                "pages": pages,
                 "ref": ref,
                 "ref_short": ref_short,
                 "year": year,
@@ -227,7 +393,9 @@ def main(serve: bool = False) -> None:
     years = sorted({p["year"] for p in pubs if not p["proceedings"]}, reverse=True)
     cv["pdf_exists"] = (ROOT / cv["pdf"]).exists()
     profile["photo_exists"] = (ROOT / profile["photo"]).exists()
-    profile["same_as"] = [l["href"] for l in profile["links"] if not l["href"].startswith("mailto")]
+    links = profile["links"]
+    profile["same_as"] = [link["href"] for link in links if not link["href"].startswith("mailto")]
+    profile["orcid"] = next((link["href"] for link in links if link["label"] == "ORCID"), "")
 
     env = Environment(loader=FileSystemLoader(ROOT / "templates"), autoescape=select_autoescape(["html"]), trim_blocks=True, lstrip_blocks=True)
     ctx = dict(
@@ -256,7 +424,9 @@ def main(serve: bool = False) -> None:
     for tpl, out, page in pages:
         dest = OUT / out
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_text(env.get_template(tpl).render(page=page, **ctx))
+        dest.write_text(env.get_template(tpl).render(
+            page=page, jsonld_extra=jsonld_nodes(page, profile, pubs, software), **ctx
+        ))
 
     for t in talks["talks"]:  # only the slides of a demo are published; the rest stays in the repository
         if t.get("demo"):
@@ -279,7 +449,16 @@ def main(serve: bool = False) -> None:
         + "".join(f"  <url><loc>{u}</loc><lastmod>{stamp}</lastmod><changefreq>monthly</changefreq><priority>{'1.0' if u.endswith('.io/') else '0.8'}</priority></url>\n" for u in urls)
         + "</urlset>\n"
     )
-    (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
+    # the wildcard already allows them; naming the answer engines records that this is deliberate
+    agents = ["*", "GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot",
+              "anthropic-ai", "PerplexityBot", "Perplexity-User", "Google-Extended",
+              "Applebot-Extended", "CCBot", "Amazonbot", "Bytespider", "Meta-ExternalAgent"]
+    (OUT / "robots.txt").write_text(
+        "".join(f"User-agent: {a}\nAllow: /\n\n" for a in agents) + f"Sitemap: {base}/sitemap.xml\n"
+    )
+    (OUT / "publications.bib").write_text("\n\n".join(p["bibtex"] for p in pubs) + "\n")
+    (OUT / "publications.json").write_text(csl_json(pubs))
+    (OUT / "llms.txt").write_text(llms_txt(profile, research, software, pubs, stamp))
     print(f"built {len(pages)} pages, {len(pubs)} publications -> {OUT.relative_to(ROOT)}/")
 
     if serve:

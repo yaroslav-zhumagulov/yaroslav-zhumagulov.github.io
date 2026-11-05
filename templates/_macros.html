@@ -19,7 +19,7 @@
 {%- endmacro %}
 
 {% macro pub_item(p, show_group=True) -%}
-<li class="pub" data-group="{{ p.group }}" data-first="{{ 'true' if p.first else 'false' }}" data-year="{{ p.year }}"
+<li class="pub" id="{{ p.key }}" data-group="{{ p.group }}" data-first="{{ 'true' if p.first else 'false' }}" data-year="{{ p.year }}"
     data-search="{{ p.title_plain|lower }} {{ p.authors_html|striptags|lower }} {{ p.journal|lower }}">
   <div class="pub-main">
     <a class="pub-title" href="{{ p.url }}" target="_blank" rel="noopener">{{ p.title|safe }}</a>
